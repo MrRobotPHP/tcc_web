@@ -28,7 +28,7 @@ class Login extends Conexao_sql {
 
 		$pdo = parent::getDB();
 
-		$logar = $pdo -> prepare("SELECT * FROM usuario WHERE user = ? AND senha = ?");
+		$logar = $pdo -> prepare("SELECT * FROM funcionario WHERE EMAIL = ? AND SENHA = ? AND NIVEL=1");
 		$logar -> bindValue(1, $this -> getLogin());
 		$logar -> bindValue(2, $this -> getSenha());
 		$logar -> execute();
