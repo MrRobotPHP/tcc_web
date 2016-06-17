@@ -18,30 +18,32 @@
 
     <h1>A basic Pie chart</h1>
 
-    <canvas id="cvs" width="350" height="250">[No canvas support]</canvas>
+    <canvas id="cvs" width="550" height="250" style="border: 1px solid #ddd">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var labels = [
-                'Alvin',  'Pete',
-                'Hoolio', 'Jack',
-                'Kev',    'Luis',
-                'Lou',    'Jesse'
-            ];
+        var labels = [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday'
+        ];
 
-            var pie = new RGraph.Pie({
-                id: 'cvs',
-                data: [4,8,4,6,5,3,2,5],
-                options: {
-                    tooltips: labels,
-                    labels: labels,
-                    shadow: false,
-                    strokestyle: 'rgba(0,0,0,0)',
-                    exploded: 3
-                }
-            }).draw();
-        };
+        new RGraph.Pie({
+            id: 'cvs',
+            data: [20,1,1,1,1,1,1],
+            options: {
+                tooltips: labels,
+                labels: labels,
+                labelsSticksList: true,
+                shadow: false,
+                strokestyle: 'rgba(0,0,0,0)',
+                exploded: 0,
+                textAccessible: true
+            }
+        }).roundRobin();
     </script>
 
 
@@ -68,27 +70,21 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var labels = [
-            'Alvin',  'Pete',
-            'Hoolio', 'Jack',
-            'Kev',    'Luis',
-            'Lou',    'Jesse'
-        ];
+    var labels = ['Monday', 'Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 
-        var pie = new RGraph.Pie({
-            id: 'cvs',
-            data: [4,8,4,6,5,3,2,5],
-            options: {
-                tooltips: labels,
-                labels: labels,
-                shadow: false,
-                strokestyle: 'rgba(0,0,0,0)',
-                exploded: 3
-            }
-        }).draw();
-    };
+    new RGraph.Pie({
+        id: 'cvs',
+        data: [20,1,1,1,1,1,1],
+        options: {
+            tooltips: labels,
+            labels: labels,
+            labelsSticksList: true,
+            shadow: false,
+            strokestyle: 'rgba(0,0,0,0)',
+            exploded: 0,
+            textAccessible: true
+        }
+    }).roundRobin();
 &lt;/script&gt;
 </pre>
 

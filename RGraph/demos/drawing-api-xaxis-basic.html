@@ -33,7 +33,8 @@
                     ylabels: false,
                     labelsAbove: true,
                     colors: ['blue','blue','blue','blue','blue','red','red','red','red','red'],
-                    colorsSequential: true
+                    colorsSequential: true,
+                    textAccessible: true
                 }
             }).draw();
 
@@ -44,14 +45,15 @@
                 id: 'cvs',
                 y: bar.canvas.height - 30,
                 options: {
-                    labels: ['Team A','Team B']
+                    labels: ['Team A','Team B'],
+                    textAccessible: true
                 }
             }).on('click', function (e, obj)
             {
                 alert('The X axis has been clicked!');
             }).on('mousemove', function (e, obj)
             {
-                e.target.style.cursor = 'pointer';
+                return true;
             }).draw();
         };
     </script>
@@ -92,7 +94,8 @@
                 ylabels: false,
                 labelsAbove: true,
                 colors: ['blue','blue','blue','blue','blue','red','red','red','red','red'],
-                colorsSequential: true
+                colorsSequential: true,
+                textAccessible: true
             }
         }).draw();
 
@@ -103,14 +106,15 @@
             id: 'cvs',
             y: bar.canvas.height - 30,
             options: {
-                labels: ['Team A','Team B']
+                labels: ['Team A','Team B'],
+                textAccessible: true
             }
         }).on('click', function (e, obj)
         {
             alert('The X axis has been clicked!');
         }).on('mousemove', function (e, obj)
         {
-            e.target.style.cursor = 'pointer';
+            return true
         }).draw();
     };
 &lt;/script&gt;

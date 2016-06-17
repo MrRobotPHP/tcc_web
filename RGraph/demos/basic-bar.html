@@ -26,18 +26,18 @@
              allowing you to put it in your pages header.
     -->
     <script>
-        window.onload = function ()
-        {
-            var bar = new RGraph.Bar({
-                id: 'cvs',
-                data: [12,13,16,15,16,19,19,12,23,16,13,24],
-                options: {
-                    gutterLeft: 35,
-                    title: 'A basic chart',
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-                }
-            }).draw();
-        };
+        new RGraph.Bar({
+            id: 'cvs',
+            data: [12,13,16,15,16,19,19,12,23,16,13,24],
+            options: {
+                //textColor: '#333',
+                textAccessible: true,
+                gutterTop: 35,
+                gutterLeft: 35,
+                title: 'A basic chart',
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            }
+        }).draw();
     </script>
 
 
@@ -71,6 +71,8 @@
             id: 'cvs',
             data: [12,13,16,15,16,19,19,12,23,16,13,24],
             options: {
+                textAccessible: true,
+                gutterTop: 35,
                 gutterLeft: 35,
                 title: 'A basic chart',
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

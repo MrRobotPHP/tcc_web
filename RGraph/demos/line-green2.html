@@ -16,7 +16,7 @@
 
     <h1>A green Line chart with indicator lines</h1>
 
-    <canvas id="cvs" width="600" height="250" style="background-color: #70AD47">[No canvas support]</canvas>
+    <canvas id="cvs" width="950" height="250" style="background-color: #70AD47">[No canvas support]</canvas>
     
     <script>
         window.onload = function ()
@@ -38,18 +38,20 @@
                     noyaxis: true,
                     textColor: 'white',
                     unitsPost: ',000k',
-                    gutterLeft: 50,
+                    gutterLeft: 70,
+                    gutterTop: 35,
+                    gutterRight: 35,
                     gutterBottom: 55,
                     noxicks: true,
                     axisColor: '#ddd',
                     numxticks: 0,
-                    textSize: 8,
-                    textAngle: 45,
+                    textSize: 12,
                     labels: [
-                        '10-Sep-15','11-Sep-15','12-Sep-15','13-Sep-15','14-Sep-15','15-Sep-15','16-Sep-15','17-Sep-15','18-Sep-15','19-Sep-15',
-                        '20-Sep-15','21-Sep-15','22-Sep-15','23-Sep-15','24-Sep-15','25-Sep-15','26-Sep-15','27-Sep-15','28-Sep-15','29-Sep-15',
-                        '30-Sep-15','1-Oct-15','2-Oct-15','3-Oct-15','4-Oct-15','5-Oct-15','6-Oct-15','7-Oct-15'
-                    ]
+                        '10-Sep','\n11-Sep','12-Sep','\n13-Sep','14-Sep','\n15-Sep','16-Sep','\n17-Sep','18-Sep','\n19-Sep',
+                        '20-Sep','\n21-Sep','22-Sep','\n23-Sep','24-Sep','\n25-Sep','26-Sep','\n27-Sep','28-Sep','\n29-Sep',
+                        '30-Sep','\n1-Oct','2-Oct','\n3-Oct','4-Oct','\n5-Oct','6-Oct','\n7-Oct'
+                    ],
+                    textAccessible: true
                 }
             }).on('draw', function (obj)
             {
@@ -123,34 +125,37 @@
                 noyaxis: true,
                 textColor: 'white',
                 unitsPost: ',000k',
-                gutterLeft: 50,
+                gutterLeft: 70,
+                gutterTop: 35,
+                gutterRight: 35,
                 gutterBottom: 55,
                 noxicks: true,
                 axisColor: '#ddd',
                 numxticks: 0,
-                textSize: 8,
-                textAngle: 45,
+                textSize: 12,
                 labels: [
-                    '10-Sep-15','11-Sep-15','12-Sep-15','13-Sep-15','14-Sep-15','15-Sep-15','16-Sep-15','17-Sep-15','18-Sep-15','19-Sep-15',
-                    '20-Sep-15','21-Sep-15','22-Sep-15','23-Sep-15','24-Sep-15','25-Sep-15','26-Sep-15','27-Sep-15','28-Sep-15','29-Sep-15',
-                    '30-Sep-15','1-Oct-15','2-Oct-15','3-Oct-15','4-Oct-15','5-Oct-15','6-Oct-15','7-Oct-15'
-                ]
+                    '10-Sep','\n11-Sep','12-Sep','\n13-Sep','14-Sep','\n15-Sep','16-Sep','\n17-Sep','18-Sep','\n19-Sep',
+                    '20-Sep','\n21-Sep','22-Sep','\n23-Sep','24-Sep','\n25-Sep','26-Sep','\n27-Sep','28-Sep','\n29-Sep',
+                    '30-Sep','\n1-Oct','2-Oct','\n3-Oct','4-Oct','\n5-Oct','6-Oct','\n7-Oct'
+                ],
+                textAccessible: true
             }
         }).on('draw', function (obj)
         {
-            var grad,
-                coords = obj.coords[i],
-                y2 = obj.canvas.height - obj.get('gutterBottom'),
-                co = obj.context;
-
+            var co = obj.context;
+            
             for (var i=0; i&lt;obj.coords.length; ++i) {
-
+                
+                var grad,
+                    coords = obj.coords[i],
+                    y2 = obj.canvas.height - obj.get('gutterBottom'),
+                    co = obj.context
+                
                 grad = RGraph.LinearGradient(
                     obj,
                     coords[0], coords[1],coords[0], y2,
                     'white', 'rgba(255,255,255,0)'
                 );
-
                 co.strokeStyle = grad;
                 
                 RGraph.path2(

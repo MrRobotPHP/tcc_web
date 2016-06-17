@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -99,12 +99,15 @@
             'chart.colors':           ['black'],
             'chart.title':            '',
             'chart.title.color':      null,
-            'chart.text.color':       null,
             'chart.numticks':         5,
             'chart.numlabels':        5,
             'chart.labels.specific':  null,
-            'chart.text.font':        'Arial',
+            'chart.text.font':        'Segoe UI, Arial, Verdana, sans-serif',
             'chart.text.size':        12,
+            'chart.text.color':       null,
+            'chart.text.accessible':         true,
+            'chart.text.accessible.overflow':'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.align':            'left',
             'hart.scale.formatter':   null,
             'chart.scale.point':      '.',
@@ -126,7 +129,8 @@
             'chart.tooltips.event':    'onclick',
             'chart.xaxispos':         'bottom',
             'chart.events.click':     null,
-            'chart.events.mousemove': null
+            'chart.events.mousemove': null,
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
 
@@ -163,7 +167,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -220,10 +223,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
 
 
 
@@ -421,44 +423,31 @@
             var coordY     = obj.gutterTop;
             var coordH     = ca.height - obj.gutterTop - obj.gutterBottom;
             var canvasXY   = RG.getCanvasXY(ca);
+            var mouseXY    = RG.getMouseXY(window.event);
 
             var width      = tooltip.offsetWidth;
             var height     = tooltip.offsetHeight;
     
             // Set the top position
             tooltip.style.left = 0;
-            tooltip.style.top  = canvasXY[1] + ((ca.height - this.gutterTop - this.gutterBottom) / 2) + 'px';
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
     
             // By default any overflow is hidden
             tooltip.style.overflow = '';
-    
-            // The arrow
-            var img = new Image();
-                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                img.style.position = 'absolute';
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.top = (tooltip.offsetHeight - 2) + 'px';
-            tooltip.appendChild(img);
             
             // Reposition the tooltip if at the edges:
             
             // LEFT edge
-            if ((canvasXY[0] + coordX + (coordW / 2) - (width / 2)) < 10) {
-                tooltip.style.left = prop['chart.align'] == 'right' ? canvasXY[0] + obj.x - (width * 0.1) + (coordW / 2) + 'px'
-                                                                    : (canvasXY[0] + coordX - (width * 0.1)) + (coordW / 2) + 'px';
-                img.style.left = (width * 0.1) - 8.5 + 'px';
+            if (canvasXY[0] + mouseXY[0] - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + (width / 2)) > document.body.offsetWidth) {
-                tooltip.style.left = prop['chart.align'] == 'right' ? canvasXY[0] + obj.x  - (width * 0.9) + (coordW / 2) + 'px'
-                                                                    : canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-                tooltip.style.left = prop['chart.align'] == 'right' ? canvasXY[0] + obj.x - (width / 2) + (coordW / 2) + 'px'
-                                                                    : canvasXY[0] + obj.x - (width / 2) - (coordW / 2) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 
@@ -473,7 +462,9 @@
         this.highlight =
         this.Highlight = function (shape)
         {
-            // When showing tooltips, this method can be used to highlight the X axis
+            if (typeof prop['chart.highlight.style'] === 'function') {
+                (prop['chart.highlight.style'])(shape);
+            }
         };
 
 
@@ -554,7 +545,7 @@
         {
             // Allow both axis.xxx and chart.xxx to prevent any confusion that may arise
             for (i in prop) {
-                if (typeof(i) == 'string') {
+                if (typeof i == 'string') {
                     var key = i.replace(/^chart\./, 'axis.');
                     
                     prop[key] = prop[i];
@@ -602,7 +593,7 @@
                 /**
                 * Draw the main vertical line
                 */
-                pa(co,['b','m',Math.round(x), y,'l',Math.round(x), y + height,'s',color]);
+                pa2(co,['b','m',Math.round(x), y,'l',Math.round(x), y + height,'s',color]);
     
                 /**
                 * Draw the axes tickmarks
@@ -614,13 +605,13 @@
         
                     co.beginPath();
                         for (var i=(notopendtick ? 1 : 0); i<=(numticks - (nobottomendtick || xaxispos == 'center'? 1 : 0)); ++i) {
-                            pa(co, ['m',align == 'right' ? x + 3 : x - 3, Math.round(y + (gap *i)),'l',x, Math.round(y + (gap *i))]);
+                            pa2(co, ['m',align == 'right' ? x + 3 : x - 3, Math.round(y + (gap *i)),'l',x, Math.round(y + (gap *i))]);
                         }
                         
                         // Draw the bottom halves ticks if the X axis is in the center
                        if (xaxispos == 'center') {
                             for (var i=1; i<=numticks; ++i) {
-                                pa(co, ['m',align == 'right' ? x + 3 : x - 3, Math.round(y + halfheight + (gap *i)),'l',x, Math.round(y + halfheight + (gap *i))]);
+                                pa2(co, ['m',align == 'right' ? x + 3 : x - 3, Math.round(y + halfheight + (gap *i)),'l',x, Math.round(y + halfheight + (gap *i))]);
                             }
                         }
                     co.stroke();
@@ -653,14 +644,14 @@
                             }
     
                             RG.text2(this, {
-                                'font':font,
-                                'size':size,
-                                'x':x - (align == 'right' ? -5 : 5),
-                                'y':(i * gap) + this.gutterTop,
-                                'text':labels_specific[i],
-                                'valign':'center',
-                                'halign':align == 'right' ? 'left' : 'right',
-                                'tag': 'scale'
+                                 'font': font,
+                                 'size': size,
+                                    'x': x - (align == 'right' ? -5 : 5),
+                                    'y': (i * gap) + this.gutterTop,
+                                 'text': labels_specific[i],
+                               'valign': 'center',
+                               'halign': align == 'right' ? 'left' : 'right',
+                                  'tag': 'scale'
                             });
                             
                             /**
@@ -773,14 +764,17 @@
                     }
                     
 
-                    RG.Text2(this, {'font':font,
-                                    'size':size + 2,
-                                    'x':align == 'right' ? x + width + 8 : x - width - 8,
-                                    'y':height / 2 + this.gutterTop,
-                                    'text':title,
-                                    'valign':'bottom',
-                                    'halign':'center',
-                                    'angle':align == 'right' ? 90 : -90});
+                    RG.text2(this, {
+                        font:font,
+                        size:size + 2,
+                        x:align == 'right' ? x + width + 8 : x - width - 8,
+                        y:height / 2 + this.gutterTop,
+                        text:title,
+                        valign:'bottom',
+                        halign:'center',
+                        angle:align == 'right' ? 90 : -90,
+                        accessible: false
+                    });
                 co.stroke();
             }
         };

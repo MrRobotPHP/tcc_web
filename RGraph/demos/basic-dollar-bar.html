@@ -34,6 +34,7 @@
                 id: 'cvs',
                 data: [12,13,16,15,16,19,19,12,23,16,13,24],
                 options: {
+                    textAccessible: true,
                     gutterLeft: 35,
                     colors: ['red'],
                     title: 'A basic chart',
@@ -48,7 +49,7 @@
             
             bar.$2.onmousemove = function (e, shape)
             {
-                e.target.style.cursor = 'pointer';
+                return true;
             }
         };
     </script>
@@ -84,6 +85,7 @@
             id: 'cvs',
             data: [12,13,16,15,16,19,19,12,23,16,13,24],
             options: {
+                textAccessible: true,
                 gutterLeft: 35,
                 colors: ['red'],
                 title: 'A basic chart',
@@ -98,7 +100,7 @@
         
         bar.$2.onmousemove = function (e, shape)
         {
-            e.target.style.cursor = 'pointer';
+            return true;
         }
     };
 &lt;/script&gt;

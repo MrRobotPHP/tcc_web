@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -95,7 +95,10 @@
             'chart.needle.triangle.border': '#aaa',
             'chart.text.size':              12,
             'chart.text.color':             'black',
-            'chart.text.font':              'Arial',
+            'chart.text.font':              'Segoe UI, Arial, Verdana, sans-serif',
+            'chart.text.accessible':               true,
+            'chart.text.accessible.overflow':      'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.green.max':              max * 0.75,
             'chart.red.min':                max * 0.9,
             'chart.green.color':            'Gradient(white:#0c0)',
@@ -178,7 +181,8 @@
             'chart.key.text.size':          10,
             'chart.key.colors':             null,
             'chart.key.text.color':         'black',
-            'chart.adjustable':             false
+            'chart.adjustable':             false,
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
 
@@ -200,7 +204,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -253,10 +256,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
     
             if (name == 'chart.needle.style') {
                 alert('[RGRAPH] The RGraph property chart.needle.style has changed to chart.needle.color');

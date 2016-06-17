@@ -17,14 +17,18 @@
 
     <h1>Pie chart Grow effect</h1>
 
-    <canvas id="cvs" width="300" height="300">[No canvas support]</canvas>
+    <canvas id="cvs" width="400" height="300">[No canvas support]</canvas>
     
     <script>
         window.onload = function ()
         {
             var pie = new RGraph.Pie({
                 id: 'cvs',
-                data: [8,6,4,8,7,5]
+                data: [8,6,4,8,7,5],
+                options: {
+                    labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+                    textAccessibleOverflow: 'hidden'
+                }
             }).grow();
         };
     </script>

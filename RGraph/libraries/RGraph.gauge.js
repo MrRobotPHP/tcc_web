@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -99,20 +99,23 @@
             'chart.gutter.bottom': 15,
             'chart.border.width':  10,
             'chart.title.top':     '',
-            'chart.title.top.font':'Arial',
+            'chart.title.top.font':'Segoe UI, Arial, Verdana, sans-serif',
             'chart.title.top.size':14,
             'chart.title.top.color':'#333',
             'chart.title.top.bold':false,
             'chart.title.top.pos': null,
             'chart.title.bottom':  '',
-            'chart.title.bottom.font':'Arial',
+            'chart.title.bottom.font':'Segoe UI, Arial, Verdana, sans-serif',
             'chart.title.bottom.size':14,
             'chart.title.bottom.color':'#333',
             'chart.title.bottom.bold':false,
             'chart.title.bottom.pos':null,
-            'chart.text.font':    'Arial',
+            'chart.text.font':    'Segoe UI, Arial, Verdana, sans-serif',
             'chart.text.color':     '#666',
             'chart.text.size':      12,
+            'chart.text.accessible':               true,
+            'chart.text.accessible.overflow':      'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.background.color': 'white',
             'chart.background.gradient': false,
             'chart.scale.decimals': 0,
@@ -132,14 +135,18 @@
 
             'chart.red.start':      0.9 * this.max,
             'chart.red.color':      '#DC3912',
+            'chart.red.width':      10,
             'chart.yellow.color':   '#FF9900',
+            'chart.yellow.width':   10,
             'chart.green.end':      0.7 * this.max,
             'chart.green.color':    'rgba(0,0,0,0)',
+            'chart.green.width':    10,
             'chart.colors.ranges':  null,
             'chart.needle.size':    null,
             'chart.needle.tail':    false,
             'chart.needle.colors':   ['#D5604D', 'red', 'green', 'yellow'],
             'chart.needle.type':     'triangle',
+            'chart.needle.width':     7,
             'chart.border.outer':     '#ccc',
             'chart.border.inner':     '#f1f1f1',
             'chart.border.outline':   'black',
@@ -162,7 +169,8 @@
             'chart.shadow.color':     'gray',
             'chart.shadow.offsetx':   0,
             'chart.shadow.offsety':   0,
-            'chart.shadow.blur':      15
+            'chart.shadow.blur':      15,
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
 
@@ -187,7 +195,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -240,10 +247,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
 
 
 
@@ -664,47 +670,50 @@
             var font = prop['chart.text.font'];
             var size = prop['chart.text.size'];
             var num  = prop['chart.labels.specific'] ? (prop['chart.labels.specific'].length - 1) : prop['chart.labels.count'];
-    
+
             co.beginPath();
-                for (var i=0; i<=num; ++i) {
-                    var hyp = (this.radius - 25 - prop['chart.border.width']) - prop['chart.labels.offset'];
-                    var a   = (this.endAngle - this.startAngle) / num
-                        a   = this.startAngle + (i * a);
-                        a  -= RG.HALFPI;
-    
-                    var x = this.centerx - (Math.sin(a) * hyp);
-                    var y = this.centery + (Math.cos(a) * hyp);
-    
-                    var hAlign = x > this.centerx ? 'right' : 'left';
-                    var vAlign = y > this.centery ? 'bottom' : 'top';
-                    
-                    // This handles the label alignment when the label is on a PI/HALFPI boundary
-                    if (a == RG.HALFPI) {
-                        vAlign = 'center';
-                    } else if (a == RG.PI) {
-                        hAlign = 'center';
-                    } else if (a == (RG.HALFPI + RG.PI) ) {
-                        vAlign = 'center';
+                if (num) {
+                    for (var i=0; i<=num; ++i) {
+                        var hyp = (this.radius - 25 - prop['chart.border.width']) - prop['chart.labels.offset'];
+                        var a   = (this.endAngle - this.startAngle) / num
+                            a   = this.startAngle + (i * a);
+                            a  -= RG.HALFPI;
+        
+                        var x = this.centerx - (ma.sin(a) * hyp);
+                        var y = this.centery + (ma.cos(a) * hyp);
+        
+                        var hAlign = x > this.centerx ? 'right' : 'left';
+                        var vAlign = y > this.centery ? 'bottom' : 'top';
+                        
+                        // This handles the label alignment when the label is on a PI/HALFPI boundary
+                        if (a == RG.HALFPI) {
+                            vAlign = 'center';
+                        } else if (a == RG.PI) {
+                            hAlign = 'center';
+                        } else if (a == (RG.HALFPI + RG.PI) ) {
+                            vAlign = 'center';
+                        }
+                        
+                        /**
+                        * Can now force center alignment
+                        */
+                        if (prop['chart.labels.centered']) {
+                            hAlign = 'center';
+                            vAlign = 'center';
+                        }
+        
+        
+                        RG.Text2(this, {
+                            'font':font,
+                            'size':size,
+                            'x':x,
+                            'y':y,
+                            'text':prop['chart.labels.specific'] ? prop['chart.labels.specific'][i] : RG.number_format(this, (((this.max - this.min) * (i / num)) + this.min).toFixed(prop['chart.scale.decimals']), prop['chart.units.pre'], prop['chart.units.post']),
+                            'halign':hAlign,
+                            'valign':vAlign,
+                            'tag': prop['chart.labels.specific'] ? 'labels.specific' : 'labels'
+                        });
                     }
-                    
-                    /**
-                    * Can now force center alignment
-                    */
-                    if (prop['chart.labels.centered']) {
-                        hAlign = 'center';
-                        vAlign = 'center';
-                    }
-    
-    
-                    RG.Text2(this, {'font':font,
-                                    'size':size,
-                                    'x':x,
-                                    'y':y,
-                                    'text':prop['chart.labels.specific'] ? prop['chart.labels.specific'][i] : RG.number_format(this, (((this.max - this.min) * (i / num)) + this.min).toFixed(prop['chart.scale.decimals']), prop['chart.units.pre'], prop['chart.units.post']),
-                                    'halign':hAlign,
-                                    'valign':vAlign,
-                                    'tag': prop['chart.labels.specific'] ? 'labels.specific' : 'labels'
-                                   });
                 }
             co.fill();
     
@@ -731,7 +740,7 @@
                     'size':size + 2,
                     'x':x,
                     'y':y,
-                    'text':RG.number_format(this, this.value.toFixed(prop['chart.scale.decimals']), units_pre, units_post),
+                    'text':RG.numberFormat(this, this.value.toFixed(prop['chart.value.text.decimals']), units_pre, units_post),
                     'halign':'center',
                     'valign':'center',
                     'bounding':bounding,
@@ -848,7 +857,7 @@
     
                 co.beginPath();
                 
-                    co.lineWidth = 7;
+                    co.lineWidth = prop['chart.needle.width'];
                     co.strokeStyle = color;
                     
                     co.arc(this.centerx,
@@ -944,7 +953,7 @@
     
             co.beginPath();
                 co.arc(this.centerx, this.centery, this.radius - 10 - prop['chart.border.width'], greenStart, greenEnd, false);
-                co.arc(this.centerx, this.centery, this.radius - 20 - prop['chart.border.width'], greenEnd, greenStart, true);
+                co.arc(this.centerx, this.centery, this.radius - (10 + prop['chart.green.width']) - prop['chart.border.width'], greenEnd, greenStart, true);
             co.fill();
     
     
@@ -962,7 +971,7 @@
     
             co.beginPath();
                 co.arc(this.centerx, this.centery, this.radius - 10 - prop['chart.border.width'], yellowStart, yellowEnd, false);
-                co.arc(this.centerx, this.centery, this.radius - 20 - prop['chart.border.width'], yellowEnd, yellowStart, true);
+                co.arc(this.centerx, this.centery, this.radius - (10 + prop['chart.yellow.width']) - prop['chart.border.width'], yellowEnd, yellowStart, true);
             co.fill();
     
     
@@ -980,7 +989,7 @@
     
             co.beginPath();
                 co.arc(this.centerx, this.centery, this.radius - 10 - prop['chart.border.width'], redStart, redEnd, false);
-                co.arc(this.centerx, this.centery, this.radius - 20 - prop['chart.border.width'], redEnd, redStart, true);
+                co.arc(this.centerx, this.centery, this.radius - (10 + prop['chart.red.width']) - prop['chart.border.width'], redEnd, redStart, true);
             co.fill();
         };
 

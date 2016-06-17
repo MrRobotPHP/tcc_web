@@ -24,42 +24,37 @@
     <canvas id="cvs" width="600" height="250" style="border: 1px solid gray">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var bipolar = new RGraph.Bipolar({
-                id: 'cvs',
-                left: [4,6,3,5,8],
-                right: [4,6,5,9,2],
-                options: {
-                    labels: ['John','Luke','Pete','Jane','Fred'],
-                    scaleZerostart: true,
-                    noaxes: true
-                }
-            }).on('firstdraw', function (obj)
-            {
-                var x = obj.gutterLeft + obj.axisWidth + 5;
-                
-                obj.context.translate(-1 * x, 0);
-                
-                obj.context.clearRect(0,0,1000,1000)
-            }).on('beforedraw', function (obj)
-            {
-                obj.context.clearRect(0,0,1000,1000);
-            }).grow();
+        new RGraph.Bipolar({
+            id: 'cvs',
+            left: [4,6,3,5,8],
+            right: [4,6,5,9,2],
+            options: {
+                colors: ['#7CB5EC'],
+                labels: ['John','Luke','Pete','Jane','Fred'],
+                scaleZerostart: true,
+                noaxes: true,
+                gutterLeft: -225,
+                gutterRight: 325,
+                textAccessible: true,
+                textAccessibleOverflow: 'hidden'
+            }
+        }).grow();
 
-            var bipolar = new RGraph.Bipolar({
-                id: 'cvs',
-                left: [4,6,3,5,8],
-                right: [4,6,5,9,2],
-                options: {
-                    labels: ['John','Luke','Pete','Jane','Fred'],
-                    scaleZerostart: true,
-                    noaxes: true,
-                    gutterLeft: 600,
-                    gutterRight: -500
-                }
-            }).grow();
-        };
+        new RGraph.Bipolar({
+            id: 'cvs',
+            left: [4,6,3,5,8],
+            right: [4,6,5,9,2],
+            options: {
+                labels: ['John','Luke','Pete','Jane','Fred'],
+                scaleZerostart: true,
+                noaxes: true,
+                gutterLeft: 325,
+                gutterRight: -225,
+                textAccessible: true,
+                textAccessibleOverflow: 'hidden',
+                colors: ['#7CB5EC']
+            }
+        }).grow();
     </script>
 
 
@@ -83,42 +78,37 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var bipolar = new RGraph.Bipolar({
-            id: 'cvs',
-            left: [4,6,3,5,8],
-            right: [4,6,5,9,2],
-            options: {
-                labels: ['John','Luke','Pete','Jane','Fred'],
-                scaleZerostart: true,
-                noaxes: true
-            }
-        }).on('firstdraw', function (obj)
-        {
-            var x = obj.gutterLeft + obj.axisWidth + 5;
-            
-            obj.context.translate(-1 * x, 0);
-            
-            obj.context.clearRect(0,0,1000,1000)
-        }).on('beforedraw', function (obj)
-        {
-            obj.context.clearRect(0,0,1000,1000);
-        }).grow();
+    new RGraph.Bipolar({
+        id: 'cvs',
+        left: [4,6,3,5,8],
+        right: [4,6,5,9,2],
+        options: {
+            labels: ['John','Luke','Pete','Jane','Fred'],
+            scaleZerostart: true,
+            noaxes: true,
+            gutterLeft: -225,
+            gutterRight: 325,
+            textAccessible: true,
+            textAccessibleOverflow: 'hidden',
+            colors: ['#7CB5EC']
+        }
+    }).grow();
 
-        var bipolar = new RGraph.Bipolar({
-            id: 'cvs',
-            left: [4,6,3,5,8],
-            right: [4,6,5,9,2],
-            options: {
-                labels: ['John','Luke','Pete','Jane','Fred'],
-                scaleZerostart: true,
-                noaxes: true,
-                gutterLeft: 600,
-                gutterRight: -500
-            }
-        }).grow();
-    };
+    new RGraph.Bipolar({
+        id: 'cvs',
+        left: [4,6,3,5,8],
+        right: [4,6,5,9,2],
+        options: {
+            labels: ['John','Luke','Pete','Jane','Fred'],
+            scaleZerostart: true,
+            noaxes: true,
+            gutterLeft: 325,
+            gutterRight: -225,
+            textAccessible: true,
+            textAccessibleOverflow: 'hidden',
+            colors: ['#7CB5EC']
+        }
+    }).grow();
 &lt;/script&gt;
 </pre>
 

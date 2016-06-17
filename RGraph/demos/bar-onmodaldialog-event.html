@@ -42,7 +42,8 @@
                     shadowOffsety: 2,
                     shadowBlur: 2,
                     'background.grid.autofit.numvlines': 7,
-                    textSize:16
+                    textSize:16,
+                    textAccessible: true
                 }
             }).draw();
             
@@ -53,7 +54,7 @@
         
             bar.onmousemove = function (e, shape)
             {
-                e.target.style.cursor = 'pointer';
+                return true;
             }
             
             ModalDialog.onmodaldialog = function (obj)
@@ -100,7 +101,8 @@
                 shadowOffsety: 2,
                 shadowBlur: 2,
                 'background.grid.autofit.numvlines': 7,
-                textSize:16
+                textSize:16,
+                textAccessible: true
             }
         }).draw();
         
@@ -111,7 +113,7 @@
     
         bar.onmousemove = function (e, shape)
         {
-            e.target.style.cursor = 'pointer';
+            return true;
         }
         
         ModalDialog.onmodaldialog = function (obj)

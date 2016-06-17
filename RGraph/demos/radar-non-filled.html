@@ -23,35 +23,31 @@
     <canvas id="cvs" width="500" height="400">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var radar3 = new RGraph.Radar({
-                id: 'cvs',
-                data: [
-                    [8,7,6,7,8,6],
-                    [8,9,4,6,6,8]
+        new RGraph.Radar({
+            id: 'cvs',
+            data: [ [8,7,6,7,8,6], [8,9,4,6,6,8] ],
+            options: {
+                textAccessible: true,
+                tooltips: [
+                    'Mal', 'Barry', 'Gary','Dave','Paul', 'Rich',
+                    'Mal', 'Barry', 'Gary','Dave','Paul', 'Rich'
                 ],
-                options: {
-                    tooltips: [
-                        'Mal', 'Barry', 'Gary','Dave','Paul', 'Rich',
-                        'Mal', 'Barry', 'Gary','Dave','Paul', 'Rich'
-                    ],
-                    backgroundCirclesPoly: true,
-                    backgroundCirclesSpacing: 30,
-                    colors: ['transparent'],
-                    axesColor: 'transparent',
-                    highlights: true,
-                    strokestyle: ['red', 'black'],
-                    linewidth: 2,
-                    labels: ['', 'Barry', 'Gary','Dave','Paul','Rich'],
-                    labelsAxes: 'n',
-                    textSize: 16,
-                    clearto: 'white',
-                    labelsAxesBoxed: false,
-                    labelsAxesBoxedZero: false
-                }
-            }).grow();
-        };
+                backgroundCirclesPoly: true,
+                backgroundCirclesSpacing: 30,
+                colors: ['transparent'],
+                axesColor: 'transparent',
+                highlights: true,
+                strokestyle: ['red', 'black'],
+                linewidth: 2,
+                labels: ['', 'Barry', 'Gary','Dave','Paul','Rich'],
+                labelsAxes: 'n',
+                textSize: 16,
+                clearto: 'white',
+                labelsAxesBoxed: false,
+                labelsAxesBoxedZero: false,
+                textAccessible: true
+            }
+        }).grow();
     </script>
 
 
@@ -79,35 +75,31 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var radar3 = new RGraph.Radar({
-            id: 'cvs',
-            data: [
-                [8,7,6,7,8,6],
-                [8,9,4,6,6,8]
+    new RGraph.Radar({
+        id: 'cvs',
+        data: [ [8,7,6,7,8,6], [8,9,4,6,6,8] ],
+        options: {
+            textAccessible: true,
+            tooltips: [
+                'Mal', 'Barry', 'Gary','Dave','Paul', 'Rich',
+                'Mal', 'Barry', 'Gary','Dave','Paul', 'Rich'
             ],
-            options: {
-                tooltips: [
-                    'Mal', 'Barry', 'Gary','Dave','Paul', 'Rich',
-                    'Mal', 'Barry', 'Gary','Dave','Paul', 'Rich'
-                ],
-                backgroundCirclesPoly: true,
-                backgroundCirclesSpacing: 30,
-                colors: ['transparent'],
-                axesColor: 'transparent',
-                highlights: true,
-                strokestyle: ['red', 'black'],
-                linewidth: 2,
-                labels: ['', 'Barry', 'Gary','Dave','Paul','Rich'],
-                labelsAxes: 'n',
-                textSize: 16,
-                clearto: 'white',
-                labelsAxesBoxed: false,
-                labelsAxesBoxedZero: false
-            }
-        }).grow();
-    };
+            backgroundCirclesPoly: true,
+            backgroundCirclesSpacing: 30,
+            colors: ['transparent'],
+            axesColor: 'transparent',
+            highlights: true,
+            strokestyle: ['red', 'black'],
+            linewidth: 2,
+            labels: ['', 'Barry', 'Gary','Dave','Paul','Rich'],
+            labelsAxes: 'n',
+            textSize: 16,
+            clearto: 'white',
+            labelsAxesBoxed: false,
+            labelsAxesBoxedZero: false,
+            textAccessible: true
+        }
+    }).grow();
 &lt;/script&gt;
 </pre>
 

@@ -20,22 +20,20 @@
     <canvas id="cvs" width="800" height="400">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var rose = new RGraph.Rose({
-                id: 'cvs',
-                data: [[4,8,7],[6,5,8],[4,5,3],[4,9,8],[3,8,6],[4,6,3],[1,5,8]],
-                options: {
-                    strokestyle: 'rgba(0,0,0,0)',
-                    margin: 7,
-                    variant: 'stacked3d',
-                    variantThreedDepth: 10,
-                    labelsAxes: 'n',
-                    colors: ['gradient(#faa:red)','Gradient(#afa:green)','gradient(#aaf:#ddf)'],
-                    labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-                }
-            }).draw();
-        };
+        new RGraph.Rose({
+            id: 'cvs',
+            data: [[4,8,7],[6,5,8],[4,5,3],[4,9,8],[3,8,6],[4,6,3],[1,5,8]],
+            options: {
+                strokestyle: 'rgba(0,0,0,0)',
+                margin: 7,
+                variant: 'stacked3d',
+                variantThreedDepth: 10,
+                labelsAxes: 'n',
+                colors: ['gradient(#faa:red)','Gradient(#afa:green)','gradient(#aaf:#ddf)'],
+                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                textAccessible: false
+            }
+        }).draw();
     </script>
 
 
@@ -60,22 +58,20 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var rose = new RGraph.Rose({
-            id: 'cvs',
-            data: [[4,8,7],[6,5,8],[4,5,3],[4,9,8],[3,8,6],[4,6,3],[1,5,8]],
-            options: {
-                strokestyle: 'rgba(0,0,0,0)',
-                margin: 7,
-                variant: 'stacked3d',
-                variantThreedDepth: 10,
-                labelsAxes: 'n',
-                colors: ['gradient(#faa:red)','Gradient(#afa:green)','gradient(#aaf:#ddf)'],
-                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-            }
-        }).draw();
-    };
+    new RGraph.Rose({
+        id: 'cvs',
+        data: [[4,8,7],[6,5,8],[4,5,3],[4,9,8],[3,8,6],[4,6,3],[1,5,8]],
+        options: {
+            strokestyle: 'rgba(0,0,0,0)',
+            margin: 7,
+            variant: 'stacked3d',
+            variantThreedDepth: 10,
+            labelsAxes: 'n',
+            colors: ['gradient(#faa:red)','Gradient(#afa:green)','gradient(#aaf:#ddf)'],
+            labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+            textAccessible: false
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

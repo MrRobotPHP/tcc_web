@@ -42,15 +42,7 @@
             bar.set({
                 numyticks: 6,
                 ymax: 6,
-                ylabelsSpecific: [
-                    RGraph.numberFormat(bar, 1000000),
-                    RGraph.numberFormat(bar, 100000),
-                    RGraph.numberFormat(bar, 10000),
-                    RGraph.numberFormat(bar, 1000),
-                    RGraph.numberFormat(bar, 100),
-                    RGraph.numberFormat(bar, 10),
-                    ''
-                ],
+                ylabelsSpecific: ['1,000,000', '100,000', '10000', '1,000', '100', '10', '0'],
                 labels: ['Pob','Libby','June','Hoolio','Jane','Daz','Luis','John'],
                 numxticks: 8,
                 textSize: 14,
@@ -58,7 +50,8 @@
                 backgroundGridAutofitNumhlines: 6,
                 backgroundGridAutofitNumvlines: 7,
                 strokestyle: 'transparent',
-                shadow: false
+                shadow: false,
+                textAccessible: true
             }).draw();
         };
     </script>
@@ -106,15 +99,7 @@
         bar.set({
             numyticks: 6,
             ymax: 6,
-            ylabelsSpecific: [
-                RGraph.numberFormat(bar, 1000000),
-                RGraph.numberFormat(bar, 100000),
-                RGraph.numberFormat(bar, 10000),
-                RGraph.numberFormat(bar, 1000),
-                RGraph.numberFormat(bar, 100),
-                RGraph.numberFormat(bar, 10),
-                ''
-            ],
+            ylabelsSpecific: ['1,000,000', '100,000', '10000', '1,000', '100', '10', '0'],
             labels: ['Pob','Libby','June','Hoolio','Jane','Daz','Luis','John'],
             numxticks: 8,
             textSize: 14,
@@ -122,7 +107,8 @@
             backgroundGridAutofitNumhlines: 6,
             backgroundGridAutofitNumvlines: 7,
             strokestyle: 'transparent',
-            shadow: false
+            shadow: false,
+            textAccessible: true
         }).draw();
     };
 &lt;/script&gt;

@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
     
     <script src="../libraries/RGraph.common.core.js" ></script>
-    <script src="../libraries/RGraph.common.effects.js" ></script>
     <script src="../libraries/RGraph.hbar.js" ></script>
     
     <title>A Horizontal Bar chart example that is animated</title>
@@ -37,10 +36,11 @@
                     labelsAbove: true,
                     labelsAboveDecimals: 1,
                     noxaxis: true,
-                    gutterLeft: 125,
-                    xlabels: false
+                    gutterLeft: 150,
+                    xlabels: false,
+                    textAccessible: true
                 }
-            }).grow()
+            }).wave();
         };
     </script>
 
@@ -53,7 +53,6 @@
     This goes in the documents header:
     <pre class="code">
 &lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
-&lt;script src="RGraph.common.effects.js"&gt;&lt;/script&gt;
 &lt;script src="RGraph.hbar.js"&gt;&lt;/script&gt;
 </pre>
     
@@ -83,7 +82,8 @@
                 labelsAboveDecimals: 1,
                 noxaxis: true,
                 gutterLeft: 125,
-                xlabels: false
+                xlabels: false,
+                textAccessible: true
             }
         }).grow();
     };

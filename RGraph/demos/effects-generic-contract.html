@@ -21,19 +21,17 @@
     <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var data = [4,8,6,3,1,2,5];
+        var data = [4,8,6,3,1,2,5];
 
-            var bar = new RGraph.Bar({
-                id: 'cvs',
-                data: data,
-                options: {
-                    labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-                }
-            }).draw()
-              .contract();
-        };
+        var bar = new RGraph.Bar({
+            id: 'cvs',
+            data: data,
+            options: {
+                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                textAccessible: false
+            }
+        }).draw()
+          .contract();
     </script>
 
     <p></p>
@@ -64,7 +62,8 @@
             id: 'cvs',
             data: data,
             options: {
-                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                textAccessible: false
             }
         }).draw()
           .contract();

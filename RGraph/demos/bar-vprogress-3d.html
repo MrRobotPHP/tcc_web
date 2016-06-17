@@ -21,32 +21,29 @@
     <canvas id="cvs" width="125" height="300">[No canvas support]</canvas>
 
     <script>
-        window.onload = function ()
-        {
-            var bar = new RGraph.Bar({
-                id: 'cvs',
-                data: [100],
-                options: {
-                    variant: '3d',
-                    strokestyle: 'rgba(0,0,0,0)',
-                    colors: ['Gradient(red:#f99:#0f0:#0f0)'],
-                    gutterBottom: 80,
-                    gutterLeft: 50,
-                    gutterRight: 35,
-                    unitsPost: '%',
-                    hmargin: 7,
-                    labels: ['Completion'],
-                    labelsAbove: true,
-                    shadowColor:'#ccc',
-                    ymax: 100,
-                    noaxes: true,
-                    shadowOffsetx: 3,
-                    backgroundGridColor: 'rgba(0,0,0,0)',
-                    adjustable: true,
-                    noxaxis: true
-                }
-            }).grow();
-        };
+        new RGraph.Bar({
+            id: 'cvs',
+            data: [100],
+            options: {
+                textAccessible: true,
+                variant: '3d',
+                strokestyle: 'rgba(0,0,0,0)',
+                colors: ['Gradient(red:#f99:#0f0:#0f0)'],
+                gutterBottom: 80,
+                gutterLeft: 50,
+                gutterRight: 35,
+                unitsPost: '%',
+                hmargin: 7,
+                labels: ['Completion'],
+                shadowColor:'#ccc',
+                ymax: 100,
+                noaxes: true,
+                shadowOffsetx: 3,
+                backgroundGridColor: 'rgba(0,0,0,0)',
+                adjustable: true,
+                noxaxis: true
+            }
+        }).grow();
     </script>
 
 
@@ -74,31 +71,29 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var bar = new RGraph.Bar({
-            id: 'cvs',
-            data: [74],
-            options: {
-                variant: '3d',
-                strokestyle: 'rgba(0,0,0,0)',
-                colors: ['Gradient(red:#f99:#0f0:#0f0)'],
-                gutterBottom: 80,
-                gutterLeft: 50,
-                gutterRight: 35,
-                unitsPost: '%',
-                hmargin: 2,
-                labels: ['Completion'],
-                labelsAbove: true,
-                shadowColor:'#ccc',
-                ymax: 100,
-                shadowOffsetx: 3,
-                backgroundGridColor: 'rgba(0,0,0,0)',
-                adjustable: true,
-                noxaxis: true
-            }
-        }).draw();
-    };
+    new RGraph.Bar({
+        id: 'cvs',
+        data: [74],
+        options: {
+            textAccessible: true,
+            variant: '3d',
+            strokestyle: 'rgba(0,0,0,0)',
+            colors: ['Gradient(red:#f99:#0f0:#0f0)'],
+            gutterBottom: 80,
+            gutterLeft: 50,
+            gutterRight: 35,
+            unitsPost: '%',
+            hmargin: 7,
+            labels: ['Completion'],
+            shadowColor:'#ccc',
+            ymax: 100,
+            noaxes: true,
+            shadowOffsetx: 3,
+            backgroundGridColor: 'rgba(0,0,0,0)',
+            adjustable: true,
+            noxaxis: true
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

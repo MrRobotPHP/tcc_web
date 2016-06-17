@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license starts at just £99 (GBP) and      |
+    * | the terms of the GPL. The commercial license starts at just 99 GBP and      |
     * | you can read about it here:                                                    |
     * |                                                                                |
     * |                      http://www.rgraph.net/license                             |
@@ -298,15 +298,26 @@
                     co.beginPath();
                     co.fillStyle = typeof text_color == 'object' ? text_color[i] : text_color;
                 
-                    ret = RG.Text2(obj, {'font': text_font,
-                                         'size': text_size,
-                                         'bold': text_bold,
-                                         'italic': text_italic,
-                                         'x': hpos + blob_size + 5 + 5,
-                                         'y': vpos + (5 * j) + (text_size * j) + 3,
-                                         'text': key[i]});
+                    ret = RG.Text2(obj, {
+                        'font': text_font,
+                        'size': text_size,
+                        'bold': text_bold,
+                        'italic': text_italic,
+                        'x': hpos + blob_size + 5 + 5,
+                        'y': vpos + (5 * j) + (text_size * j) + 3,
+                        'text': key[i],
+                        'accessible': !obj.properties['chart.key.interactive']
+                    });
 
-                    obj.coords.key[i] = [ret.x, ret.y, ret.width, ret.height, key[i], colors[i], obj];
+                    obj.coords.key[i] = [
+                        ret.x,
+                        ret.y,
+                        ret.width,
+                        ret.height,
+                        key[i],
+                        colors[i],
+                        obj
+                    ];
                 }
             co.fill();
         }
@@ -537,12 +548,21 @@
                         'italic': text_italic,
                         'x':pos,
                         'y':vpos + text_size + 3,
-                        'text': key[i]
+                        'text': key[i],
+                        accessible: !obj.properties['chart.key.interactive']
                     });
                 co.fill();
                 pos += co.measureText(key[i]).width;
-                
-                obj.coords.key[i] = [ret.x, ret.y, ret.width, ret.height, key[i], colors[i], obj];
+            
+                obj.coords.key[i] = [
+                    ret.x,
+                    ret.y,
+                    ret.width,
+                    ret.height,
+                    key[i],
+                    colors[i],
+                    obj
+                ];
             }
         }
 
@@ -622,7 +642,7 @@
                     
                     rect.onmousemove = function (e, shape)
                     {
-                        e.target.style.cursor = 'pointer';
+                        return true;
                     }
                 })(i);
             }

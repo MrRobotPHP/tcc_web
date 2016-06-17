@@ -2,39 +2,47 @@
 <html>
 <head>
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
-    
+
     <script src="../libraries/RGraph.common.core.js" ></script>
     <script src="../libraries/RGraph.bar.js" ></script>
     
+
     <title>A basic Bar chart</title>
     
     <meta name="robots" content="noindex,nofollow" />
     <meta name="description" content="A basic Bar chart" />
-    
 </head>
 <body>
 
     <h1>A basic Bar chart</h1>
 
     
-    <canvas id="cvs" width="700" height="250">[No canvas support]</canvas>
-    
+    <div style="padding: 15px; display: inline-block">
+        <canvas id="cvs" width="750" height="250">[No canvas support]</canvas>
+    </div>
+
+
+
     <script>
-        var bar = new RGraph.Bar({
+            var bar = new RGraph.Bar({
             id: 'cvs',
             data: [12,18,10,9,6,20,18],
             options: {
-                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                labels: ['Monday\n(urgh!)','Tuesday','Wednesday','Thursday','Friday\n(yay!)','Saturday','Sunday'],
+                unitsPost: 'k',
                 shadow: false,
                 colors: ['red'],
-                strokestyle: 'rgba(0,0,0,0)'
-            }                
+                strokestyle: 'rgba(0,0,0,0)',
+                textSize: 14,
+                //textAccessible: true, // Defaults to true now
+                title: 'A basic Bar chart using accessible text',
+                numyticks: 5,
+                noxaxis: true,
+                gutterLeft: 50,
+                scaleZerostart: true
+            }
         }).draw();
     </script>
-
-
-
-
 
 
 
@@ -48,22 +56,30 @@
     
     Put this where you want the chart to show up:
     <pre class="code">
-&lt;canvas id="cvs" width="700" height="250"&gt;
-    [No canvas support]
-&lt;/canvas&gt;
+&lt;div style="padding: 15px"&gt;
+    &lt;canvas id="cvs" width="750" height="250"&gt;[No canvas support]&lt;/canvas&gt;
+&lt;/div&gt;
 </pre>
 
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    var bar = new RGraph.Bar({
+    new RGraph.Bar({
         id: 'cvs',
         data: [12,18,10,9,6,20,18],
         options: {
-            labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+            labels: ['Monday\n(urgh!)','Tuesday','Wednesday','Thursday','Friday\n(yay!)','Saturday','Sunday'],
+            unitsPost: 'k',
             shadow: false,
             colors: ['red'],
-            strokestyle: 'rgba(0,0,0,0)'
+            strokestyle: 'rgba(0,0,0,0)',
+            textSize: 14,
+            <span>//textAccessible: true, // Defaults to true now</span>
+            title: 'A basic Bar chart using DOM text',
+            numyticks: 5,
+            noxaxis: true,
+            gutterLeft: 50,
+            scaleZerostart: true
         }                
     }).draw();
 &lt;/script&gt;

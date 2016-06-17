@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -106,7 +106,7 @@
         this.properties =
         {
             'chart.size':                    10,
-            'chart.font':                    'Arial',
+            'chart.font':                    'Segoe UI, Arial, Verdana, sans-serif',
             'chart.bold':                    false,
             'chart.angle':                   0,
             'chart.colors':                  ['black'],
@@ -133,7 +133,11 @@
             'chart.valign':                  'bottom',
             'chart.link':                    null,
             'chart.link.target':             '_self',
-            'chart.link.options':            ''
+            'chart.link.options':            '',
+            'chart.text.accessible':                true,
+            'chart.text.accessible.overflow':       'visible',
+            'chart.text.accessible.pointerevents': false,
+            'chart.clearto':                       'rgba(0,0,0,0)'
         }
 
         /**
@@ -170,7 +174,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -224,10 +227,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
 
 
 
@@ -324,35 +326,36 @@
     
             // ------------- DRAW TEXT HERE -------------
             co.fillStyle = prop['chart.colors'][0];
-    
-            var ret = RG.Text2(this, {'font':                    prop['chart.font'],
-                                      'size':                    prop['chart.size'],
-                                      'x':                       this.x,
-                                      'y':                       this.y,
-                                      'text':                    this.text,
-                                      'bold':                    prop['chart.bold'],
-                                      'angle':                   prop['chart.angle'],
-                                      'bounding':                prop['chart.bounding'],
-                                      'bounding.fill':           prop['chart.bounding.fill'],
-                                      'bounding.stroke':         prop['chart.bounding.stroke'],
-                                      'bounding.shadow':         prop['chart.bounding.shadow'],
-                                      'bounding.shadow.color':   prop['chart.bounding.shadow.color'],
-                                      'bounding.shadow.blur':    prop['chart.bounding.shadow.blur'],
-                                      'bounding.shadow.offsetx': prop['chart.bounding.shadow.offsetx'],
-                                      'bounding.shadow.offsety': prop['chart.bounding.shadow.offsety'],
-                                      'marker':                  prop['chart.marker'],
-                                      'halign':                  prop['chart.halign'],
-                                      'valign':                  prop['chart.valign']
-                                      });
+
+            var ret = RG.text2(this, {
+                font:                      prop['chart.font'],
+                size:                      prop['chart.size'],
+                x:                         this.x,
+                y:                         this.y,
+                text:                      this.text,
+                bold:                      prop['chart.bold'],
+                angle:                     prop['chart.angle'],
+                bounding:                  prop['chart.bounding'],
+                'bounding.fill':           prop['chart.bounding.fill'],
+                'bounding.stroke':         prop['chart.bounding.stroke'],
+                'bounding.shadow':         prop['chart.bounding.shadow'],
+                'bounding.shadow.color':   prop['chart.bounding.shadow.color'],
+                'bounding.shadow.blur':    prop['chart.bounding.shadow.blur'],
+                'bounding.shadow.offsetx': prop['chart.bounding.shadow.offsetx'],
+                'bounding.shadow.offsety': prop['chart.bounding.shadow.offsety'],
+                marker:                    prop['chart.marker'],
+                halign:                    prop['chart.halign'],
+                valign:                    prop['chart.valign']
+            });
     
     
             // store the dimensions
             this.coords.push({
-                              0: ret.x,      'x':      ret.x,
-                              1: ret.y,      'y':      ret.y,
-                              2: ret.width,  'width':  ret.width,
-                              3: ret.height, 'height': ret.height
-                             });
+                0: ret.x,      'x':      ret.x,
+                1: ret.y,      'y':      ret.y,
+                2: ret.width,  'width':  ret.width,
+                3: ret.height, 'height': ret.height
+            });
     
     
     
@@ -460,46 +463,35 @@
         this.positionTooltip = function (obj, x, y, tooltip, idx)
         {
             var coords   = obj.coords[0];
-            var coordX   = coords.x;
-            var coordY   = coords.y;
+            var coordX   = parseFloat(coords.x);
+            var coordY   = parseFloat(coords.y);
             var coordW   = coords.width;
             var coordH   = coords.height;
-            var canvasXY = RGraph.getCanvasXY(obj.canvas);
+            var canvasXY = RG.getCanvasXY(obj.canvas);
+            var mouseXY  = RG.getMouseXY(window.event);
             var width    = tooltip.offsetWidth;
             var height   = tooltip.offsetHeight;
     
             // Set the top position
             tooltip.style.left = 0;
-            
-            tooltip.style.top  = canvasXY[1] + coordY + (coordH / 2) - height + 'px';
-            
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
+    
             // By default any overflow is hidden
             tooltip.style.overflow = '';
-    
-            // The arrow
-            var img = new Image();
-                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                img.style.position = 'absolute';
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.top = (tooltip.offsetHeight - 2) + 'px';
-            tooltip.appendChild(img);
             
             // Reposition the tooltip if at the edges:
             
             // LEFT edge
-            if ((canvasXY[0] + coordX + (coordW / 2) - (width / 2)) < 10) {
-                tooltip.style.left = (canvasXY[0] + coordX - (width * 0.1)) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.1) - 8.5) + 'px';
+            if (canvasXY[0] + mouseXY[0] - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + (coordW / 2) + (width / 2)) > (doc.body.offsetWidth - 10)) {
-                tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-                tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 
@@ -514,8 +506,11 @@
         this.highlight =
         this.Highlight = function (shape)
         {
-            // Add the new highlight
-            RG.Highlight.Rect(this, shape);
+            if (typeof prop['chart.highlight.style'] === 'function') {
+                (prop['chart.highlight.style'])(shape);
+            } else {
+                RG.Highlight.Rect(this, shape);
+            }
         };
 
 

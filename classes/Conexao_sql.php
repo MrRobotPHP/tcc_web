@@ -4,10 +4,10 @@ abstract class Conexao_sql {
 
 	const user = "root";
 	const pass = "root";
-
 	private static $instance = null;
 
 	private static function conectar() {
+
 		try {
 			
 			self::$instance = new PDO("mysql:host=localhost;dbname=tcc", self::user, self::pass);

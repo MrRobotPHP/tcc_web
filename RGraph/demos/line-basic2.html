@@ -23,23 +23,21 @@
     <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
 
     <script>
-        window.onload = function ()
-        {
-            var line = new RGraph.Line({
-                id: 'cvs',
-                data: [4,5,5,6,6,7,4,5,6,8,8,9,15,16,24,25, null, null],
-                options: {
-                    numxticks: 0,
-                    numyticks: 0,
-                    backgroundGrid: false,
-                    colors: ['black'],
-                    linewidth: 5,
-                    hmargin: 5,
-                    ylabels: false,
-                    shadow: false
-                }
-            }).trace2();
-        };
+        new RGraph.Line({
+            id: 'cvs',
+            data: [4,5,5,6,6,7,4,5,6,8,8,9,15,16,24,25, null, null],
+            options: {
+                numxticks: 0,
+                numyticks: 0,
+                backgroundGrid: false,
+                colors: ['black'],
+                linewidth: 5,
+                hmargin: 5,
+                ylabels: false,
+                shadow: false,
+                tickmarks: null
+            }
+        }).trace2();
     </script>
 
 
@@ -67,23 +65,21 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var line = new RGraph.Line({
-            id: 'cvs',
-            data: [4,5,5,6,6,7,4,5,6,8,8,9,15,16,24,25, null, null],
-            options: {
-                numxticks: 0,
-                numyticks: 0,
-                backgroundGrid: false,
-                colors: ['black'],
-                linewidth: 5,
-                hmargin: 5,
-                ylabels: false,
-                shadow: false
-            }
-        }).trace2();
-    };
+    new RGraph.Line({
+        id: 'cvs',
+        data: [4,5,5,6,6,7,4,5,6,8,8,9,15,16,24,25, null, null],
+        options: {
+            numxticks: 0,
+            numyticks: 0,
+            backgroundGrid: false,
+            colors: ['black'],
+            linewidth: 5,
+            hmargin: 5,
+            ylabels: false,
+            shadow: false,
+            tickmarks: null
+        }
+    }).trace2();
 &lt;/script&gt;
 </pre>
 

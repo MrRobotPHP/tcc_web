@@ -28,11 +28,11 @@
                 value: [184,12],
                 options: {
                     titleTop: 'Air Speed',
-                    titleTopSize: 'Italic 22',
+                    titleTopSize: 'italic 22',
                     titleTopFont: 'Impact',
                     titleTopColor: 'white',
                     titleBottom: 'Knots',
-                    titleBottomSize: 'Italic 14',
+                    titleBottomSize: 'italic 14',
                     titleBottomFont: 'Impact',
                     titleBottomColor: '#ccc',
                     titleBottomPos: 0.4,
@@ -47,7 +47,8 @@
                     tickmarksSmallColor: 'white',
                     borderOuter: '#666',
                     borderInner: '#333',
-                    colorsRanges: []
+                    colorsRanges: [[160,200,'rgba(255,0,0,1)'], [120,160,'rgba(255,255,0,0.95']],
+                    textAccessible: true
                 }
             }).draw();
         };
@@ -84,7 +85,7 @@
             value: [184,12],
             options: {
                 titleTop: 'Air Speed',
-                titleTopSize: 'Italic 22',
+                titleTopSize: '22',
                 titleTopFont: 'Impact',
                 titleTopColor: 'white',
                 titleBottom: 'Knots',
@@ -103,7 +104,8 @@
                 tickmarksSmallColor: 'white',
                 borderOuter: '#666',
                 borderInner: '#333',
-                colorsRanges: []
+                colorsRanges: [[160,200,'rgba(255,0,0,1)'], [120,160,'rgba(255,255,0,0.95']],
+                textAccessible: true
             }
         }).draw();
     };

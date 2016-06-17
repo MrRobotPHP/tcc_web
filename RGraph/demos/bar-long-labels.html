@@ -19,35 +19,34 @@
     <canvas id="cvs" width="500" height="350" style="border: 1px solid #ddd">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var data = [[4,5,3],[4,8,6],[4,2,4],[4,2,3],[1,2,3],[8,8,4],[4,8,6]];
+        var data = [[4,5,3],[4,8,6],[4,2,4],[4,2,3],[1,2,3],[8,8,4],[4,8,6]];
 
-            var bar = new RGraph.Bar({
-                id:'cvs',
-                data: data,
-                options: {
-                    labels: [
-                        'Mondays sales',
-                        '\r\nTuesdays sales',
-                        'Wednesdays sales',
-                        '\r\nThursdays sales',
-                        'Fridays sales',
-                        '\r\nSaturdays sales',
-                        'Sundays sales'
-                    ],
-                    colors: ['red','yellow', 'pink'],
-                    grouping: 'stacked',
-                    gutterLeft: 100,
-                    gutterRight: 5,
-                    gutterTop: 5,
-                    gutterBottom: 95,
-                    textAngle: 45,
-                    strokestyle: 'rgba(0,0,0,0)',
-                    backgroundGridAutofitNumvlines: 7
-                }
-            }).draw();
-        };
+        new RGraph.Bar({
+            id:'cvs',
+            data: data,
+            options: {
+                labels: [
+                    'Mondays sales',
+                    '\r\nTuesdays sales',
+                    'Wednesdays sales',
+                    '\r\nThursdays sales',
+                    'Fridays sales',
+                    '\r\nSaturdays sales',
+                    'Sundays sales'
+                ],
+                colors: ['red','yellow', 'pink'],
+                grouping: 'stacked',
+                gutterLeft: 100,
+                gutterRight: 5,
+                gutterTop: 5,
+                gutterBottom: 105,
+                textAngle: 45,
+                textAccessible: false,
+                strokestyle: 'rgba(0,0,0,0)',
+                backgroundGridAutofitNumvlines: 7,
+                labelsOffsety: 7
+            }
+        }).draw();
     </script>
 
 
@@ -75,35 +74,33 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var data = [[4,5,3],[4,8,6],[4,2,4],[4,2,3],[1,2,3],[8,8,4],[4,8,6]];
+    var data = [[4,5,3],[4,8,6],[4,2,4],[4,2,3],[1,2,3],[8,8,4],[4,8,6]];
 
-        var bar = new RGraph.Bar({
-            id:'cvs',
-            data: data,
-            options: {
-                labels: [
-                    'Mondays sales',
-                    '\r\nTuesdays sales',
-                    'Wednesdays sales',
-                    '\r\nThursdays sales',
-                    'Fridays sales',
-                    '\r\nSaturdays sales',
-                    'Sundays sales'
-                ],
-                colors: ['red','yellow', 'pink'],
-                grouping: 'stacked',
-                gutterLeft: 100,
-                gutterRight: 5,
-                gutterTop: 5,
-                gutterBottom: 95,
-                textAngle: 45,
-                strokestyle: 'rgba(0,0,0,0)',
-                backgroundGridAutofitNumvlines: 7
-            }
-        }).draw();
-    };
+    new RGraph.Bar({
+        id:'cvs',
+        data: data,
+        options: {
+            labels: [
+                'Mondays sales',
+                '\r\nTuesdays sales',
+                'Wednesdays sales',
+                '\r\nThursdays sales',
+                'Fridays sales',
+                '\r\nSaturdays sales',
+                'Sundays sales'
+            ],
+            colors: ['red','yellow', 'pink'],
+            grouping: 'stacked',
+            gutterLeft: 100,
+            gutterRight: 5,
+            gutterTop: 5,
+            gutterBottom: 105,
+            textAngle: 45,
+            strokestyle: 'rgba(0,0,0,0)',
+            backgroundGridAutofitNumvlines: 7,
+            labelsOffsety: 7
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

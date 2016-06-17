@@ -61,7 +61,7 @@
 
                 if (!obj) {
                     obj = new RG.Line({
-                        id: 'cvs',
+                            id: 'cvs',
                         data: [],
                         options: {
                             colors: ['black'],
@@ -75,7 +75,10 @@
                             backgroundGridVlines: false,
                             numyticks: 5,
                             numxticks: 0,
-                            ylabelsCount: 5
+                            ylabelsCount: 5,
+                            scaleZerostart: true,
+                            textAccessible: true,
+                            noxaxis:true
                         }
                     })
                 }
@@ -195,7 +198,10 @@
                         backgroundGridVlines: false,
                         numyticks: 5,
                         numxticks: 0,
-                        ylabelsCount: 5
+                        ylabelsCount: 5,
+                        textAccessible: true,
+                        scaleZerostart: true,
+                        noxaxis: true
                     }
                 })
             }

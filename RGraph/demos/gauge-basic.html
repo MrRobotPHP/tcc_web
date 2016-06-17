@@ -16,18 +16,28 @@
 
     <h1>A basic Gauge chart</h1>
 
-    <canvas id="cvs" width="250" height="250">[No canvas support]</canvas>
+    <canvas id="cvs" width="350" height="350">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var gauge = new RGraph.Gauge({
-                id: 'cvs',
-                min: 0,
-                max: 10,
-                value: 3.2
-            }).draw();
-        };
+        new RGraph.Gauge({
+            id: 'cvs',
+            min: 0,
+            max: 10,
+            value: 3.29,
+            options: {
+                valueText: true,
+                valueTextDecimals: 2,
+                valueTextBoundingStroke: '#aaa',
+                valueTextYPos: 0.4,
+                textAccessible: true,
+                textSize: 18,
+                greenColor: '#afa',
+                greenWidth: 15,
+                redWidth: 15,
+                yellowWidth: 15,
+                labelsOffset: 9
+            }
+        }).draw();
     </script>
 
 
@@ -52,15 +62,25 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var gauge = new RGraph.Gauge({
-            id: 'cvs',
-            min: 0,
-            max: 10,
-            value: 3.2
-        }).draw();
-    };
+    new RGraph.Gauge({
+        id: 'cvs',
+        min: 0,
+        max: 10,
+        value: 3.29,
+        options: {
+            valueText: true,
+            valueTextDecimals: 2,
+            valueTextBoundingStroke: '#aaa',
+            valueTextYPos: 0.4,
+            textAccessible: true,
+            textSize: 18,
+            greenColor: '#afa',
+            greenWidth: 15,
+            redWidth: 15,
+            yellowWidth: 15,
+            labelsOffset: 9
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

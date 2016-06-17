@@ -35,7 +35,8 @@
                     ylabels: false,
                     colors: ['blue','blue','blue','blue','blue','red','red','red','red','red'],
                     colorsSequential: true,
-                    gutterLeft: 100
+                    gutterLeft: 100,
+                    textAccessible:true
                 }
             }).draw();
             
@@ -45,7 +46,9 @@
                 options: {
                     max: 100,
                     numticks: 6,
-                    labelsSpecific: ['Lots','A fair amount','Not so many','A few']
+                    labelsSpecific: ['Lots','A fair amount','Not so many','A few'],
+                    textAccessible:true,
+                    textAccessiblePointerevents: false
                 }
             }).on('click', function (e, obj)
             {
@@ -97,7 +100,8 @@
                 ylabels: false,
                 colors: ['blue','blue','blue','blue','blue','red','red','red','red','red'],
                 colorsSequential: true,
-                gutterLeft: 100
+                gutterLeft: 100,
+                textAccessible: true
             }
         }).draw();
         
@@ -107,7 +111,9 @@
             options: {
                 max: 100,
                 numticks: 6,
-                labelsSpecific: ['Lots','A fair amount','Not so many','A few']
+                labelsSpecific: ['Lots','A fair amount','Not so many','A few'],
+                    textAccessible: true,
+                    textAccessiblePointerevents: false
             }
         }).on('click', function (e, obj)
         {

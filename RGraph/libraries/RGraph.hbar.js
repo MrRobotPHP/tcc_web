@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license starts at just £99 (GBP) and      |
+    * | the terms of the GPL. The commercial license starts at just 99 GBP and      |
     * | you can read about it here:                                                    |
     * |                                                                                |
     * |                      http://www.rgraph.net/license                             |
@@ -63,11 +63,6 @@
         this.firstDraw         = true; // After the first draw this will be false
 
 
-
-        /**
-        * Compatibility with older browsers
-        */
-        //RGraph.OldBrowserCompat(this.context);
 
         
         this.max = 0;
@@ -126,16 +121,32 @@
             'chart.title.valign':           null,
             'chart.text.size':              12,
             'chart.text.color':             'black',
-            'chart.text.font':              'Arial',
+            'chart.text.font':              'Segoe UI, Arial, Verdana, sans-serif',
+            'chart.text.accessible':               true,
+            'chart.text.accessible.overflow':      'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.colors':                 ['Gradient(white:red)', 'Gradient(white:blue)', 'Gradient(white:green)', 'Gradient(white:pink)', 'Gradient(white:yellow)', 'Gradient(white:cyan)', 'Gradient(white:navy)', 'Gradient(white:gray)', 'Gradient(white:black)'],
             'chart.colors.sequential':      false,
             'chart.xlabels.specific':       null,
             'chart.labels':                 [],
             'chart.labels.bold':            false,
             'chart.labels.color':           null,
+
             'chart.labels.above':           false,
             'chart.labels.above.decimals':  0,
             'chart.labels.above.specific':  null,
+            'chart.labels.above.color':     null,
+            'chart.labels.above.units.pre':  '',
+            'chart.labels.above.units.post': '',
+            'chart.labels.above.font':       null,
+            'chart.labels.above.size':       null,
+            'chart.labels.above.bold':       false,
+            'chart.labels.above.italic':     false,
+
+            'chart.labels.offsetx':  0,
+            'chart.labels.offsety':  0,
+            'chart.xlabels.offsetx':  0,
+            'chart.xlabels.offsety':  0,
             'chart.xlabels':                true,
             'chart.xlabels.count':          5,
             'chart.contextmenu':            null,
@@ -182,6 +193,7 @@
             'chart.tooltips.highlight':     true,
             'chart.highlight.fill':         'rgba(255,255,255,0.7)',
             'chart.highlight.stroke':       'rgba(0,0,0,0)',
+            'chart.highlight.style':        null,
             'chart.annotatable':            false,
             'chart.annotate.color':         'black',
             'chart.zoom.factor':            1.5,
@@ -200,7 +212,7 @@
             'chart.scale.point':            '.',
             'chart.scale.thousand':         ',',
             'chart.scale.decimals':         null,
-            'chart.scale.zerostart':        false,
+            'chart.scale.zerostart':        true,
             'chart.noredraw':               false,
             'chart.events.click':           null,
             'chart.events.mousemove':       null,
@@ -218,7 +230,8 @@
             'chart.variant.threed.xaxis':   true,
             'chart.variant.threed.yaxis':   true,
             'chart.yaxispos':               'left',
-            'chart.variant':                'hbar'
+            'chart.variant':                'hbar',
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
         // Check for support
@@ -227,9 +240,21 @@
             return;
         }
 
+        // This loop is used to check for stacked or grouped charts and now
+        // also to convert strings to numbers
         for (i=0,len=this.data.length; i<len; ++i) {
-            if (typeof this.data[i] == 'object') {
+            if (typeof this.data[i] == 'object' && !RGraph.isNull(this.data[i])) {
+                
                 this.stackedOrGrouped = true;
+                
+                for (var j=0,len2=this.data[i].length; j<len2; ++j) {
+                    if (typeof this.data[i][j] === 'string') {
+                        this.data[i][j] = parseFloat(this.data[i][j]);
+                    }
+                }
+
+            } else if (typeof this.data[i] == 'string') {
+                this.data[i] = parseFloat(this.data[i]) || 0;
             }
         }
 
@@ -268,7 +293,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -319,10 +343,9 @@
             
             
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase()
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
     
             if (name == 'chart.labels.abovebar') {
                 name = 'chart.labels.above';
@@ -385,8 +408,14 @@
             //
             // If the chart is 3d then angle it it
             //
+
             if (prop['chart.variant'] === '3d') {
-                co.setTransform(1,prop['chart.variant.threed.angle'],0,1,0.5,0.5);
+                
+                if (prop['chart.text.accessible']) {
+                    // Nada
+                } else {
+                    co.setTransform(1,prop['chart.variant.threed.angle'],0,1,0.5,0.5);
+                }
                 
                 // Enlarge the gutter if its 25
                 if (prop['chart.gutter.bottom'] === 25) {
@@ -720,7 +749,9 @@
             var units_pre  = prop['chart.units.pre'],
                 units_post = prop['chart.units.post'],
                 text_size  = prop['chart.text.size'],
-                font       = prop['chart.text.font'];
+                font       = prop['chart.text.font'],
+                offsetx    = prop['chart.xlabels.offsetx'],
+                offsety    = prop['chart.xlabels.offsety']
     
     
     
@@ -742,7 +773,7 @@
                 * Specific X labels
                 */
                 if (RG.isArray(prop['chart.xlabels.specific'])) {
-                    
+
                     if (prop['chart.yaxispos'] == 'center') {
 
                         var halfGraphWidth = this.graphwidth / 2;
@@ -750,27 +781,31 @@
                         var interval       = (this.graphwidth / 2) / (labels.length - 1);
 
                         co.fillStyle = prop['chart.text.color'];
-                        
+
                         for (var i=0; i<labels.length; i+=1) {
-                                RG.Text2(this, {'font':font,
-                                                'size':text_size,
-                                                'x':this.gutterLeft + halfGraphWidth + (interval * i),
-                                                'y':ca.height - this.gutterBottom,
-                                                'text':labels[i],
-                                                'valign':'top',
-                                                'halign':'center',
-                                                'tag': 'scale'});
+                                RG.text2(this, {
+                                    'font':font,
+                                    'size':text_size,
+                                    'x':this.gutterLeft + halfGraphWidth + (interval * i) + offsetx,
+                                    'y':ca.height - this.gutterBottom + offsetx,
+                                    'text':labels[i],
+                                    'valign':'top',
+                                    'halign':'center',
+                                    'tag': 'scale'
+                                });
                         }
                         
                         for (var i=(labels.length - 1); i>0; i-=1) {
-                                RG.Text2(this, {'font':font,
-                                                'size':text_size,
-                                                'x':this.gutterLeft + (interval * (labels.length - i - 1)),
-                                                'y':ca.height - this.gutterBottom,
-                                                'text':labels[i],
-                                                'valign':'top',
-                                                'halign':'center',
-                                                'tag': 'scale'});
+                                RG.Text2(this, {
+                                    'font':font,
+                                    'size':text_size,
+                                    'x':this.gutterLeft + (interval * (labels.length - i - 1)) + offsetx,
+                                    'y':ca.height - this.gutterBottom + offsety,
+                                    'text':labels[i],
+                                    'valign':'top',
+                                    'halign':'center',
+                                    'tag': 'scale'
+                                });
                         }
 
                     } else if (prop['chart.yaxispos'] == 'right') {
@@ -781,14 +816,16 @@
                         co.fillStyle = prop['chart.text.color'];
                         
                         for (var i=0; i<labels.length; i+=1) {
-                                RG.Text2(this, {'font':font,
-                                                'size':text_size,
-                                                'x':this.gutterLeft + (interval * i),
-                                                'y':ca.height - this.gutterBottom,
-                                                'text':labels[labels.length - i - 1],
-                                                'valign':'top',
-                                                'halign':'center',
-                                                'tag': 'scale'});
+                                RG.text2(this, {
+                                    'font':font,
+                                            'size':text_size,
+                                            'x':this.gutterLeft + (interval * i) + offsetx,
+                                            'y':ca.height - this.gutterBottom + offsety,
+                                            'text':labels[labels.length - i - 1],
+                                            'valign':'top',
+                                            'halign':'center',
+                                            'tag': 'scale'
+                                        });
                         }
 
                     } else {
@@ -799,14 +836,16 @@
                         co.fillStyle = prop['chart.text.color'];
                         
                         for (var i=0; i<labels.length; i+=1) {
-                                RG.Text2(this, {'font':font,
-                                                'size':text_size,
-                                                'x':this.gutterLeft + (interval * i),
-                                                'y':ca.height - this.gutterBottom,
-                                                'text':labels[i],
-                                                'valign':'top',
-                                                'halign':'center',
-                                                'tag': 'scale'});
+                                RG.Text2(this, {
+                                    'font':font,
+                                    'size':text_size,
+                                    'x':this.gutterLeft + (interval * i) + offsetx,
+                                    'y':ca.height - this.gutterBottom + offsety,
+                                    'text':labels[i],
+                                    'valign':'top',
+                                    'halign':'center',
+                                    'tag': 'scale'
+                                });
                         }
                     }
 
@@ -827,8 +866,8 @@
                             RG.text2(this, {
                                 'font':font,
                                 'size':text_size,
-                                'x':this.gutterLeft + (this.graphwidth / 2) - ((this.graphwidth / 2) * ((i+1)/this.scale2.labels.length)),
-                                'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap,
+                                'x':this.gutterLeft + (this.graphwidth / 2) - ((this.graphwidth / 2) * ((i+1)/this.scale2.labels.length)) + offsetx,
+                                'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap + offsety,
                                 'text':'-' + this.scale2.labels[i],
                                 'valign':'center',
                                 'halign':'center',
@@ -840,8 +879,8 @@
                             RG.text2(this, {
                                 'font':font,
                                 'size':text_size,
-                                'x':this.gutterLeft + ((this.graphwidth / 2) * ((i+1)/this.scale2.labels.length)) + (this.graphwidth / 2),
-                                'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap,
+                                'x':this.gutterLeft + ((this.graphwidth / 2) * ((i+1)/this.scale2.labels.length)) + (this.graphwidth / 2) + offsetx,
+                                'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap + offsety,
                                 'text':this.scale2.labels[i],
                                 'valign':'center',
                                 'halign':'center',
@@ -856,8 +895,8 @@
                             RG.Text2(this, {
                                 'font':font,
                                 'size':text_size,
-                                'x':this.gutterLeft + (i * (this.graphwidth / len)),
-                                'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap,
+                                'x':this.gutterLeft + (i * (this.graphwidth / len)) + offsetx,
+                                'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap + offsety,
                                 'text':'-' + this.scale2.labels[len - 1 - i],
                                 'valign':'center',
                                 'halign':'center',
@@ -871,8 +910,8 @@
                             RG.Text2(this, {
                                 'font':font,
                                 'size':text_size,
-                                'x':this.gutterLeft + (this.graphwidth * ((i+1)/len)),
-                                'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap,
+                                'x':this.gutterLeft + (this.graphwidth * ((i+1)/len)) + offsetx,
+                                'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap + offsety,
                                 'text':this.scale2.labels[i],
                                 'valign':'center',
                                 'halign':'center',
@@ -898,8 +937,8 @@
                         RG.text2(this, {
                             'font':font,
                             'size':text_size,
-                            'x':x,
-                            'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap,
+                            'x':x + offsetx,
+                            'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap + offsety,
                             'text':RG.numberFormat(this, prop['chart.xmin'].toFixed(prop['chart.scale.decimals']), units_pre, units_post),
                             'valign':'center',
                             'halign':'center',
@@ -926,7 +965,9 @@
                 var xOffset = prop['chart.variant'] === '3d' && prop['chart.yaxispos'] === 'right' ? 15 : 5,
                     font    = prop['chart.text.font'],
                     color   = prop['chart.labels.color'] || prop['chart.text.color'],
-                    bold    = prop['chart.labels.bold']
+                    bold    = prop['chart.labels.bold'],
+                    offsetx = prop['chart.labels.offsetx'],
+                    offsety = prop['chart.labels.offsety']
                 
     
                 // Draw the X axis labels
@@ -957,8 +998,8 @@
                         'font': font,
                         'size': prop['chart.text.size'],
                         'bold': bold,
-                        'x': x,
-                        'y': y,
+                        'x': x + offsetx,
+                        'y': y + offsety,
                         'text': String(prop['chart.labels'][i++]),
                         'halign': halign,
                         'valign': 'center',
@@ -1675,15 +1716,18 @@
             co.strokeStyle = prop['chart.strokestyle'];
     
             for (var i=0; i<coords.length; ++i) {
-    
+
                 if (prop['chart.shadow']) {
-                    co.beginPath();
-                        co.strokeStyle = prop['chart.strokestyle'];
-                        co.fillStyle = coords[i][4];
-                        co.lineWidth = prop['chart.linewidth'];
-                        co.rect(coords[i][0], coords[i][1], coords[i][2], coords[i][3]);
-                    co.stroke();
-                    co.fill();
+                    
+                    pa2(co, 'b lw % r % % % % s % f %',
+                        prop['chart.linewidth'],
+                        coords[i][0],
+                        coords[i][1],
+                        coords[i][2],
+                        coords[i][3],
+                        prop['chart.strokestyle'],
+                        coords[i][4]
+                    );
                 }
     
                 /**
@@ -1692,20 +1736,20 @@
                 var halign = 'left';
                 if (prop['chart.labels.above'] && coords[i][6]) {
     
-                    co.fillStyle   = prop['chart.text.color'];
-                    co.strokeStyle = 'black';
+                    var border = (coords[i][0] + coords[i][2] + 7 + co.measureText(prop['chart.labels.above.units.pre'] + this.coords[i][5] + prop['chart.labels.above.units.post']).width) > ca.width ? true : false,
+                        text   = RG.numberFormat(this, (this.coords[i][5]).toFixed(prop['chart.labels.above.decimals']), prop['chart.labels.above.units.pre'], prop['chart.labels.above.units.post']);
+
                     RG.noShadow(this);
-    
-                    var border = (coords[i][0] + coords[i][2] + 7 + co.measureText(prop['chart.units.pre'] + this.coords[i][5] + prop['chart.units.post']).width) > ca.width ? true : false;
 
                     /**
                     * Default to the value - then check for specific labels
                     */
-                    var text = RG.numberFormat(this, (this.coords[i][5]).toFixed(prop['chart.labels.above.decimals']), prop['chart.units.pre'], prop['chart.units.post']);
-                    if (typeof prop['chart.labels.above.specific'] == 'object' && prop['chart.labels.above.specific'] && prop['chart.labels.above.specific'][i]) {
+                    
+
+                    if (typeof prop['chart.labels.above.specific'] === 'object' && prop['chart.labels.above.specific'] && prop['chart.labels.above.specific'][i]) {
                         text = prop['chart.labels.above.specific'][i];
                     }
-                    
+
                     var x = coords[i][0] + coords[i][2] + 5;
                     var y = coords[i][1] + (coords[i][3] / 2);
                     
@@ -1718,14 +1762,17 @@
                     }
 
                     RG.text2(this, {
-                          'font': font,
-                          'size': size,
-                             'x': x,
-                             'y': y,
-                          'text': text,
-                        'valign': 'center',
-                        'halign': halign,
-                           'tag': 'labels.above'
+                          font: typeof prop['chart.labels.above.font'] === 'string' ? prop['chart.labels.above.font'] : font,
+                          size: typeof prop['chart.labels.above.size'] === 'number' ? prop['chart.labels.above.size'] : size,
+                         color: typeof prop['chart.labels.above.color'] ==='string' ? prop['chart.labels.above.color'] : color,
+                             x: x,
+                             y: y,
+                          bold: prop['chart.labels.above.bold'],
+                        italic: prop['chart.labels.above.italic'],
+                          text: text,
+                        valign: 'center',
+                        halign: halign,
+                           tag: 'labels.above'
                     });
                 }
             }
@@ -1762,7 +1809,7 @@
 
                 // Recreate the path/rectangle so that it can be tested
                 //  ** DO NOT STROKE OR FILL IT **
-                pa(co,['b','r',left,top,width,height]);
+                pa2(co,['b','r',left,top,width,height]);
 
                 if (co.isPointInPath(mouseX, mouseY)) {
     
@@ -1841,8 +1888,11 @@
         this.highlight =
         this.Highlight = function (shape)
         {
-            // Add the new highlight
-            RG.Highlight.Rect(this, shape);
+            if (typeof prop['chart.highlight.style'] === 'function') {
+                (prop['chart.highlight.style'])(shape);
+            } else {
+                RG.Highlight.Rect(this, shape);
+            }
         };
 
 
@@ -1912,35 +1962,24 @@
 
             // Set the top position
             tooltip.style.left = 0;
-            tooltip.style.top  = canvasXY[1] + coordY - height  + 5 + (adjustment || 0) + 'px';
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
             
             // By default any overflow is hidden
             tooltip.style.overflow = '';
-    
-            // The arrow
-            var img = new Image();
-                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                img.style.position = 'absolute';
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.top = (tooltip.offsetHeight - 2) + 'px';
-            tooltip.appendChild(img);
             
             // Reposition the tooltip if at the edges:
             
             // LEFT edge
-            if ((canvasXY[0] + coordX  + (coordW / 2) - (width / 2)) < 10) {
-                tooltip.style.left = (canvasXY[0] + coordX - (width * 0.1)) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.1) - 8.5) + 'px';
+            if (canvasXY[0] + mouseXY[0] - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + (coordW / 2) + coordX + (width / 2)) > doc.body.offsetWidth) {
-                tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-                tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 
@@ -2142,11 +2181,14 @@
         */
         this.grow = function ()
         {
-            var obj      = this,
-                opt      = arguments[0] || {},
-                frames   = opt.frames || 30,
-                frame    = 0,
-                callback = arguments[1] || function () {};
+            var obj         = this,
+                opt         = arguments[0] || {},
+                frames      = opt.frames || 30,
+                frame       = 0,
+                callback    = arguments[1] || function () {},
+                labelsAbove = prop['chart.labels.above'];
+            
+            this.set('labelsAbove', false);
 
 
             // Save the data
@@ -2197,6 +2239,12 @@
                     frame += 1;
                     RG.Effects.updateCanvas(iterator);
                 } else {
+
+                    if (labelsAbove) {
+                        obj.set('labelsAbove', true);
+                        RG.redraw();
+                    }
+
                     callback(obj);
                 }
             }
@@ -2227,7 +2275,10 @@
             var framesperbar   = opt.frames / 3,
                 frame          = -1,
                 callback       = arguments[1] || function () {},
-                original       = RG.arrayClone(obj.data);
+                original       = RG.arrayClone(obj.data),
+                labelsAbove    = prop['chart.labels.above'];
+
+            this.set('labelsAbove', false);
 
             for (var i=0,len=obj.data.length; i<len; i+=1) {
                 opt.startFrames[i] = ((opt.frames / 2) / (obj.data.length - 1)) * i;
@@ -2254,39 +2305,45 @@
                 ++frame;
 
                 for (var i=0,len=obj.data.length; i<len; i+=1) {
-                        if (frame > opt.startFrames[i]) {
-                            if (typeof obj.data[i] === 'number') {
+                    if (frame > opt.startFrames[i]) {
+                        if (typeof obj.data[i] === 'number') {
+                            
+                            obj.data[i] = ma.min(
+                                ma.abs(original[i]),
+                                ma.abs(original[i] * ( (opt.counters[i]++) / framesperbar))
+                            );
+                            
+                            // Make the number negative if the original was
+                            if (original[i] < 0) {
+                                obj.data[i] *= -1;
+                            }
+                        } else if (!RG.isNull(obj.data[i])) {
+                            for (var j=0,len2=obj.data[i].length; j<len2; j+=1) {
                                 
-                                obj.data[i] = ma.min(
-                                    ma.abs(original[i]),
-                                    ma.abs(original[i] * ( (opt.counters[i]++) / framesperbar))
+                                obj.data[i][j] = ma.min(
+                                    ma.abs(original[i][j]),
+                                    ma.abs(original[i][j] * ( (opt.counters[i][j]++) / framesperbar))
                                 );
-                                
-                                // Make the number negative if the original was
-                                if (original[i] < 0) {
-                                    obj.data[i] *= -1;
-                                }
-                            } else if (!RG.isNull(obj.data[i])) {
-                                for (var j=0,len2=obj.data[i].length; j<len2; j+=1) {
-                                    
-                                    obj.data[i][j] = ma.min(
-                                        ma.abs(original[i][j]),
-                                        ma.abs(original[i][j] * ( (opt.counters[i][j]++) / framesperbar))
-                                    );
 
-                                    // Make the number negative if the original was
-                                    if (original[i][j] < 0) {
-                                        obj.data[i][j] *= -1;
-                                    }
+                                // Make the number negative if the original was
+                                if (original[i][j] < 0) {
+                                    obj.data[i][j] *= -1;
                                 }
                             }
-                        } else {
-                            obj.data[i] = typeof obj.data[i] === 'object' && obj.data[i] ? RG.arrayPad([], obj.data[i].length, 0) : (RG.isNull(obj.data[i]) ? null : 0);
                         }
+                    } else {
+                        obj.data[i] = typeof obj.data[i] === 'object' && obj.data[i] ? RG.arrayPad([], obj.data[i].length, 0) : (RG.isNull(obj.data[i]) ? null : 0);
+                    }
                 }
 
 
                 if (frame >= opt.frames) {
+
+                    if (labelsAbove) {
+                        obj.set('labelsAbove', true);
+                        RG.redrawCanvas(obj.canvas);
+                    }
+
                     callback(obj);
                 } else {
                     RG.redrawCanvas(obj.canvas);

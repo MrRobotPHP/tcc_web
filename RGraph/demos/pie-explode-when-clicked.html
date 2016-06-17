@@ -38,8 +38,8 @@
                     linewidth: 1,
                     shadow: true,
                     labels: ['Bob',,,'Jerry'],
-                    labelsSticks: [true,,,true],
-                    labelsSticksLength: 25
+                    labelsSticksList: true,
+                    textAccessible: true
                 }
             }).draw()
 
@@ -64,7 +64,7 @@
             pie.$3.onmousemove =
             pie.$0.onmousemove = function (e, shape)
             {
-                e.target.style.cursor = 'pointer';
+                return true;
             }
 
 
@@ -117,8 +117,8 @@
                 linewidth: 1,
                 shadow: true,
                 labels: ['Bob',,,'Jerry'],
-                labelsSticks: [true,,,true],
-                labelsSticksLength: 25
+                labelsSticksList: true,
+                textAccessible: true
             }
         }).draw()
 
@@ -143,7 +143,7 @@
         pie.$3.onmousemove =
         pie.$0.onmousemove = function (e, shape)
         {
-            e.target.style.cursor = 'pointer';
+            return true;
         }
 
 

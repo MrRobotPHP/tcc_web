@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
     
     <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.tooltips.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
     <script src="../libraries/RGraph.hprogress.js" ></script>
     
     <title>A basic HProgress chart</title>
@@ -20,12 +22,19 @@
     <canvas id="cvs" width="600" height="100">[No canvas support]</canvas>
     
     <script>
-        var hprogress = new RGraph.HProgress({
+        new RGraph.HProgress({
             id: 'cvs',
-            min: '50',
-            max: '100',
-            value: 85
-        }).draw();
+            min: 0,
+            max: 100,
+            value: [10,10,10,10],
+            options: {
+                textAccessible: true,
+                margin: 7,
+                bevel: true,
+                tooltips: ['<b>An example tooltip!</b>','Foo','bar'],
+                colors: ['red','yellow','pink','white']
+            }
+        }).grow();
     </script>
 
 
@@ -50,12 +59,19 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    var hprogress = new RGraph.HProgress({
+    new RGraph.HProgress({
         id: 'cvs',
-        min: 50,
+        min: 0,
         max: 100,
-        value: 85
-    }).draw();
+        value: [10,10,10,10],
+        options: {
+            textAccessible: true,
+            margin: 7,
+            bevel: true,
+            tooltips: ['<b>An example tooltip!</b>','Foo','bar'],
+            colors: ['red','yellow','pink','white']
+        }
+    }).grow();
 &lt;/script&gt;
 </pre>
 

@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license starts at just £99 (GBP) and      |
+    * | the terms of the GPL. The commercial license starts at just 99 GBP and      |
     * | you can read about it here:                                                    |
     * |                                                                                |
     * |                      http://www.rgraph.net/license                             |
@@ -201,15 +201,15 @@
     {
         // This function gets added to the chart object - so the this
         // variable is the chart object
-        var obj      = this;
-        var opt      = arguments[0] || {};
-        var frames   = opt.frames || 30;
-        var frame    = 0;
-        var pc       = -20;
-        var step     = (120 - pc) / frames;
-        var canvasXY = RG.getCanvasXY(obj.canvas);
-        var color    = opt.color || 'white';
-        var callback = arguments[1] || function () {};
+        var obj      = this,
+            opt      = arguments[0] || {},
+            frames   = opt.frames || 30,
+            frame    = 0,
+            pc       = -20,
+            step     = (120 - pc) / frames,
+            canvasXY = RG.getCanvasXY(obj.canvas),
+            color    = opt.color || 'white',
+            callback = arguments[1] || function () {};
 
         
         // Draw the chart
@@ -230,8 +230,8 @@
             {
                 if (pc < 120) {
                     $('div#rgraph_fadeslide_cover_' + obj.id).css({
-                                                                   background: 'linear-gradient(135deg, rgba(255,255,255,0) ' + pc + '%, ' + color + ' ' + (pc + 20) + '%)'
-                                                                  });
+                        background: 'linear-gradient(135deg, rgba(255,255,255,0) ' + pc + '%, ' + color + ' ' + (pc + 20) + '%)'
+                    });
                     pc += step;
                     RG.Effects.updateCanvas(iterator);
                 
@@ -292,8 +292,8 @@
                     RG.Effects.updateCanvas(iterator);
                 
                 } else {
-                
-                    RG.clear(obj.canvas, color)
+
+                    RG.clear(obj.canvas, obj.get('clearto'))
                 
                     $('div#rgraph_fadeslide_cover_' + obj.id).remove();
 
@@ -411,9 +411,9 @@
                     RG.Effects.updateCanvas(iterator);
             
             } else {
-            
+
                 RG.clear(obj.canvas, color);
-            
+
                 $('div#rgraph_fadeslide_cover_' + obj.id).remove();
 
                 callback(obj);
@@ -525,7 +525,7 @@
             } else {
             
                 RG.clear(obj.canvas);
-            
+
                 $('div#rgraph_fadeslide_cover_' + obj.id).remove();
 
                 callback(obj);
@@ -638,22 +638,31 @@
         obj.canvas.style.top      = 0;
         obj.canvas.style.left     = 0;
 
-
-        jQuery('#' + obj.id).animate({
-            width: (obj.canvas.width * 1.2) + 'px',
-            height: (obj.canvas.height * 1.2) + 'px',
-            left: (obj.canvas.width * -0.1) + 'px',
-            top: (obj.canvas.height * -0.1) + 'px'
-        }, duration * 0.25, function ()
-        {
-                jQuery('#' + obj.id).animate({
-                    opacity: 0,
-                    width: 0,
-                    height: 0,
-                    left: (obj.canvas.width * 0.5) + 'px',
-                    top: (obj.canvas.height * 0.5) + 'px'
-                }, duration * 0.75, function () {callback(obj);});
-        });
+        if (opt.bounce !== false) {
+            jQuery('#' + obj.id).animate({
+                width: (obj.canvas.width * 1.2) + 'px',
+                height: (obj.canvas.height * 1.2) + 'px',
+                left: (obj.canvas.width * -0.1) + 'px',
+                top: (obj.canvas.height * -0.1) + 'px'
+            }, duration * 0.25, function ()
+            {
+                    jQuery('#' + obj.id).animate({
+                        opacity: 0,
+                        width: 0,
+                        height: 0,
+                        left: (obj.canvas.width * 0.5) + 'px',
+                        top: (obj.canvas.height * 0.5) + 'px'
+                    }, duration * 0.75, function () {callback(obj);});
+            });
+        } else {
+            jQuery('#' + obj.id).animate({
+                opacity: 0,
+                width: 0,
+                height: 0,
+                left: (obj.canvas.width * 0.5) + 'px',
+                top: (obj.canvas.height * 0.5) + 'px'
+            }, duration * 0.75, function () {callback(obj);});
+        }
         
         
         return this;
@@ -828,7 +837,6 @@
 
 
 
-
         var divs = [
             ['rgraph_conceal_left_' + obj.id, xy[0], xy[1], 0, obj.canvas.height],
             ['rgraph_conceal_right_' + obj.id,(xy[0] + obj.canvas.width),xy[1],0,obj.canvas.height],
@@ -866,7 +874,7 @@
             doc.body.removeChild(doc.getElementById("rgraph_conceal_left_" + obj.id));
             doc.body.removeChild(doc.getElementById("rgraph_conceal_right_" + obj.id));
             
-            RG.clear(obj.canvas, color);
+            RG.clear(obj.canvas);
             
             callback(obj);
         
@@ -1317,7 +1325,16 @@
             }
         }
         
-        setTimeout(function () {callback(obj);}, duration);
+        setTimeout(function ()
+        {
+            RGraph.clear(obj.canvas);
+            jQuery('#' + 'rgraph_hscissors_' + 0 + '_' + obj.id).remove();
+            jQuery('#' + 'rgraph_hscissors_' + 1 + '_' + obj.id).remove();
+            jQuery('#' + 'rgraph_hscissors_' + 2 + '_' + obj.id).remove();
+            jQuery('#' + 'rgraph_hscissors_' + 3 + '_' + obj.id).remove();
+            jQuery('#' + 'rgraph_hscissors_' + 4 + '_' + obj.id).remove();
+            callback(obj);
+        }, duration);
         
         return this;
     };
@@ -1445,7 +1462,14 @@
             }
         }
         
-        setTimeout(function () {callback(obj);}, duration);
+        setTimeout(function ()
+        {
+            RG.clear(obj.canvas);
+            for (var i=0; i<10; i++) {
+                jQuery('#rgraph_vscissors_' + i + '_' + obj.id).remove();
+            }
+            callback(obj);
+        }, duration);
         
         return this;
     };

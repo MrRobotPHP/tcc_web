@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -103,9 +103,12 @@
             'chart.labels.axes':            'nsew',
             'chart.labels.boxed':           false,
             'chart.labels.offset':          0,
-            'chart.text.color':             '#d1d1d1',
-            'chart.text.font':              'Arial',
+            'chart.text.color':             'black',
+            'chart.text.font':              'Segoe UI, Arial, Verdana, sans-serif',
             'chart.text.size':              12,
+            'chart.text.accessible':               true,
+            'chart.text.accessible.overflow':      'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.key':                    null,
             'chart.key.background':         'white',
             'chart.key.position':           'graph',
@@ -168,8 +171,25 @@
             'chart.segment.highlight':         false,
             'chart.segment.highlight.count':   null,
             'chart.segment.highlight.fill':    'rgba(0,255,0,0.5)',
-            'chart.segment.highlight.stroke':  'rgba(0,0,0,0)'
+            'chart.segment.highlight.stroke':  'rgba(0,0,0,0)',
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
+        
+        
+        
+        // Go through the data converting it to numbers
+        for (var i=0; i<this.data.length; ++i) {
+            if (typeof this.data[i] === 'string') {
+                this.data[i] = parseFloat(this.data[i]);
+            } else if (typeof this.data[i] === 'object') {
+                for (var j=0; j<this.data[i].length; ++j) {
+                    if (typeof this.data[i][j] === 'string') {
+                        this.data[i][j] = parseFloat(this.data[i][j]);
+                    }
+                }
+            }
+        }
+
 
 
 
@@ -201,7 +221,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -251,10 +270,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
 
 
 
@@ -414,7 +432,7 @@
 
                         var a = this.angles[j];
 
-                        pa(co, [
+                        pa2(co, [
                             'b',
                             'm', a[4], a[5],
                             'a', a[4], a[5], a[3] + 1.5, a[0] - 0.01, a[1] + 0.01, false,
@@ -1014,8 +1032,8 @@
                         'valign':'center',
                         'halign':'right',
                         'bounding':true,
-                        'boundingFill':color,
-                        'boundingStroke':prop['chart.labels.boxed'] ? 'black' : 'rgba(0,0,0,0)',
+                        'bounding.fill':color,
+                        'bounding.stroke':prop['chart.labels.boxed'] ? 'black' : 'rgba(0,0,0,0)',
                         'tag': 'scale'
                     });
                 }
@@ -1033,8 +1051,8 @@
                         'valign':'center',
                         'halign':'right',
                         'bounding':true,
-                        'boundingFill':color,
-                        'boundingStroke':prop['chart.labels.boxed'] ? 'black' : 'rgba(0,0,0,0)',
+                        'bounding.fill':color,
+                        'bounding.stroke':prop['chart.labels.boxed'] ? 'black' : 'rgba(0,0,0,0)',
                         'tag': 'scale'
                     });
                 }
@@ -1052,8 +1070,8 @@
                         'valign':'top',
                         'halign':'center',
                         'bounding':true,
-                        'boundingFill':color,
-                        'boundingStroke':prop['chart.labels.boxed'] ? 'black' : 'rgba(0,0,0,0)',
+                        'bounding.fill':color,
+                        'bounding.stroke':prop['chart.labels.boxed'] ? 'black' : 'rgba(0,0,0,0)',
                         'tag': 'scale'
                     });
                 }
@@ -1071,8 +1089,8 @@
                         'valign':'top',
                         'halign':'center',
                         'bounding':true,
-                        'boundingFill':color,
-                        'boundingStroke':prop['chart.labels.boxed'] ? 'black' : 'rgba(0,0,0,0)',
+                        'bounding.fill':color,
+                        'bounding.stroke':prop['chart.labels.boxed'] ? 'black' : 'rgba(0,0,0,0)',
                         'tag': 'scale'
                     });
                 }
@@ -1088,8 +1106,8 @@
                     'valign':'center',
                     'halign':'center',
                     'bounding':true,
-                    'boundingFill':color,
-                    'boundingStroke':prop['chart.labels.boxed'] ? 'black' : 'rgba(0,0,0,0)',
+                    'bounding.fill':color,
+                    'bounding.stroke':prop['chart.labels.boxed'] ? 'black' : 'rgba(0,0,0,0)',
                     'tag': 'scale'
                 });
             }
@@ -1342,6 +1360,14 @@
         this.Highlight = function (shape)
         {
             if (prop['chart.tooltips.highlight']) {
+            
+            
+                if (typeof prop['chart.highlight.style'] === 'function'){
+                    (prop['chart.highlight.style'])(shape);
+                    return;
+                }
+            
+            
                 // Add the new segment highlight
                 co.beginPath();
                 
@@ -1437,42 +1463,33 @@
                 radius      = ((radiusEnd - radiusStart) / 2) + radiusStart,
                 angleCenter = ((angleEnd - angleStart) / 2) + angleStart,
                 canvasXY    = RG.getCanvasXY(this.canvas),
+                mouseXY     = RG.getMouseXY(window.event),
                 gutterLeft  = this.gutterLeft,
                 gutterTop   = this.gutterTop,
                 width       = tooltip.offsetWidth,
                 height      = tooltip.offsetHeight
-            
+
+
+            // Set the top position
+            tooltip.style.left = 0;
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
+
             // By default any overflow is hidden
             tooltip.style.overflow = '';
-    
-            // The arrow
-            var img = new Image();
-                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                img.style.position = 'absolute';
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.top = (tooltip.offsetHeight - 2) + 'px';
-            tooltip.appendChild(img);
             
             // Reposition the tooltip if at the edges:
     
             // LEFT edge
-            if ((canvasXY[0] + coordX + (Math.cos(angleCenter) * radius) - (width / 2)) < 10) {
-                tooltip.style.left = (canvasXY[0] + coordX + (Math.cos(angleCenter) * (radius * (prop['chart.variant'].indexOf('3d') !== -1 ? 1.5 : 1)) )- (width * 0.1)) + 'px';
-                tooltip.style.top = (canvasXY[1] + coordY + (Math.sin(angleCenter) * radius)- height - 5) + 'px';
-                img.style.left = ((width * 0.1) - 8.5) + 'px';
+            if (canvasXY[0] + mouseXY[0] - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + (Math.cos(angleCenter) * radius) + (width / 2)) > (doc.body.offsetWidth - 10) ) {
-                tooltip.style.left = (canvasXY[0] + coordX + (Math.cos(angleCenter) * (radius * (prop['chart.variant'].indexOf('3d') !== -1 ? 1.5 : 1)) ) - (width * 0.9)) + 'px';
-                tooltip.style.top = (canvasXY[1] + coordY + (Math.sin(angleCenter) * radius)- height - 5) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-
-                tooltip.style.left = (canvasXY[0] + coordX + (ma.cos(angleCenter) * (radius * (prop['chart.variant'].indexOf('3d') !== -1 ? 1.5 : 1) ) )- (width / 2)) + 'px';
-                tooltip.style.top = (canvasXY[1] + coordY + (ma.sin(angleCenter) * radius)- height - 5) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 

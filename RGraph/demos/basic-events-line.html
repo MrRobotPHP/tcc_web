@@ -41,7 +41,7 @@
             */
             function myMousemove (e, point)
             {
-                e.target.style.cursor = 'pointer';
+                return true;
             }
 
 
@@ -61,6 +61,7 @@
                 id: 'cvs',
                 data: [12,13,16,15,16,19,19,12,23,16,13,24],
                 options: {
+                    textAccessible: true,
                     eventsMousemove: myMousemove,
                     eventsClick: myClick,
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -119,7 +120,7 @@
         */</span>
         function myMousemove (e, point)
         {
-            e.target.style.cursor = 'pointer';
+            return true;
         }
 
 
@@ -139,6 +140,7 @@
             id: 'cvs',
             data: [12,13,16,15,16,19,19,12,23,16,13,24],
             options: {
+                textAccessible: true,
                 eventsMousemove: myMousemove,
                 eventsClick: myClick,
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

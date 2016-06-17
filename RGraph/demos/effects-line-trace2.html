@@ -20,16 +20,17 @@
     <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
+        var line = new RGraph.Line({
+            id: 'cvs',
+            data: [10,1,10,7,4,9,5,6,3,5],
+            options: {
+                textAccessible: true,
+                scaleZerostart: true
+            }
+        }).on('beforedraw', function (obj)
         {
-            var line = new RGraph.Line({
-                id: 'cvs',
-                data: [10,1,10,7,4,9,5,6,3,5]
-            }).on('beforedraw', function (obj)
-            {
-                RGraph.clear(obj.canvas, 'white')
-            }).trace2()
-        };
+            RGraph.clear(obj.canvas, 'white')
+        }).trace2();
     </script>
 
     <p></p>
@@ -50,16 +51,17 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
+    var line = new RGraph.Line({
+        id: 'cvs',
+        data: [10,1,10,7,4,9,5,6,3,5],
+        options: {
+            textAccessible: true,
+            scaleZerostart: true
+        }
+    }).on('beforedraw', function (obj)
     {
-        var line = new RGraph.Line({
-            id: 'cvs',
-            data: [10,1,10,7,4,9,5,6,3,5]
-        }).on('beforedraw', function (obj)
-        {
-            RGraph.clear(obj.canvas, 'white')
-        }).trace2()
-    };
+        RGraph.clear(obj.canvas, 'white')
+    }).trace2();
 &lt;/script&gt;
 </pre>
 

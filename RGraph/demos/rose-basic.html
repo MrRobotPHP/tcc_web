@@ -20,13 +20,13 @@
     <canvas id="cvs" width="400" height="400">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var rose = new RGraph.Rose({
-                id: 'cvs',
-                data: [4,6,3,5,2,8,9]
-            }).draw();
-        };
+        var rose = new RGraph.Rose({
+            id: 'cvs',
+            data: [4,6,3,5,2,8,9],
+            options: {
+                textAccessible: true
+            }
+        }).draw();
     </script>
 
 
@@ -51,13 +51,13 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var rose = new RGraph.Rose({
-            id: 'cvs',
-            data: [4,6,3,5,2,8,9]
-        }).draw();
-    };
+    new RGraph.Rose({
+        id: 'cvs',
+        data: [4,6,3,5,2,8,9],
+        options: {
+            textAccessible: true
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

@@ -30,15 +30,22 @@
                 id: 'cvs',
                 data: data,
                 options: {
+                    linewidth: 25,
+                    tickmarks: null,
                     labels: labels,
                     xlabelsOffset: 10,
                     colors: ['#f66'],
-                    shadow: false,
+                    shadowOffsetx: 2,
+                    shadowOffsety: 2,
                     strokestyle: 'rgba(0,0,0,0)',
                     scaleZerostart: true,
                     noaxes: true,
                     backgroundGridVlines: false,
-                    backgroundGridBorder: false
+                    backgroundGridBorder: false,
+                    textAccessible: true,
+                    textSize: 18,
+                    gutterLeft: 35,
+                    hmargin: 10
                 }
             }).trace2();
         });
@@ -78,15 +85,22 @@
             id: 'cvs',
             data: data,
             options: {
+                linewidth: 25,
+                tickmarks: null,
                 labels: labels,
                 xlabelsOffset: 10,
                 colors: ['#f66'],
-                shadow: false,
+                shadowOffsetx: 2,
+                shadowOffsety: 2,
                 strokestyle: 'rgba(0,0,0,0)',
                 scaleZerostart: true,
                 noaxes: true,
                 backgroundGridVlines: false,
-                backgroundGridBorder: false
+                backgroundGridBorder: false,
+                textAccessible: true,
+                textSize: 18,
+                gutterLeft: 35,
+                hmargin: 10
             }
         }).trace2();
 &lt;/script&gt;

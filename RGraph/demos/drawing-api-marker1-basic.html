@@ -29,7 +29,8 @@
                 data: [5,8,6,4,3,5,2],
                 options: {
                     hmargin: 5,
-                    labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+                    labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                    textAccessible: true
                 }
             }).draw();
 
@@ -41,7 +42,10 @@
                 text: 'Woohoo!',
                 options: {
                     tooltips: ['Lou'],
-                    align: 'left'
+                    tooltipsNohideonclear: true,
+                    align: 'left',
+                    textAccessible: true,
+                    textAccessiblePointerevents: false
                 }
             }).draw();
         };
@@ -80,7 +84,8 @@
             data: [5,8,6,4,3,5,2],
             options: {
                 hmargin: 5,
-                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                textAccessible: true
             }
         }).draw();
 
@@ -92,7 +97,9 @@
             text: 'Woohoo!',
             options: {
                 tooltips: ['Lou'],
-                align: 'left'
+                align: 'left',
+                textAccessible: true,
+                textAccessiblePointerevents: false
             }
         }).draw();
     };

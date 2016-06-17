@@ -20,6 +20,11 @@
         New CSS3 animations can be used to great effect with your canvas tags. <b>Updated:</b> This demo was updated on the 20th June
         2013 so that now instead of just one switch between charts it repeatedly switches back and forth between charts.
     </p>
+    
+    <p>
+        Another update: It now adds the CSS animation to the DIV wrapper that RGraph
+        adds so that the DOM text is moved as well as the canvas.
+    </p>
 
     <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
     
@@ -37,6 +42,7 @@
                 id: 'cvs',
                 data: [4,5,3,8,4,9,6,5,3],
                 options: {
+                    textAccessible: true,
                     colors: ['blue'],
                     labels: ['Mal', 'Barry', 'Gary', 'Neil', 'Kim', 'Pete', 'Lou', 'Fred', 'Jobe'],
                     strokestyle: 'rgba(0,0,0,0)',
@@ -57,6 +63,7 @@
                 id: 'cvs',
                 data: [4,8,5,4,8,6,3,5,2],
                 options: {
+                    textAccessible: true,
                     colors: ['red'],
                     labels: ['Mal', 'Barry', 'Gary', 'Neil', 'Kim', 'Pete', 'Lou', 'Fred', 'Jobe'],
                     strokestyle: 'rgba(0,0,0,0)',
@@ -73,10 +80,10 @@
         */
         function swap ()
         {
-            $('#cvs').addClass('animated bounceOutLeft');
+            $('#cvs').parent().addClass('animated bounceOutLeft');
             setTimeout(function ()
             {
-                RGraph.Reset(document.getElementById("cvs"));
+                RGraph.reset(document.getElementById("cvs"));
 
                 if (chart == 2) {
                     drawBar1();
@@ -86,8 +93,8 @@
                     chart = 2;
                 }
 
-                $('#cvs').removeClass('bounceOutLeft');
-                $('#cvs').addClass('bounceInLeft');
+                $('#cvs').parent().removeClass('bounceOutLeft');
+                $('#cvs').parent().addClass('bounceInLeft');
             }, 750)
         }
         
@@ -136,9 +143,11 @@
             id: 'cvs',
             data: [4,5,3,8,4,9,6,5,3],
             options: {
+                textAccessible: true,
                 colors: ['blue'],
                 labels: ['Mal', 'Barry', 'Gary', 'Neil', 'Kim', 'Pete', 'Lou', 'Fred', 'Jobe'],
-                strokestyle: 'rgba(0,0,0,0)'
+                strokestyle: 'rgba(0,0,0,0)',
+                backgroundGridAutofitNumvlines: 9
             }
         }).draw();
     }
@@ -155,9 +164,11 @@
             id: 'cvs',
             data: [4,8,5,4,8,6,3,5,2],
             options: {
+                textAccessible: true,
                 colors: ['red'],
                 labels: ['Mal', 'Barry', 'Gary', 'Neil', 'Kim', 'Pete', 'Lou', 'Fred', 'Jobe'],
-                strokestyle: 'rgba(0,0,0,0)'
+                strokestyle: 'rgba(0,0,0,0)',
+                backgroundGridAutofitNumvlines: 9
             }
         }).draw();
     }
@@ -170,10 +181,10 @@
     */</span>
     function swap ()
     {
-        $('#cvs').addClass('animated bounceOutLeft');
+        $('#cvs').parent().addClass('animated bounceOutLeft');
         setTimeout(function ()
         {
-            RGraph.Reset(document.getElementById("cvs"));
+            RGraph.reset(document.getElementById("cvs"));
 
             if (chart == 2) {
                 drawBar1();
@@ -183,8 +194,8 @@
                 chart = 2;
             }
 
-            $('#cvs').removeClass('bounceOutLeft');
-            $('#cvs').addClass('bounceInLeft');
+            $('#cvs').parent().removeClass('bounceOutLeft');
+            $('#cvs').parent().addClass('bounceInLeft');
         }, 750)
     }
     

@@ -27,15 +27,15 @@
              allowing you to put it in your pages header.
     -->
     <script>
-        window.onload = function ()
-        {
-            var gauge = new RGraph.Gauge({
-                id: 'cvs',
-                min: 0,
-                max: 100,
-                value: 78
-            }).draw()
-        };
+        new RGraph.Gauge({
+            id: 'cvs',
+            min: 0,
+            max: 100,
+            value: 78,
+            options: {
+                textAccessible: true
+            }
+        }).draw();
     </script>
 
 
@@ -62,15 +62,15 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var gauge = new RGraph.Gauge({
-            id: 'cvs',
-            min: 0,
-            max: 100,
-            value: 78
-        }).draw()
-    };
+    new RGraph.Gauge({
+        id: 'cvs',
+        min: 0,
+        max: 100,
+        value: 78,
+        options: {
+            textAccessible: true
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

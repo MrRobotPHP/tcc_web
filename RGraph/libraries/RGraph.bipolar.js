@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license starts at just £99 (GBP) and      |
+    * | the terms of the GPL. The commercial license starts at just 99 GBP and      |
     * | you can read about it here:                                                    |
     * |                                                                                |
     * |                      http://www.rgraph.net/license                             |
@@ -75,7 +75,11 @@
         //RGraph.OldBrowserCompat(this.context);
 
         
-        // The left and right data respectively
+        // The left and right data respectively. Ensure that the data is an array
+        // of numbers
+        for (var i=0; i<left.length; ++i)  left[i]  = parseFloat(left[i]);
+        for (var i=0; i<right.length; ++i) right[i] = parseFloat(right[i]);
+
         this.left  = left;
         this.right = right;
         this.data  = [left, right];
@@ -96,7 +100,10 @@
             'chart.labels.above':           false,
             'chart.text.size':              12,
             'chart.text.color':             'black', // (Simple) gradients are not supported
-            'chart.text.font':              'Arial',
+            'chart.text.font':              'Segoe UI, Arial, Verdana, sans-serif',
+            'chart.text.accessible':               true,
+            'chart.text.accessible.overflow':      'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.title.left':             '',
             'chart.title.right':            '',
             'chart.gutter.center':          60,
@@ -135,7 +142,7 @@
             'chart.annotate.color':         'black',
             'chart.xmax':                   null,
             'chart.xmin':                   0,
-            'chart.scale.zerostart':        false,
+            'chart.scale.zerostart':        true,
             'chart.scale.decimals':         null,
             'chart.scale.point':            '.',
             'chart.scale.thousand':         ',',
@@ -164,7 +171,8 @@
             'chart.labels.count':           5,
             'chart.variant.threed.offsetx': 10,
             'chart.variant.threed.offsety': 5,
-            'chart.variant.threed.angle':   0.1
+            'chart.variant.threed.angle':   0.1,
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
         // Pad the arrays so they're the same size
@@ -207,7 +215,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -264,10 +271,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
 
 
 
@@ -363,8 +369,11 @@
             
             
             if (prop['chart.variant'] === '3d') {
-                co.setTransform(1,prop['chart.variant.threed.angle'],0,1,0.5,0.5);
-                
+                if (prop['chart.text.accessible']) {
+                    // Nada
+                } else {
+                    co.setTransform(1,prop['chart.variant.threed.angle'],0,1,0.5,0.5);
+                }
             }
 
 
@@ -481,15 +490,13 @@
                 
                 // Draw the horizontal 3d axis
                 // The left horizontal axis
-                pa(co, [
-                    'b',
-                    'm', this.gutterLeft, ma.round( ca.height - this.gutterBottom),
-                    'l', this.gutterLeft + offsetx, ma.round( ca.height - this.gutterBottom - offsety),
-                    'l', this.gutterLeft + offsetx + this.axisWidth, ma.round( ca.height - this.gutterBottom - offsety),
-                    'l', this.gutterLeft + this.axisWidth, ma.round( ca.height - this.gutterBottom),
-                    's', '#aaa',
-                    'f','#ddd'
-                ]);
+                pa2(co,
+                    'b m % % l % % l % % l % % s #aaa f #ddd',
+                    this.gutterLeft, ma.round( ca.height - this.gutterBottom),
+                    this.gutterLeft + offsetx, ma.round( ca.height - this.gutterBottom - offsety),
+                    this.gutterLeft + offsetx + this.axisWidth, ma.round( ca.height - this.gutterBottom - offsety),
+                    this.gutterLeft + this.axisWidth, ma.round( ca.height - this.gutterBottom)
+                );
                 
                 // The left vertical axis
                 this.draw3DLeftVerticalAxis();
@@ -498,29 +505,25 @@
                 
                 
                 // Draw the right horizontal axes
-                pa(co, [
-                    'b',
-                    'm', this.gutterLeft + this.gutterCenter + this.axisWidth, ma.round( ca.height - this.gutterBottom),
-                    'l',this.gutterLeft + this.gutterCenter + this.axisWidth + offsetx, ma.round( ca.height - this.gutterBottom - offsety),
-                    'l',this.gutterLeft + this.gutterCenter + this.axisWidth + this.axisWidth + offsetx, ma.round( ca.height - this.gutterBottom - offsety),
-                    'l',this.gutterLeft + this.gutterCenter + this.axisWidth + this.axisWidth, ma.round( ca.height - this.gutterBottom),
-                    's', '#aaa',
-                    'f','#ddd'
-                ]);
+                pa2(co,
+                    'b m % % l % % l % % l % % s #aaa f #ddd',
+                    this.gutterLeft + this.gutterCenter + this.axisWidth, ma.round( ca.height - this.gutterBottom),
+                    this.gutterLeft + this.gutterCenter + this.axisWidth + offsetx, ma.round( ca.height - this.gutterBottom - offsety),
+                    this.gutterLeft + this.gutterCenter + this.axisWidth + this.axisWidth + offsetx, ma.round( ca.height - this.gutterBottom - offsety),
+                    this.gutterLeft + this.gutterCenter + this.axisWidth + this.axisWidth, ma.round( ca.height - this.gutterBottom)
+                );
                 
                 
                 
                 
                 // Draw the right vertical axes
-                pa(co, [
-                    'b',
-                    'm', this.gutterLeft + this.gutterCenter + this.axisWidth, ca.height - this.gutterBottom,
-                    'l', this.gutterLeft + this.gutterCenter + this.axisWidth, ca.height - this.gutterBottom - this.axisHeight,
-                    'l',this.gutterLeft + this.gutterCenter + this.axisWidth + offsetx, ca.height - this.gutterBottom - this.axisHeight - offsety,
-                    'l',this.gutterLeft + this.gutterCenter + this.axisWidth + offsetx, ca.height - this.gutterBottom - offsety,
-                    's', '#aaa',
-                    'f','#ddd'
-                ]);
+                pa2(co,
+                    'b m % % l % % l % % l % % s #aaa f #ddd',
+                    this.gutterLeft + this.gutterCenter + this.axisWidth, ca.height - this.gutterBottom,
+                    this.gutterLeft + this.gutterCenter + this.axisWidth, ca.height - this.gutterBottom - this.axisHeight,
+                    this.gutterLeft + this.gutterCenter + this.axisWidth + offsetx, ca.height - this.gutterBottom - this.axisHeight - offsety,
+                    this.gutterLeft + this.gutterCenter + this.axisWidth + offsetx, ca.height - this.gutterBottom - offsety
+                );
             }
         }
         
@@ -534,15 +537,13 @@
                     offsety = prop['chart.variant.threed.offsety'];
     
                 // The left vertical axis
-                pa(co, [
-                    'b',
-                    'm', this.gutterLeft + this.axisWidth, this.gutterTop,
-                    'l', this.gutterLeft + this.axisWidth + offsetx, this.gutterTop - offsety,
-                    'l', this.gutterLeft + this.axisWidth + offsetx, ca.height - this.gutterBottom - offsety,
-                    'l',this.gutterLeft + this.axisWidth, ca.height - this.gutterBottom,
-                    's', '#aaa',
-                    'f','#ddd'
-                ]);
+                pa2(co,
+                    'b m % % l % % l % % l % % s #aaa f #ddd',
+                    this.gutterLeft + this.axisWidth, this.gutterTop,
+                    this.gutterLeft + this.axisWidth + offsetx, this.gutterTop - offsety,
+                    this.gutterLeft + this.axisWidth + offsetx, ca.height - this.gutterBottom - offsety,
+                    this.gutterLeft + this.axisWidth, ca.height - this.gutterBottom
+                );
             }
         };
 
@@ -842,18 +843,13 @@
                         co.shadowOffsetY = prop['chart.shadow.offsety'];
 
 
-                        pa(co, [
-                            'b',
-                            'm',coords[0] + offsetx, coords[1] - offsety,
-                            'l',coords[0] + offsetx + coords[2], coords[1] - offsety,
-                            'l',coords[0] + offsetx + coords[2], coords[1] - offsety + coords[3],
-                            'l',coords[0] + offsetx,coords[1] - offsety + coords[3],
-                            'f', 'black',
-                            'sc', 'rgba(0,0,0,0)',
-                            'sx', 0,
-                            'sy', 0,
-                            'sb', 0
-                        ]);
+                        pa2(co,
+                            'b m % % l % % l % % l % % f black sc rgba(0,0,0,0) sx 0 sy 0 sb 0',
+                            coords[0] + offsetx, coords[1] - offsety,
+                            coords[0] + offsetx + coords[2], coords[1] - offsety,
+                            coords[0] + offsetx + coords[2], coords[1] - offsety + coords[3],
+                            coords[0] + offsetx,coords[1] - offsety + coords[3]
+                        );
                     }
 
 
@@ -868,23 +864,21 @@
                         co.fillStyle = prop['chart.colors'][0];
                     }
 
-                    pa(co, [
-                        'b',
-                        'm',coords[0],coords[1],
-                        'l',coords[0] + offsetx, coords[1] - offsety,
-                        'l',coords[0] + offsetx + coords[2], coords[1] - offsety,
-                        'l',coords[0] + coords[2], coords[1],
-                        'f', null
-                    ]);
+                    pa2(co,
+                        'b m % % l % % l % % l % % f %',
+                        coords[0],coords[1],
+                        coords[0] + offsetx, coords[1] - offsety,
+                        coords[0] + offsetx + coords[2], coords[1] - offsety,
+                        coords[0] + coords[2], coords[1]
+                    );
 
-                    pa(co, [
-                        'b',
-                        'm',coords[0],coords[1],
-                        'l',coords[0] + offsetx, coords[1] - offsety,
-                        'l',coords[0] + offsetx + coords[2], coords[1] - offsety,
-                        'l',coords[0] + coords[2], coords[1],
-                        'f', 'rgba(255,255,255,0.4)'
-                    ]);
+                    pa2(co,
+                        'b m % % l % % l % % l % % f rgba(255,255,255,0.4)',
+                        coords[0],coords[1],
+                        coords[0] + offsetx, coords[1] - offsety,
+                        coords[0] + offsetx + coords[2], coords[1] - offsety,
+                        coords[0] + coords[2], coords[1]
+                    );
                 }
                 
                 this.draw3DLeftVerticalAxis();
@@ -1014,61 +1008,54 @@
                         co.shadowOffsetX = prop['chart.shadow.offsetx'];
                         co.shadowOffsetY = prop['chart.shadow.offsety'];
 
-                        pa(co, [
-                            'b',
-                            'm',coords[0] + offsetx, coords[1] - offsety,
-                            'l',coords[0] + offsetx + coords[2], coords[1] - offsety,
-                            'l',coords[0] + offsetx + coords[2], coords[1] - offsety + coords[3],
-                            'l',coords[0] + offsetx,coords[1] - offsety + coords[3],
-                            'f', 'black',
-                            'sc', 'rgba(0,0,0,0)',
-                            'sx', 0,
-                            'sy', 0,
-                            'sb', 0
-                        ]);
+                        pa2(co,
+                            'b m % % l % % l % % l % % f black sc rgba(0,0,0,0) sx 0 sy 0 sb 0',
+                            coords[0] + offsetx, coords[1] - offsety,
+                            coords[0] + offsetx + coords[2], coords[1] - offsety,
+                            coords[0] + offsetx + coords[2], coords[1] - offsety + coords[3],
+                            coords[0] + offsetx,coords[1] - offsety + coords[3]
+                        );
                     }
 
                     // Draw the top
-                    pa(co, [
-                        'b',
-                        'm',coords[0],coords[1],
-                        'l',coords[0] + offsetx, coords[1] - offsety,
-                        'l',coords[0] + offsetx + coords[2], coords[1] - offsety,
-                        'l',coords[0] + coords[2], coords[1],
-                        'f', color
-                    ]);
+                    pa2(co,
+                        'b m % % l % % l % % l % % f %',
+                        coords[0],coords[1],
+                        coords[0] + offsetx, coords[1] - offsety,
+                        coords[0] + offsetx + coords[2], coords[1] - offsety,
+                        coords[0] + coords[2], coords[1],
+                        color
+                    );
 
 
                     // Draw the right hand side
-                    pa(co, [
-                        'b',
-                        'm',coords[0] + coords[2],coords[1],
-                        'l',coords[0] + coords[2] + offsetx, coords[1] - offsety,
-                        'l',coords[0] + coords[2] + offsetx, coords[1] - offsety + coords[3],
-                        'l',coords[0] + coords[2],coords[1] + coords[3],
-                        'f', color
-                    ]);
+                    pa2(co,
+                        'b m % % l % % l % % l % % f %',
+                        coords[0] + coords[2],coords[1],
+                        coords[0] + coords[2] + offsetx, coords[1] - offsety,
+                        coords[0] + coords[2] + offsetx, coords[1] - offsety + coords[3],
+                        coords[0] + coords[2],coords[1] + coords[3],
+                        color
+                    );
 
                     // Draw the LIGHTER top
-                    pa(co, [
-                        'b',
-                        'm',coords[0],coords[1],
-                        'l',coords[0] + offsetx, coords[1] - offsety,
-                        'l',coords[0] + offsetx + coords[2], coords[1] - offsety,
-                        'l',coords[0] + coords[2], coords[1],
-                        'f', 'rgba(255,255,255,0.6)'
-                    ]);
+                    pa2(co,
+                        'b m % % l % % l % % l % % f rgba(255,255,255,0.6)',
+                        coords[0],coords[1],
+                        coords[0] + offsetx, coords[1] - offsety,
+                        coords[0] + offsetx + coords[2], coords[1] - offsety,
+                        coords[0] + coords[2], coords[1]
+                    );
 
 
                     // Draw the DARKER right hand side
-                    pa(co, [
-                        'b',
-                        'm',coords[0] + coords[2],coords[1],
-                        'l',coords[0] + coords[2] + offsetx, coords[1] - offsety,
-                        'l',coords[0] + coords[2] + offsetx, coords[1] - offsety + coords[3],
-                        'l',coords[0] + coords[2],coords[1] + coords[3],
-                        'f', 'rgba(0,0,0,0.3)'
-                    ]);
+                    pa2(co,
+                        'b m % % l % % l % % l % % f rgba(0,0,0,0.3)',
+                        coords[0] + coords[2],coords[1],
+                        coords[0] + coords[2] + offsetx, coords[1] - offsety,
+                        coords[0] + coords[2] + offsetx, coords[1] - offsety + coords[3],
+                        coords[0] + coords[2],coords[1] + coords[3]
+                    );
                 }
 
 
@@ -1373,7 +1360,13 @@
                     height = this.coords[i][3]
     
                 //if (mouseX >= left && mouseX <= (left + width) && mouseY >= top && mouseY <= (top + height) ) {
-                pa(co, ['b','r',left,top,width,height]);
+                pa2(co,
+                    'b r % % % %',
+                    left,
+                    top,
+                    width,
+                    height
+                );
                 
                 if (co.isPointInPath(mouseX, mouseY)) {
                 
@@ -1400,8 +1393,11 @@
         this.highlight =
         this.Highlight = function (shape)
         {
-            // Add the new highlight
-            RG.Highlight.Rect(this, shape);
+            if (typeof prop['chart.highlight.style'] === 'function') {
+                (prop['chart.highlight.style'])(shape);
+            } else {
+                RG.Highlight.Rect(this, shape);
+            }
         };
 
 
@@ -1506,36 +1502,23 @@
 
             // Set the top position
             tooltip.style.left = 0;
-            tooltip.style.top  = canvasXY[1] + coordY - height - 7 + (adjustment || 0) + 'px';
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
             
 
             // By default any overflow is hidden
             tooltip.style.overflow = '';
-    
-            // The arrow
-            var img = new Image();
-                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                img.style.position = 'absolute';
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.top = (tooltip.offsetHeight - 2) + 'px';
-            tooltip.appendChild(img);
-            
-            // Reposition the tooltip if at the edges:
-            
+
             // LEFT edge
-            if ((canvasXY[0] + coordX + (coordW / 2)- (width / 2)) < 0) {
-                tooltip.style.left = (canvasXY[0] + coordX - (width * 0.1)) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.1) - 8.5) + 'px';
+            if (canvasXY[0] + mouseXY[0]  - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0] - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + width) > doc.body.offsetWidth) {
-                tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0] - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-                tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 
@@ -1698,12 +1681,12 @@
                 // Draw vertical grid lines for the left side
                 if (vlines) {
                     for (var i=0; i<=numvlines; i+=1) {
-                        pa(co, [
-                            'b',
-                            'm', this.gutterLeft + (this.axisWidth / numvlines) * i, this.gutterTop,
-                            'l', this.gutterLeft + (this.axisWidth / numvlines) * i, this.gutterTop + this.axisHeight,
-                            's', color
-                        ]);
+                        pa2(co,
+                            'b m % % l % % s %',
+                            this.gutterLeft + (this.axisWidth / numvlines) * i, this.gutterTop,
+                            this.gutterLeft + (this.axisWidth / numvlines) * i, this.gutterTop + this.axisHeight,
+                            color
+                        );
 
                     }
                 }
@@ -1711,12 +1694,12 @@
                 // Draw horizontal grid lines for the left side
                 if (hlines) {
                     for (var i=0; i<=numhlines; i+=1) {
-                        pa(co, [
-                            'b',
-                            'm', this.gutterLeft, this.gutterTop + (this.axisHeight / numhlines) * i,
-                            'l', this.gutterLeft + this.axisWidth, this.gutterTop + (this.axisHeight / numhlines) * i,
-                            's', color
-                        ]);
+                        pa2(co,
+                            'b m % % l % % s %',
+                            this.gutterLeft, this.gutterTop + (this.axisHeight / numhlines) * i,
+                            this.gutterLeft + this.axisWidth, this.gutterTop + (this.axisHeight / numhlines) * i,
+                            color
+                        );
                     }
                 }
     
@@ -1724,24 +1707,24 @@
                 // Draw vertical grid lines for the right side
                 if (vlines) {
                     for (var i=0; i<=numvlines; i+=1) {
-                        pa(co, [
-                            'b',
-                            'm', this.gutterLeft + this.gutterCenter + this.axisWidth + (this.axisWidth / numvlines) * i, this.gutterTop,
-                            'l', this.gutterLeft + this.gutterCenter + this.axisWidth + (this.axisWidth / numvlines) * i, this.gutterTop + this.axisHeight,
-                            's', color
-                        ]);
+                        pa2(co,
+                            'b m % % l % % s %',
+                            this.gutterLeft + this.gutterCenter + this.axisWidth + (this.axisWidth / numvlines) * i, this.gutterTop,
+                            this.gutterLeft + this.gutterCenter + this.axisWidth + (this.axisWidth / numvlines) * i, this.gutterTop + this.axisHeight,
+                            color
+                        );
                     }
                 }
                 
                 // Draw horizontal grid lines for the right side
                 if (hlines) {
                     for (var i=0; i<=numhlines; i+=1) {
-                        pa(co, [
-                            'b',
-                            'm', this.gutterLeft + this.axisWidth + this.gutterCenter, this.gutterTop + (this.axisHeight / numhlines) * i,
-                            'l', this.gutterLeft + this.axisWidth + this.gutterCenter + this.axisWidth, this.gutterTop + (this.axisHeight / numhlines) * i,
-                            's', color
-                        ]);
+                        pa2(co,
+                            'b m % % l % % s %',
+                            this.gutterLeft + this.axisWidth + this.gutterCenter, this.gutterTop + (this.axisHeight / numhlines) * i,
+                            this.gutterLeft + this.axisWidth + this.gutterCenter + this.axisWidth, this.gutterTop + (this.axisHeight / numhlines) * i,
+                            color
+                        );
                     }
                 }
                 

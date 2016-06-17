@@ -1,9 +1,13 @@
+<?php
+    header('Content-Type: ISO-8859-1');
+?>
 <!DOCTYPE html>
 <html>
 <head>
 
     <title>A basic Bar chart using (column based) CSV data</title>
     
+
     <meta name="robots" content="noindex,nofollow" />
     <meta name="description" content="A basic example of an RGraph Bar chart that uses AJAX to fetch a CSV file and then parses it with JavaScript. Instead of each row being a dataset - this CSV holds the data as columns" />
     <meta name="googlebot" content="NOODP">
@@ -60,6 +64,7 @@
                     id: 'cvs',
                     data: data,
                     options: {
+                        textAccessible: true,
                         linewidth: 2,
                         shadowColor: '#ccc',
                         labels: labels,
@@ -150,6 +155,7 @@
                 id: 'cvs',
                 data: data,
                 options: {
+                    textAccessible: true,
                     linewidth: 2,
                     shadowColor: '#ccc',
                     labels: labels,

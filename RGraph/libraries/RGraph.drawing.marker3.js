@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -123,7 +123,11 @@
             'chart.highlight.fill':     'rgba(255,0,0,1.0)',
             'chart.tooltips':           null,
             'chart.tooltips.highlight': true,
-            'chart.tooltips.event':     'onclick'
+            'chart.tooltips.event':     'onclick',
+            'chart.text.accessible':           true,
+            'chart.text.accessible.overflow':  'visible',
+            'chart.text.accessible.pointerevents': false,
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
         /**
@@ -165,7 +169,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -219,10 +222,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
 
 
 
@@ -272,7 +274,7 @@
         {
             // Draw a circle to start with
             co.globalAlpha = this.alpha;
-            pa(this, [
+            pa2(co, [
                 'b',
                 'a', this.centerx, this.centery, this.actualRadius, 0, 2 * Math.PI,false,
                 'a', this.centerx, this.centery, ma.max(this.actualRadius - 8, 0), 2 * Math.PI,0, true,
@@ -393,41 +395,31 @@
         this.positionTooltip = function (obj, x, y, tooltip, idx)
         {
             var canvasXY   = RG.getCanvasXY(obj.canvas);
+            var mouseXY    = RG.getMouseXY(window.event);
             var width      = tooltip.offsetWidth;
             var height     = tooltip.offsetHeight;
             var radius     = this.radius;
     
             // Set the top position
             tooltip.style.left = 0;
-            tooltip.style.top  = canvasXY[1] + obj.centery - height - 7 + 'px';
-            
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
+    
             // By default any overflow is hidden
             tooltip.style.overflow = '';
-    
-            // The arrow
-            var img = new Image();
-                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                img.style.position = 'absolute';
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.top = (tooltip.offsetHeight - 2) + 'px';
-            tooltip.appendChild(img);
             
             // Reposition the tooltip if at the edges:
             
             // LEFT edge
-            if ((canvasXY[0] + obj.centerx - (width / 2)) < 10) {
-                tooltip.style.left = (canvasXY[0] + this.centerx - (width * 0.1))  + 'px';
-                img.style.left = ((width * 0.1) - 8.5) + 'px';
+            if (canvasXY[0] + mouseXY[0] - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + obj.centerx + (width / 2)) > doc.body.offsetWidth) {
-                tooltip.style.left = canvasXY[0] + this.centerx - (width * 0.9) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-                tooltip.style.left = (canvasXY[0] + this.centerx - (width * 0.5)) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 
@@ -442,7 +434,11 @@
         this.Highlight = function (shape)
         {
             if (prop['chart.tooltips.highlight']) {
-                pa(this, ['b','r',this.coords[0][0],this.coords[0][1],this.coords[0][2],this.coords[0][3],'f',prop['chart.highlight.fill'],'s',prop['chart.highlight.stroke']]);
+                if (typeof prop['chart.highlight.style'] === 'function') {
+                    (prop['chart.highlight.style'])(shape);
+                } else {
+                    pa2(co, ['b','r',this.coords[0][0],this.coords[0][1],this.coords[0][2],this.coords[0][3],'f',prop['chart.highlight.fill'],'s',prop['chart.highlight.stroke']]);
+                }
             }
         };
 

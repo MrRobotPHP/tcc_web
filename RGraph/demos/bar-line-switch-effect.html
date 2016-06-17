@@ -3,9 +3,9 @@
 <head>
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
     
-    <script type="text/javascript" src="../libraries/RGraph.common.core.js" ></script>
-    <script type="text/javascript" src="../libraries/RGraph.bar.js" ></script>
-    <script type="text/javascript" src="../libraries/RGraph.line.js" ></script>
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.bar.js" ></script>
+    <script src="../libraries/RGraph.line.js" ></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     
     <title>Bar and Line charts with switch effect</title>
@@ -47,6 +47,12 @@
     <h1>Bar and Line charts with switch effect</h1>
 
     <span style="font-weight: bold; color: red;">Requires jQuery</span>
+    
+    <p>
+        This effect currently doesn't use the <b>textAccessible</b> option. If rewritten
+        it probably could by applying the CSS to the container DIV instead of the canvas.
+        This way the DIV and everything in it (ie the canvas and the text) is animated.
+    </p>
 
     <div id="container">
         <canvas id="cvs1" width="600" height="250">[No canvas support]</canvas>
@@ -157,7 +163,7 @@
                 tickmarks: function myTick (obj, data, value, index, x, y, color, prevX, prevY)
                 {
                     <span>// An RGraph function</span>
-                    RGraph.path(obj.context, ['b', 'a',x, y, 15, 0, 2 * Math.PI, false, 'f', color]);
+                    RGraph.path2(obj.context, ['b', 'a',x, y, 15, 0, 2 * Math.PI, false, 'f', color]);
                 },
                 linewidth: 10,
                 shadow: false,
@@ -260,7 +266,8 @@
                     title: 'A Bar chart (click to switch to the Line chart)',
                     backgroundGridVlines: false,
                     backgroundGridBorder: false,
-                    labels: ['John','Fred','Lucy']
+                    labels: ['John','Fred','Lucy'],
+                    textAccessible: false
                 }
 
             }).draw();
@@ -279,7 +286,7 @@
                     tickmarks: function myTick (obj, data, value, index, x, y, color, prevX, prevY)
                     {
                         // An RGraph function
-                        RGraph.path(obj.context, ['b', 'a',x, y, 15, 0, 2 * Math.PI, false, 'f', color]);
+                        RGraph.path2(obj.context, ['b', 'a',x, y, 15, 0, 2 * Math.PI, false, 'f', color]);
                     },
                     linewidth: 10,
                     shadow: false,

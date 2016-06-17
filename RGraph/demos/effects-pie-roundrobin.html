@@ -20,17 +20,17 @@
     <canvas id="cvs" width="250" height="250">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var bar = new RGraph.Pie({
-                id: 'cvs',
-                data: [4,8,6,4,3,5,2]
-            }).on('beforedraw', function (obj)
-            {
-                RGraph.clear(obj.canvas, 'white');
-            }).roundRobin({frames: 60})
-              .grow({frames: 60})
-        };
+        new RGraph.Pie({
+            id: 'cvs',
+            data: [4,8,6,4,3,5,2],
+            options: {
+                labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+                shadowOffsetx: 3,
+                shadowOffsety: 3,
+                shadowBlur: 5,
+                clearto: 'white'
+            }
+        }).roundRobin({frames: 60})
     </script>
 
     <p></p>
@@ -51,17 +51,17 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var bar = new RGraph.Pie({
-            id: 'cvs',
-            data: [4,8,6,4,3,5,2]
-        }).on('beforedraw', function (obj)
-        {
-            RGraph.clear(obj.canvas, 'white');
-        }).roundRobin({frames: 60})
-          .grow({frames: 60})
-    };
+    new RGraph.Pie({
+        id: 'cvs',
+        data: [4,8,6,4,3,5,2],
+        options: {
+            labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+            shadowOffsetx: 3,
+            shadowOffsety: 3,
+            shadowBlur: 5,
+            clearto: 'white'
+        }
+    }).roundRobin({frames: 60})
 &lt;/script&gt;
 </pre>
 

@@ -48,7 +48,10 @@
 
             var rscatter = new RGraph.RScatter({
                 id: 'cvs',
-                data: data
+                data: data,
+                options: {
+                    textAccessible: true
+                }
             }).draw();
         };
     </script>
@@ -96,7 +99,10 @@
 
         var rscatter = new RGraph.RScatter({
             id: 'cvs',
-            data: data
+            data: data,
+            options: {
+                textAccessible: true
+            }
         }).draw();
     };
 &lt;/script&gt;

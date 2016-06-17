@@ -17,14 +17,17 @@
 
     <h1>Rose chart Explode effect</h1>
 
-    <canvas id="cvs" width="250" height="250">[No canvas support]</canvas>
+    <canvas id="cvs" width="350" height="350">[No canvas support]</canvas>
     
     <script>
         window.onload = function ()
         {
             var rose = new RGraph.Rose({
                 id: 'cvs',
-                data: [4,8,6,4,3,5,2]
+                data: [4,8,6,4,3,5,2],
+                options: {
+                    textAccessible: true
+                }
             }).explode()
               .on('beforedraw', function (obj)
             {
@@ -43,7 +46,7 @@
     
     Put this where you want the chart to show up:
     <pre class="code">
-&lt;canvas id="cvs" width="600" height="250"&gt;
+&lt;canvas id="cvs" width="350" height="350"&gt;
     [No canvas support]
 &lt;/canvas&gt;
 </pre>
@@ -55,7 +58,10 @@
     {
         var rose = new RGraph.Rose({
             id: 'cvs',
-            data: [4,8,6,4,3,5,2]
+            data: [4,8,6,4,3,5,2],
+            options: {
+                textAccessible: true
+            }
         }).explode()
           .on('beforedraw', function (obj)
           {

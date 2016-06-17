@@ -3,11 +3,11 @@
 <head>
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
     
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script type="text/javascript" src="../libraries/RGraph.common.core.js" ></script>
-    <script type="text/javascript" src="../libraries/RGraph.common.dynamic.js" ></script>
-    <script type="text/javascript" src="../libraries/RGraph.common.resizing.js" ></script>
-    <script type="text/javascript" src="../libraries/RGraph.bar.js" ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
+    <script src="../libraries/RGraph.common.resizing.js" ></script>
+    <script src="../libraries/RGraph.bar.js" ></script>
     
     <title>A resizable Bar chart</title>
     
@@ -23,20 +23,18 @@
     <canvas id="cvs" width="700" height="250">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var bar = new RGraph.Bar({
-                id: 'cvs',
-                data: [12,18,10,9,6,20,18],
-                options: {
-                    resizable: true,
-                    labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
-                    shadow: false,
-                    colors: ['red'],
-                    strokestyle: 'rgba(0,0,0,0)'
-                }                
-            }).draw();
-        };
+        new RGraph.Bar({
+            id: 'cvs',
+            data: [12,18,10,9,6,20,18],
+            options: {
+                resizable: true,
+                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                shadow: false,
+                colors: ['red'],
+                strokestyle: 'rgba(0,0,0,0)',
+                textAccessible: true
+            }                
+        }).draw();
     </script>
 
 
@@ -76,7 +74,8 @@
                 labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
                 shadow: false,
                 colors: ['red'],
-                strokestyle: 'rgba(0,0,0,0)'
+                strokestyle: 'rgba(0,0,0,0)',
+                textAccessible: true
             }                
         }).draw();
     };

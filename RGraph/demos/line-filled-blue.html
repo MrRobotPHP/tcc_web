@@ -16,7 +16,7 @@
 
     <h1>A filled blue line chart</h1>
 
-    <canvas id="cvs" width="950" height="500">[No canvas support]</canvas>
+    <canvas id="cvs" width="950" height="400">[No canvas support]</canvas>
     
     <script>
         window.onload = function ()
@@ -43,7 +43,8 @@
                     backgroundGridVlines: false,
                     backgroundGridBorder: false,
                     noxaxis: true,
-                    textSize: 16
+                    textSize: 16,
+                    textAccessible: true
                 }
             }).draw();
         };
@@ -65,7 +66,7 @@
     
     Put this where you want the chart to show up:
     <pre class="code">
-&lt;canvas id="cvs" width="600" height="250"&gt;
+&lt;canvas id="cvs" width="950" height="400"&gt;
     [No canvas support]
 &lt;/canvas&gt;
 </pre>
@@ -97,7 +98,8 @@
                 backgroundGridVlines: false,
                 backgroundGridBorder: false,
                 noxaxis: true,
-                textSize: 16
+                textSize: 16,
+                textAccessible: true
             }
         }).draw();
     };

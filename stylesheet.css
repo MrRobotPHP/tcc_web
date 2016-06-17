@@ -23,6 +23,21 @@
   src: url('fonts/Amaranth-Bold.otf');
 }
 
+@font-face {
+  font-family: Sansation-Regular;
+  src: url('fonts/Sansation_Regular.ttf');
+}
+
+@font-face {
+  font-family: Sansation-Bold;
+  src: url('fonts/Sansation_Bold.ttf');
+}
+
+@font-face {
+  font-family: Sansation-Light;
+  src: url('fonts/Sansation_Light.ttf');
+}
+
 body {
   background-image: url('img/wallpaper_site_photus.jpg');
   background-repeat: no-repeat;
@@ -30,139 +45,127 @@ body {
   background-size: 100%;
 }
 
-input[type="text"],
+
+.fmr-login {
+ display: block;
+  position: relative;
+  width: 300px;
+  margin: 0px auto;
+  top: -20px;
+  
+  }
+
+input[type="email"],
 input[type="password"] {
   width: 100%;
   height: 50px;
   font-family: Amaranth-Regular;
   font-size: 16px;
-  color: #282828;
+  color: #ffffff;
 }
 
-button[type="submit"] {
+.submit{
   width: 300px;
   height: 50px;
   font-family: JosefinSans-Regular;
   font-size: 24px;
-  color: #d5d5d5;
-  background-color: #27b789;
+  color: #ffffff;
+  background-color: #070438;
   border: none;
 }
 
-button[type="submit"]:hover {
-  background-color: #25c492;
+.submit:hover{
+  background-color:#ffffff;
+  color: #070438;
+  transition:0.5s;
 }
 
 label,
-input[type="text"],
+input[type="email"],
 input[type="password"] {
   font-family: JosefinSans-Regular;
   font-size: 24px;
 }
 
 label {
-  color: #11C2CD;
+  color: #ffffff;
+  text-decoration: bold;
+  text-shadow:black 0.1em 0.1em 0.2em;
 }
 
-input[type="text"],
+input[type="email"],
 input[type="password"] {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.5);
   border: none;
-  border-bottom: 3px solid #11cda8;
+  border-bottom: 3px solid #070438;
   width: 300px;
 }
 
 .container {
-  padding: 0.01em;
   position: relative;
+  display: block;
+  margin: auto;
+
 }
 
 .d-login {
   width: 300px;
-  height: 282px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -150px;
-  margin-left: -155px;
-
+  margin: 100px auto;
+  display: block;
 }
 
-.fmr-login {
-  width: 170px;
-  height: 200px;
-  border: 1px solid #bfbfbf;
-  border-radius: 5px;
+.d-login input:hover{
+  border-bottom: 3px solid #ffffff;
+  transition:0.5s;
 }
+
+.d-login input:focus{
+  border-bottom: 3px solid #ffffff;
+}
+
 
 .header {
   font-family: Squared-Display, sans-serif;
-  font-size: 70px;
+  font-size: 100px;
+  color: #ffffff;
   text-align: center;
+  text-shadow:black 0.1em 0.1em 0.2em;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #337ab7;
-  border-color: #2e6da4;
-}
-.btn-primary:focus,
-.btn-primary.focus {
-  color: #fff;
-  background-color: #286090;
-  border-color: #122b40;
-}
-.btn-primary:hover {
-  color: #fff;
-  background-color: #286090;
-  border-color: #204d74;
-}
-.btn-primary:active,
-.btn-primary.active,
-.open > .dropdown-toggle.btn-primary {
-  color: #fff;
-  background-color: #286090;
-  border-color: #204d74;
-}
-.btn-primary:active:hover,
-.btn-primary.active:hover,
-.open > .dropdown-toggle.btn-primary:hover,
-.btn-primary:active:focus,
-.btn-primary.active:focus,
-.open > .dropdown-toggle.btn-primary:focus,
-.btn-primary:active.focus,
-.btn-primary.active.focus,
-.open > .dropdown-toggle.btn-primary.focus {
-  color: #fff;
-  background-color: #204d74;
-  border-color: #122b40;
-}
-.btn-primary:active,
-.btn-primary.active,
-.open > .dropdown-toggle.btn-primary {
-  background-image: none;
-}
-.btn-primary.disabled:hover,
-.btn-primary[disabled]:hover,
-fieldset[disabled] .btn-primary:hover,
-.btn-primary.disabled:focus,
-.btn-primary[disabled]:focus,
-fieldset[disabled] .btn-primary:focus,
-.btn-primary.disabled.focus,
-.btn-primary[disabled].focus,
-fieldset[disabled] .btn-primary.focus {
-  background-color: #337ab7;
-  border-color: #2e6da4;
-}
-.btn-primary .badge {
-  color: #337ab7;
-  background-color: #fff;
+.header-painel {
+  background: #070438;
+  height: 90px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 15;
+  width: 100%;
+  padding-left: 10px;
 }
 
-.btn-lg,
-.btn-group-lg > .btn {
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.3333333;
-  border-radius: 6px;
+.painel {
+  position: relative;
+}
+
+.p-grafico {
+  position: absolute;
+  top: 100px;
+  left: 25%;
+}
+
+.t-painel {
+  font-family: Sansation-Regular;
+  font-size: 36px;
+}
+
+.t-texto-painel {
+  font-family: Sansation-Regular;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.texto-painel {
+  font-family: Sansation-Light;
+  font-size: 14px;
+  font-weight: bold;
 }

@@ -17,26 +17,27 @@
     <canvas id="cvs" width="650" height="350">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var data = [4,8,6,3,5,2,6,8,4,5,7,8];
+        data = [4,8,6,3,5,2,6,8,4,5,7,8];
 
-            var bar = new RGraph.Bar({
-                id: 'cvs',
-                data: data,
-                options: {
-                    backgroundGridAutofitNumvlines: 0,
-                    linewidth: 0,
-                    shadow: false,
-                    hmargin: 13,
-                    colors: ['Gradient(pink:red:#f33)', 'Gradient(green:#0f0)'],
-                    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-                    clearto: 'white',
-                    variant: '3d',
-                    gutterBottom: 90
-                }
-            }).wave({frames: 60});
-        };
+        new RGraph.Bar({
+            id: 'cvs',
+            data: data,
+            options: {
+                textAccessible: true,
+                scaleZerostart: true,
+                backgroundGridAutofitNumvlines: 0,
+                linewidth: 0,
+                shadow: false,
+                hmargin: 7,
+                colors: ['Gradient(pink:red:#f33)', 'Gradient(green:#0f0)'],
+                labelsAbove: true,
+                labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+                clearto: 'white',
+                variant: '3d',
+                gutterBottom: 90,
+                noaxes: true
+            }
+        }).wave({frames: 60});
     </script>
 
     <p></p>
@@ -57,26 +58,27 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var data = [4,8,6,3,5,2,6,8,4,5,7,8];
+    data = [4,8,6,3,5,2,6,8,4,5,7,8];
 
-        var bar = new RGraph.Bar({
-            id: 'cvs',
-            data: data,
-            options: {
-                backgroundGridAutofitNumvlines: 0,
-                linewidth: 0,
-                shadow: false,
-                hmargin: 10,
-                colors: ['Gradient(pink:red:#f33)', 'Gradient(green:#0f0)'],
-                labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-                clearto: 'white',
-                variant: '3d',
-                gutterBottom: 90
-            }
-        }).wave({frames: 60});
-    };
+    new RGraph.Bar({
+        id: 'cvs',
+        data: data,
+        options: {
+            textAccessible: true,
+            scaleZerostart: true,
+            backgroundGridAutofitNumvlines: 0,
+            linewidth: 0,
+            shadow: false,
+            hmargin: 7,
+            colors: ['Gradient(pink:red:#f33)', 'Gradient(green:#0f0)'],
+            labelsAbove: true,
+            labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            clearto: 'white',
+            variant: '3d',
+            gutterBottom: 90,
+            noaxes: true
+        }
+    }).wave({frames: 60});
 &lt;/script&gt;
 </pre>
 

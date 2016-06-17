@@ -49,7 +49,8 @@
                     tickmarks: 'dot',
                     ticksize: 5,
                     tickmarksDotLinewidth: 1,
-                    shadow: false
+                    shadow: false,
+                    textAccessible: true
                 }
             }).trace2({frames: 60});
             
@@ -90,18 +91,19 @@
                     backgroundColor: 'rgba(0,0,0,0)',
                     borderOuter: 'rgba(0,0,0,0)',
                     borderInner: 'rgba(0,0,0,0)',
-                    borderOutline: 'rgba(0,0,0,0)'
+                    borderOutline: 'rgba(0,0,0,0)',
+                    textAccessible: true
                 }
             }).on('beforedraw', function (obj)
             {
                 // On the first frame obj.centerx is not defined, but
                 // it is on subsequent frames
-                RGraph.path(obj.context,[
+                RGraph.path2(obj.context,[
                     'b',
                     'a',obj.centerx,obj.centery, 60,0,6.28, false,
                     'f', 'rgba(232,232,232,.5)'
                 ]);
-            }).grow();
+            }).draw();
 
 
 
@@ -134,17 +136,18 @@
                     valueTextColor: '#aaa',
                     valueTextBounding: false,
                     unitsPost: 'km/h',
+                    textAccessible: true
                 }
             }).on('beforedraw', function (obj)
             {
                 // On the first frame obj.centerx is not defined, but
                 // it is on subsequent frames
-                RGraph.path(obj.context,[
+                RGraph.path2(obj.context,[
                     'b',
                     'a',obj.centerx,obj.centery, 60,0,6.28, false,
                     'f', 'rgba(232,232,232,.5)'
                 ]);
-            }).grow();
+            }).draw();
 
 
 
@@ -158,7 +161,8 @@
                     scaleDecimals: 1,
                     textSize: 8,
                     textColor: '#90AA00',
-                    colors: ['transparent']
+                    colors: ['transparent'],
+                    textAccessible: true
                 }
             }).draw();
         };
@@ -217,7 +221,8 @@
                 tickmarks: 'dot',
                 ticksize: 5,
                 tickmarksDotLinewidth: 1,
-                shadow: false
+                shadow: false,
+                textAccessible: true
             }
         }).trace2({frames: 60});
         
@@ -258,18 +263,19 @@
                 backgroundColor: 'rgba(0,0,0,0)',
                 borderOuter: 'rgba(0,0,0,0)',
                 borderInner: 'rgba(0,0,0,0)',
-                borderOutline: 'rgba(0,0,0,0)'
+                borderOutline: 'rgba(0,0,0,0)',
+                textAccessible: true
             }
         }).on('beforedraw', function (obj)
         {
-            // On the first frame obj.centerx is not defined, but
-            // it is on subsequent frames
-            RGraph.path(obj.context,[
+            <span>// On the first frame obj.centerx is not defined, but
+            // it is on subsequent frames</span>
+            RGraph.path2(obj.context,[
                 'b',
                 'a',obj.centerx,obj.centery, 60,0,6.28, false,
                 'f', 'rgba(232,232,232,.5)'
             ]);
-        }).grow();
+        }).draw();
 
 
 
@@ -302,21 +308,22 @@
                 valueTextColor: '#aaa',
                 valueTextBounding: false,
                 unitsPost: 'km/h',
+                textAccessible: true
             }
         }).on('beforedraw', function (obj)
         {
-            // On the first frame obj.centerx is not defined, but
-            // it is on subsequent frames
-            RGraph.path(obj.context,[
+            <span>// On the first frame obj.centerx is not defined, but
+            // it is on subsequent frames</span>
+            RGraph.path2(obj.context,[
                 'b',
                 'a',obj.centerx,obj.centery, 60,0,6.28, false,
                 'f', 'rgba(232,232,232,.5)'
             ]);
-        }).grow();
+        }).draw();
 
 
 
-        // Draw the right hand Y axis using the drawing API
+        <span>// Draw the right hand Y axis using the drawing API</span>
         var yaxis = new RGraph.Drawing.YAxis({
             id: 'cvs',
             x: line.canvas.width - line.gutterRight,
@@ -326,7 +333,8 @@
                 scaleDecimals: 1,
                 textSize: 8,
                 textColor: '#90AA00',
-                colors: ['transparent']
+                colors: ['transparent'],
+                textAccessible: true
             }
         }).draw();
     };

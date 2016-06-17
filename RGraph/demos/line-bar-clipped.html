@@ -27,64 +27,54 @@
     <canvas id="cvs" width="600" height="300">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var linewidth = 5;
-            var linedata  = [1,5,6,8,9,8,6,4,3,1];
-            var bardata   = [8,7,9,10,8,7,6,5,4];
+        var linewidth = 5,
+            linedata  = [1,5,6,8,9,8,6,4,3,1],
+            bardata   = [8,7,9,10,8,7,6,5,4]
 
-            var line = new RGraph.Line({
-                id: 'cvs',
-                data: linedata,
-                options: {
-                    backgroundGridVlines: false,
-                    backgroundGridBorder: false,
-                    spline: true,
-                    tickmarks: 'endcircle',
-                    linewidth: linewidth,
-                    shadow: false,
-                    textSize: 14
-                }
-            }).draw();
+        var line = new RGraph.Line({
+            id: 'cvs',
+            data: linedata,
+            options: {
+                backgroundGridVlines: false,
+                backgroundGridBorder: false,
+                spline: true,
+                tickmarks: 'endcircle',
+                linewidth: linewidth,
+                shadow: false,
+                textSize: 14,
+                ylabels: false,
+                textAccessible: true
+            }
+        }).draw();
+        
+        var ca = line.canvas,
+            co = line.context;
             
-            var ca = line.canvas;
-            var co = line.context;
-                
-                
-                
-                
-                
-                
-            // Draw a area under the chart and clip to it
-            co.beginPath();
-                co.moveTo(line.gutterLeft, ca.height)
-                for (var i=0,len=line.coordsSpline[0].length; i<len; ++i) {
-                    co.lineTo(line.coordsSpline[0][i][0], line.coordsSpline[0][i][1] + (linewidth / 2) - 0.5);
-                }
-                co.lineTo(ca.width, ca.height)
-                co.clip();
-                
-                
-                
-                
-                
-
-            // Now draw the bar chart
-            var bar = new RGraph.Bar({
-                id: 'cvs',
-                data: bardata,
-                options: {
-                    labels: ['Rob','Lucy','Lynsey','Paul','Olga','Jerry','Kev','Luis','Hoolio'],
-                    backgroundGrid: false,
-                    noxaxis: true,
-                    noyaxis: true,
-                    colors: ['gradient(#eef:#01B4FF)'],
-                    shadow: false,
-                    strokestyle: 'rgba(0,0,0,0)',
-                    textSize: 14
-                }
-            }).wave();
-        };
+        // Draw a area under the chart and clip to it
+        co.beginPath();
+            co.moveTo(line.gutterLeft, ca.height)
+            for (var i=0,len=line.coordsSpline[0].length; i<len; ++i) {
+                co.lineTo(line.coordsSpline[0][i][0], line.coordsSpline[0][i][1] + (linewidth / 2) - 0.5);
+            }
+            co.lineTo(ca.width, ca.height)
+            co.clip();
+            
+        // Now draw the bar chart
+        new RGraph.Bar({
+            id: 'cvs',
+            data: bardata,
+            options: {
+                labels: ['Rob','Lucy','Lynsey','Paul','Olga','Jerry','Kev','Luis','Hoolio'],
+                backgroundGrid: false,
+                noxaxis: true,
+                noyaxis: true,
+                colors: ['gradient(#eef:#01B4FF)'],
+                shadow: false,
+                strokestyle: 'rgba(0,0,0,0)',
+                textSize: 14,
+                textAccessible: true
+            }
+        }).wave();
     </script>
 
 
@@ -112,64 +102,54 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var linewidth = 5;
-        var linedata  = [1,5,6,8,9,8,6,4,3,1];
-        var bardata   = [8,7,9,10,8,7,6,5,4];
+    var linewidth = 5,
+        linedata  = [1,5,6,8,9,8,6,4,3,1],
+        bardata   = [8,7,9,10,8,7,6,5,4]
 
-        var line = new RGraph.Line({
-            id: 'cvs',
-            data: linedata,
-            options: {
-                backgroundGridVlines: false,
-                backgroundGridBorder: false,
-                spline: true,
-                tickmarks: 'endcircle',
-                linewidth: linewidth,
-                shadow: false,
-                textSize: 14
-            }
-        }).draw();
+    var line = new RGraph.Line({
+        id: 'cvs',
+        data: linedata,
+        options: {
+            backgroundGridVlines: false,
+            backgroundGridBorder: false,
+            spline: true,
+            tickmarks: 'endcircle',
+            linewidth: linewidth,
+            shadow: false,
+            textSize: 14,
+            ylabels: false,
+            textAccessible: true
+        }
+    }).draw();
+    
+    var ca = line.canvas,
+        co = line.context;
         
-        var ca = line.canvas;
-        var co = line.context;
-            
-            
-            
-            
-            
-            
-        // Draw a area under the chart and clip to it
-        co.beginPath();
-            co.moveTo(line.gutterLeft, ca.height)
-            for (var i=0,len=line.coordsSpline[0].length; i&lt;len; ++i) {
-                co.lineTo(line.coordsSpline[0][i][0], line.coordsSpline[0][i][1] + (linewidth / 2) - 0.5);
-            }
-            co.lineTo(ca.width, ca.height)
-            co.clip();
-            
-            
-            
-            
-            
-
-        // Now draw the bar chart
-        var bar = new RGraph.Bar({
-            id: 'cvs',
-            data: bardata,
-            options: {
-                labels: ['Rob','Lucy','Lynsey','Paul','Olga','Jerry','Kev','Luis','Hoolio'],
-                backgroundGrid: false,
-                noxaxis: true,
-                noyaxis: true,
-                colors: ['gradient(#eef:#01B4FF)'],
-                shadow: false,
-                strokestyle: 'rgba(0,0,0,0)',
-                textSize: 14
-            }
-        }).wave();
-    };
+    // Draw a area under the chart and clip to it
+    co.beginPath();
+        co.moveTo(line.gutterLeft, ca.height)
+        for (var i=0,len=line.coordsSpline[0].length; i&lt;len; ++i) {
+            co.lineTo(line.coordsSpline[0][i][0], line.coordsSpline[0][i][1] + (linewidth / 2) - 0.5);
+        }
+        co.lineTo(ca.width, ca.height)
+        co.clip();
+        
+    // Now draw the bar chart
+    new RGraph.Bar({
+        id: 'cvs',
+        data: bardata,
+        options: {
+            labels: ['Rob','Lucy','Lynsey','Paul','Olga','Jerry','Kev','Luis','Hoolio'],
+            backgroundGrid: false,
+            noxaxis: true,
+            noyaxis: true,
+            colors: ['gradient(#eef:#01B4FF)'],
+            shadow: false,
+            strokestyle: 'rgba(0,0,0,0)',
+            textSize: 14,
+            textAccessible: true
+        }
+    }).wave();
 &lt;/script&gt;
 </pre>
 

@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -33,7 +33,7 @@
             var parseConfObjectForOptions = true; // Set this so the config is parsed (at the end of the constructor)
             
             // Turn conf.data into a multi-d array if it's not already
-            if (typeof conf.data[0] === 'number') {
+            if (typeof conf.data[0] === 'number' || typeof conf.data[0] === 'string') {
                 conf.data = [conf.data];
             }
         
@@ -78,8 +78,19 @@
 
         /**
         * Add the data to the .original_data array and work out the max value
+        * 
+        * 2/5/14 Now also use this loop to ensure that the data pieces
+        *        are numbers
         */
         for (var i=0,len=conf.data.length; i<len; ++i) {
+        
+            // Convert strings to numbers
+            for (var j=0; j<conf.data[i].length; ++j) {
+                if (typeof conf.data[i][j] === 'string') {
+                    conf.data[i][j] = parseFloat(conf.data[i][j]);
+                }
+            }
+        
             this.original_data.push(RGraph.arrayClone(conf.data[i]));
             this.data.push(RGraph.arrayClone(conf.data[i]));
             this.max = Math.max(this.max, RGraph.arrayMax(conf.data[i]));
@@ -119,8 +130,11 @@
             'chart.background.circles.spokes': 24,
             'chart.text.size':             12,
             'chart.text.size.scale':       null,
-            'chart.text.font':             'Arial',
+            'chart.text.font':             'Segoe UI, Arial, Verdana, sans-serif',
             'chart.text.color':            'black',
+            'chart.text.accessible':               true,
+            'chart.text.accessible.overflow':      'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.title':                 '',
             'chart.title.background':      null,
             'chart.title.hpos':            null,
@@ -204,7 +218,8 @@
             'chart.fill.highlight.fill':   'rgba(255,255,255,0.7)',
             'chart.fill.highlight.stroke': 'rgba(0,0,0,0)',
             'chart.fill.mousemove.redraw': false,
-            'chart.animation.trace.clip': 1
+            'chart.animation.trace.clip': 1,
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
 
@@ -248,7 +263,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -301,10 +315,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
 
 
 
@@ -1232,8 +1245,11 @@
         this.highlight =
         this.Highlight = function (shape)
         {
-            // Add the new highlight
-            RG.Highlight.Point(this, shape);
+            if (typeof prop['chart.highlight.style'] === 'function') {
+                (prop['chart.highlight.style'])(shape);
+            } else {
+                RG.Highlight.Point(this, shape);
+            }
         };
 
 
@@ -1282,38 +1298,29 @@
             var gutterLeft = this.gutterLeft;
             var gutterTop  = this.gutterTop;
             var width      = tooltip.offsetWidth;
+            var height     = tooltip.offsetHeight;
+            var mouseXY    = RG.getMouseXY(window.event);
     
             // Set the top position
             tooltip.style.left = 0;
-            tooltip.style.top  = parseInt(tooltip.style.top) - 9 + 'px';
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
             
             // By default any overflow is hidden
             tooltip.style.overflow = '';
-    
-            // The arrow
-            var img = new Image();
-                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                img.style.position = 'absolute';
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.top = (tooltip.offsetHeight - 2) + 'px';
-            tooltip.appendChild(img);
             
             // Reposition the tooltip if at the edges:
             
             // LEFT edge
-            if ((canvasXY[0] + coordX - (width / 2)) < 10) {
-                tooltip.style.left = (canvasXY[0] + coordX - (width * 0.1)) + 'px';
-                img.style.left = ((width * 0.1) - 8.5) + 'px';
+            if (canvasXY[0] + mouseXY[0] - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + (width / 2)) > doc.body.offsetWidth) {
-                tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-                tooltip.style.left = (canvasXY[0] + coordX - (width * 0.5)) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 

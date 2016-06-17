@@ -1,13 +1,14 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
     * |                                                                                |
     * |                          http://www.rgraph.net                                 |
-    * |                                                                                |
+    * |                   F                                                             |
+    * |                   F                                                             |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license starts at just £99 (GBP) and      |
+    * | the terms of the GPL. The commercial license starts at just 99 GBP and      |
     * | you can read about it here:                                                    |
     * |                                                                                |
     * |                      http://www.rgraph.net/license                             |
@@ -428,7 +429,7 @@
                 temp[i] = obj[i];
             
             } else {
-                temp[i] = RG.array_clone(obj[i]);
+                temp[i] = RG.arrayClone(obj[i]);
             }
         }
 
@@ -489,6 +490,7 @@
     RG.arrayMin = function (arr)
     {
         var max = null,
+            min = null,
             ma  = Math;
         
         if (typeof arr === 'number') {
@@ -704,34 +706,47 @@
             return;
         }
         
-        RG.FireCustomEvent(obj, 'onbeforeclear');
+        RG.fireCustomEvent(obj, 'onbeforeclear');
 
-        if (RG.ISIE8 && !color) {
-            color = 'white';
+        /**
+        * Set the CSS display: to none for DOM text
+        */
+        if (RG.text2.domNodeCache && RG.text2.domNodeCache[ca.id]) {
+            for (var i in RG.text2.domNodeCache[ca.id]) {
+                
+                var el = RG.text2.domNodeCache[ca.id][i];
+    
+                if (el && el.style) {
+                    el.style.display = 'none';
+                }
+            }
         }
 
         /**
         * Can now clear the canvas back to fully transparent
         */
-        if (!color || (color && color === 'rgba(0,0,0,0)' || color === 'transparent')) {
+        if (   !color
+            || (color && color === 'rgba(0,0,0,0)' || color === 'transparent')
+            ) {
 
-            co.clearRect(0,0,ca.width, ca.height);
+            co.clearRect(-100,-100,ca.width + 200, ca.height + 200);
             
             // Reset the globalCompositeOperation
             co.globalCompositeOperation = 'source-over';
 
+        } else if (color) {
+            RG.path2(co, 'fs % fr -100 -100 % %',
+                color,
+                ca.width + 200,
+                ca.height + 200
+            );
+        
         } else {
-
-            co.fillStyle = color;
-            co.beginPath();
-
-            if (RG.ISIE8) {
-                co.fillRect(0,0,ca.width,ca.height);
-            } else {
-                co.fillRect(-10,-10,ca.width + 20,ca.height + 20);
-            }
-
-            co.fill();
+            RG.path2(co, 'fs % fr -100 -100 % %',
+                obj.get('clearto'),
+                ca.width + 200,
+                ca.height + 200
+            );
         }
         
         //if (RG.ClearAnnotations) {
@@ -752,7 +767,7 @@
         * This hides the tooltip that is showing IF it has the same canvas ID as
         * that which is being cleared
         */
-        if (RG.Registry.Get('chart.tooltip') && obj.get('chart.tooltips.nohideonclear') !== true) {
+        if (RG.Registry.Get('chart.tooltip') && obj && !obj.get('chart.tooltips.nohideonclear')) {
             RG.HideTooltip(ca);
             //RG.Redraw();
         }
@@ -796,13 +811,14 @@
     {
         var ca = canvas  = obj.canvas,
             co = context = obj.context,
-            prop         = obj.properties,
+            prop         = obj.properties
             gutterLeft   = prop['chart.gutter.left'],
             gutterRight  = prop['chart.gutter.right'],
             gutterTop    = gutterTop,
             gutterBottom = prop['chart.gutter.bottom'],
             size         = arguments[4] ? arguments[4] : 12,
             bold         = prop['chart.title.bold'],
+            italic       = prop['chart.title.italic'],
             centerx      = (arguments[3] ? arguments[3] : ((ca.width - gutterLeft - gutterRight) / 2) + gutterLeft),
             keypos       = prop['chart.key.position'],
             vpos         = prop['chart.title.vpos'],
@@ -924,7 +940,8 @@
         /**
         * Draw the title
         */
-        RG.Text2(co, {
+
+        RG.text2(co, {
             'font':font,
             'size':size,
             'x':centerx,
@@ -935,7 +952,9 @@
             'bounding':bgcolor != null,
             'bounding.fill':bgcolor,
             'bold':bold,
-            'tag':'title'
+            italic: italic,
+            'tag':'title',
+            marker: false
         });
 
         // Reset the fill colour
@@ -952,6 +971,11 @@
     */
     RG.getMouseXY = function(e)
     {
+        // This is necessary foe IE9
+        if (!e.target) {
+            return;
+        }
+
         var el      = e.target;
         var ca      = el;
         var caStyle = ca.style;
@@ -1203,19 +1227,17 @@
     RG.background.draw =
     RG.background.Draw = function (obj)
     {
-        var func = function (obj, canvas, context)
-        {
-            var ca   = canvas,
-                co   = context,
-                prop = obj.properties,
+        var ca   = obj.canvas,
+            co   = obj.context,
+            prop = obj.properties,
+            height       = 0,
+            gutterLeft   = obj.gutterLeft,
+            gutterRight  = obj.gutterRight,
+            gutterTop    = obj.gutterTop,
+            gutterBottom = obj.gutterBottom,
+            variant      = prop['chart.variant']
+                
 
-                height       = 0,
-                gutterLeft   = obj.gutterLeft,
-                gutterRight  = obj.gutterRight,
-                gutterTop    = obj.gutterTop,
-                gutterBottom = obj.gutterBottom,
-                variant      = prop['chart.variant']
-            
             co.fillStyle = prop['chart.text.color'];
             
             // If it's a bar and 3D variant, translate
@@ -1260,8 +1282,7 @@
     
     
     
-    
-                RG.Text2(co,  {
+                RG.text2(prop['chart.text.accessible'] ? obj.context : co,  {
 					'font':font,
 					'size':size,
 					'x':hpos,
@@ -1319,9 +1340,9 @@
                 if (typeof prop['chart.title.yaxis.y'] === 'number') {
                     y = prop['chart.title.yaxis.y'];
                 }
-    
+
                 co.fillStyle = color;
-                RG.text2(co,  {
+                RG.text2(prop['chart.text.accessible'] ? obj.context : co,  {
 					'font':font,
 					'size':size,
 					'x':yaxis_title_pos,
@@ -1331,7 +1352,8 @@
 					'angle':angle,
 					'bold':bold,
 					'text':prop['chart.title.yaxis'],
-					'tag':'title yaxis'
+					'tag':'title yaxis',
+                    accessible: false
 				});
             }
     
@@ -1376,10 +1398,10 @@
 
                 for (var i=0; i<numbars; i+=2) {
                     co.rect(gutterLeft,
-                            (i * barHeight) + gutterTop,
-                            ca.width - gutterLeft - gutterRight,
-                            barHeight
-                            );
+                        (i * barHeight) + gutterTop,
+                        ca.width - gutterLeft - gutterRight,
+                        barHeight
+                    );
                 }
             co.fill();
 
@@ -1399,158 +1421,153 @@
                 }
             
             co.fill();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             
+            // Close any errantly open path
+            co.beginPath();
 
 
 
 
-
-
-
-
-            // Draw the background grid
-            if (prop['chart.background.grid']) {
-
-                // If autofit is specified, use the .numhlines and .numvlines along with the width to work
-                // out the hsize and vsize
-                if (prop['chart.background.grid.autofit']) {
-
-                    /**
-                    * Align the grid to the tickmarks
-                    */
-                    if (prop['chart.background.grid.autofit.align']) {
-
-                        // Align the horizontal lines
-                        if (obj.type === 'hbar') {
-                            obj.set('chart.background.grid.autofit.numhlines', obj.data.length);
-                        }
-
-                        // Align the vertical lines for the line
-                        if (obj.type === 'line') {
-                            if (typeof prop['chart.background.grid.autofit.numvlines'] === 'number') {
-                                // Nada
-                            } else if (prop['chart.labels'] && prop['chart.labels'].length) {
-                                obj.Set('chart.background.grid.autofit.numvlines', prop['chart.labels'].length - 1);
-                            } else {
-                                obj.Set('chart.background.grid.autofit.numvlines', obj.data[0].length - 1);
+            //
+            // The background grid is cached
+            //
+            var func = function (obj, cacheCanvas, cacheContext)
+            {
+                // Draw the background grid
+                if (prop['chart.background.grid']) {
+    
+                    // If autofit is specified, use the .numhlines and .numvlines along with the width to work
+                    // out the hsize and vsize
+                    if (prop['chart.background.grid.autofit']) {
+    
+                        /**
+                        * Align the grid to the tickmarks
+                        */
+                        if (prop['chart.background.grid.autofit.align']) {
+    
+                            // Align the horizontal lines
+                            if (obj.type === 'hbar') {
+                                obj.set('chart.background.grid.autofit.numhlines', obj.data.length);
                             }
-                        } else if (obj.type === 'waterfall') {
+    
+                            // Align the vertical lines for the line
+                            if (obj.type === 'line') {
+                                if (typeof prop['chart.background.grid.autofit.numvlines'] === 'number') {
+                                    // Nada
+                                } else if (prop['chart.labels'] && prop['chart.labels'].length) {
+                                    obj.Set('chart.background.grid.autofit.numvlines', prop['chart.labels'].length - 1);
+                                } else {
+                                    obj.Set('chart.background.grid.autofit.numvlines', obj.data[0].length - 1);
+                                }
+                            } else if (obj.type === 'waterfall') {
                             obj.set(
                                 'backgroundGridAutofitNumvlines',
                                 obj.data.length + (prop['chart.total'] ? 1 : 0)
                             );
-
-
-                        // Align the vertical lines for the bar, Scatter
-                        } else if ( (
-                            obj.type === 'bar' ||
-                            obj.type === 'scatter'
-                            )
+    
+                            // Align the vertical lines for the bar, Scatter
+                            } else if ( (
+                                obj.type === 'bar' ||
+                                obj.type === 'scatter'
+                                )
+                                
+                                && (
+                                       (prop['chart.labels'] && prop['chart.labels'].length)
+                                    || obj.type === 'bar'
+                                   )
+                            ) {
+    
+                                var len = (prop['chart.labels'] && prop['chart.labels'].length) || obj.data.length;
+    
+    
+                                obj.set({
+                                    backgroundGridAutofitNumvlines: len
+                                });
+    
+                            // Gantt
+                            } else if (obj.type === 'gantt') {
+    
+                                if (typeof obj.get('chart.background.grid.autofit.numvlines') === 'number') {
+                                    // Nothing to do here
+                                } else {
+                                    obj.set('chart.background.grid.autofit.numvlines', prop['chart.xmax']);
+                                }
+    
+                                obj.set('chart.background.grid.autofit.numhlines', obj.data.length);
                             
-                            && (
-                                   (prop['chart.labels'] && prop['chart.labels'].length)
-                                || obj.type === 'bar'
-                               )
-                        ) {
-
-                            var len = (prop['chart.labels'] && prop['chart.labels'].length) || obj.data.length;
-
-
-                            obj.set({
-                                backgroundGridAutofitNumvlines: len
-                            });
-
-                        // Gantt
-                        } else if (obj.type === 'gantt') {
-
-                            if (typeof obj.get('chart.background.grid.autofit.numvlines') === 'number') {
-                                // Nothing to do here
-                            } else {
-                                obj.set('chart.background.grid.autofit.numvlines', prop['chart.xmax']);
+                            // HBar
+                            } else if (obj.type === 'hbar' && RG.isNull(prop['chart.background.grid.autofit.numhlines']) ) {
+                                obj.set('chart.background.grid.autofit.numhlines', obj.data.length);
                             }
+                        }
+    
+                        var vsize = ((cacheCanvas.width - gutterLeft - gutterRight)) / prop['chart.background.grid.autofit.numvlines'];
+                        var hsize = (cacheCanvas.height - gutterTop - gutterBottom) / prop['chart.background.grid.autofit.numhlines'];
+    
+                        obj.Set('chart.background.grid.vsize', vsize);
+                        obj.Set('chart.background.grid.hsize', hsize);
+                    }
+    
+                    co.beginPath();
+                    cacheContext.lineWidth   = prop['chart.background.grid.width'] ? prop['chart.background.grid.width'] : 1;
+                    cacheContext.strokeStyle = prop['chart.background.grid.color'];
 
-                            obj.set('chart.background.grid.autofit.numhlines', obj.data.length);
-                        
-                        // HBar
-                        } else if (obj.type === 'hbar' && RG.isNull(prop['chart.background.grid.autofit.numhlines']) ) {
-                            obj.set('chart.background.grid.autofit.numhlines', obj.data.length);
+                    // Dashed background grid
+                    if (prop['chart.background.grid.dashed'] && typeof cacheContext.setLineDash == 'function') {
+                        cacheContext.setLineDash([3,5]);
+                    }
+                    
+                    // Dotted background grid
+                    if (prop['chart.background.grid.dotted'] && typeof cacheContext.setLineDash == 'function') {
+                        cacheContext.setLineDash([1,3]);
+                    }
+                    
+                    co.beginPath();
+        
+        
+                    // Draw the horizontal lines
+                    if (prop['chart.background.grid.hlines']) {
+                        height = (cacheCanvas.height - gutterBottom)
+                        var hsize = prop['chart.background.grid.hsize'];
+                        for (y=gutterTop; y<=height; y+=hsize) {
+                            cacheContext.moveTo(gutterLeft, ma.round(y));
+                            cacheContext.lineTo(ca.width - gutterRight, ma.round(y));
                         }
                     }
-
-                    var vsize = ((ca.width - gutterLeft - gutterRight)) / prop['chart.background.grid.autofit.numvlines'];
-                    var hsize = (ca.height - gutterTop - gutterBottom) / prop['chart.background.grid.autofit.numhlines'];
-
-                    obj.Set('chart.background.grid.vsize', vsize);
-                    obj.Set('chart.background.grid.hsize', hsize);
-                }
-
-                co.beginPath();
-                co.lineWidth   = prop['chart.background.grid.width'] ? prop['chart.background.grid.width'] : 1;
-                co.strokeStyle = prop['chart.background.grid.color'];
+        
+                    if (prop['chart.background.grid.vlines']) {
+                        // Draw the vertical lines
+                        var width = (cacheCanvas.width - gutterRight)
+                        var vsize = prop['chart.background.grid.vsize'];
     
-                // Dashed background grid
-                if (prop['chart.background.grid.dashed'] && typeof co.setLineDash == 'function') {
-                    co.setLineDash([3,5]);
-                }
-                
-                // Dotted background grid
-                if (prop['chart.background.grid.dotted'] && typeof co.setLineDash == 'function') {
-                    co.setLineDash([1,3]);
-                }
-                
-                co.beginPath();
-    
-    
-                // Draw the horizontal lines
-                if (prop['chart.background.grid.hlines']) {
-                    height = (ca.height - gutterBottom)
-                    var hsize = prop['chart.background.grid.hsize'];
-                    for (y=gutterTop; y<=height; y+=hsize) {
-                        context.moveTo(gutterLeft, ma.round(y));
-                        context.lineTo(ca.width - gutterRight, ma.round(y));
+                        for (x=gutterLeft; x<=width; x+=vsize) {
+                            cacheContext.moveTo(ma.round(x), gutterTop);
+                            cacheContext.lineTo(ma.round(x), ca.height - gutterBottom);
+                        }
+                    }
+        
+                    if (prop['chart.background.grid.border']) {
+                        // Make sure a rectangle, the same colour as the grid goes around the graph
+                        cacheContext.strokeStyle = prop['chart.background.grid.color'];
+                        cacheContext.strokeRect(ma.round(gutterLeft), ma.round(gutterTop), ca.width - gutterLeft - gutterRight, ca.height - gutterTop - gutterBottom);
                     }
                 }
     
-                if (prop['chart.background.grid.vlines']) {
-                    // Draw the vertical lines
-                    var width = (ca.width - gutterRight)
-                    var vsize = prop['chart.background.grid.vsize'];
-
-                    for (x=gutterLeft; x<=width; x+=vsize) {
-                        co.moveTo(ma.round(x), gutterTop);
-                        co.lineTo(ma.round(x), ca.height - gutterBottom);
-                    }
-                }
+                cacheContext.stroke();
     
-                if (prop['chart.background.grid.border']) {
-                    // Make sure a rectangle, the same colour as the grid goes around the graph
-                    co.strokeStyle = prop['chart.background.grid.color'];
-                    co.strokeRect(ma.round(gutterLeft), ma.round(gutterTop), ca.width - gutterLeft - gutterRight, ca.height - gutterTop - gutterBottom);
-                }
+    
+    
+                // Necessary to ensure the grids drawn before continuing
+                cacheContext.beginPath();
+                cacheContext.closePath();
             }
+            
+            // Now a cached draw in newer browsers
+            RG.cachedDraw(obj, obj.uid + '_background', func);
 
-            co.stroke();
 
 
 
-            // Necessary to ensure the gris drawn before continuing
-            co.beginPath();
-            co.closePath();
 
 
 
@@ -1564,29 +1581,24 @@
                 co.setLineDash([1,0]);
             }
     
-            // Draw the title if one is set
-            if ( typeof(prop['chart.title']) == 'string') {
-
-                if (obj.type == 'gantt') {
-                    gutterTop -= 10;
-                }
-    
-                RG.drawTitle(
-					// Because of caching the obj variablee cannot be used here
-					{context: co, canvas: ca, properties: prop},
-					prop['chart.title'],
-					gutterTop,
-					null,
-					prop['chart.title.size'] ? prop['chart.title.size'] : prop['chart.text.size'] + 2,
-					{canvas: ca, context: co}
-				);
-            }
-    
             co.stroke();
-        }
 
-        // Now a cached draw in newer browsers
-        RG.ISOLD ? func(obj, obj.canvas, obj.context) : RG.cachedDraw(obj, obj.uid + '_background', func);
+
+
+        // Draw the title if one is set
+        if ( typeof(obj.properties['chart.title']) == 'string') {
+
+            var prop = obj.properties;
+
+            RG.drawTitle(
+                obj,
+                prop['chart.title'],
+                obj.gutterTop,
+                null,
+                prop['chart.title.size'] ? prop['chart.title.size'] : prop['chart.text.size'] + 2,
+                obj
+            );
+        }
     };
 
 
@@ -1848,7 +1860,7 @@
         /**
         * Turn off any shadow
         */
-        RG.NoShadow(obj);
+        RG.noShadow(obj);
 
         if (labels_processed && labels_processed.length > 0) {
 
@@ -1903,8 +1915,8 @@
                             co.fill();
                             
     
-                        } else if (obj.type == 'line') {
-                        
+                        } else {
+
                             if (
                                 typeof labels_processed[i] == 'object' &&
                                 typeof labels_processed[i][3] == 'number' &&
@@ -1955,17 +1967,18 @@
                             // Fore ground color
                             co.fillStyle = (typeof labels_processed[i] === 'object' && typeof labels_processed[i][1] === 'string') ? labels_processed[i][1] : 'black';
 
-                            RG.Text2(obj,{'font':prop['chart.text.font'],
-                                          'size':prop['chart.text.size'],
-                                          'x':text_x,
-                                          'y':text_y,
-                                          'text': (typeof labels_processed[i] === 'object' && typeof labels_processed[i][0] === 'string') ? labels_processed[i][0] : labels_processed[i],
-                                          'valign': 'bottom',
-                                          'halign':'center',
-                                          'bounding':true,
-                                          'bounding.fill': (typeof labels_processed[i] === 'object' && typeof labels_processed[i][2] === 'string') ? labels_processed[i][2] : 'white',
-                                          'tag':'labels ingraph'
-                                         });
+                            RG.text2(obj,{
+                                'font':prop['chart.text.font'],
+                                'size':prop['chart.text.size'],
+                                'x':text_x,
+                                'y':text_y + (obj.properties['chart.text.accessible'] ? 2 : 0),
+                                'text': (typeof labels_processed[i] === 'object' && typeof labels_processed[i][0] === 'string') ? labels_processed[i][0] : labels_processed[i],
+                                'valign': 'bottom',
+                                'halign':'center',
+                                'bounding':true,
+                                'bounding.fill': (typeof labels_processed[i] === 'object' && typeof labels_processed[i][2] === 'string') ? labels_processed[i][2] : 'white',
+                                'tag':'labels ingraph'
+                            });
                         co.fill();
                     }
                 }
@@ -2078,26 +2091,31 @@
         // X axis
         if (xaxis) {
             if (xaxispos === 'center') {
-                RG.path(co, [
-                    'b',
-                    'm',gutterLeft,gutterTop + halfGraphArea,
-                    'l',gutterLeft + offsetx,gutterTop + halfGraphArea - offsety,
-    
-                    'l',ca.width - gutterRight + offsetx,gutterTop + halfGraphArea - offsety,
-                    'l',ca.width - gutterRight,gutterTop + halfGraphArea,
-                    'c',
-                    's','#aaa',
-                    'f','#ddd'
-                ]);
+                RG.path2(
+                    co,
+                    'b m % % l % % l % % l % % c s #aaa f #ddd',
+                    gutterLeft,gutterTop + halfGraphArea,
+                    gutterLeft + offsetx,gutterTop + halfGraphArea - offsety,
+                    ca.width - gutterRight + offsetx,gutterTop + halfGraphArea - offsety,
+                    ca.width - gutterRight,gutterTop + halfGraphArea
+                );
+
             } else {
-                RG.path(co, [
-                    'b',
-                    'm',gutterLeft,ca.height - gutterBottom,
-                    'l',gutterLeft + offsetx,ca.height - gutterBottom - offsety,
-                    'l',ca.width - gutterRight + offsetx,ca.height - gutterBottom - offsety,
-                    'l',ca.width - gutterRight,ca.height - gutterBottom,
-                    'c','s','#aaa','f','#ddd'
-                ]);
+            
+                if (obj.type === 'hbar') {
+                    var xaxisYCoord = obj.canvas.height - obj.properties['chart.gutter.bottom'];
+                } else {
+                    var xaxisYCoord = obj.getYCoord(0);
+                }
+
+                RG.path2(
+                    co,
+                    'm % % l % % l % % l % % c s #aaa f #ddd',
+                    gutterLeft,xaxisYCoord,
+                    gutterLeft + offsetx,xaxisYCoord - offsety,
+                    ca.width - gutterRight + offsetx,xaxisYCoord - offsety,
+                    ca.width - gutterRight,xaxisYCoord
+                );
             }
         }
     };
@@ -2131,23 +2149,23 @@
         // Y axis
         // Commented out the if condition because of drawing oddities
         //if (!prop['chart.noaxes'] && !prop['chart.noyaxis']) {
-        
-            if (obj.type === 'hbar' && prop['chart.yaxispos'] === 'center') {
+
+            if ( (obj.type === 'hbar' || obj.type === 'bar') && prop['chart.yaxispos'] === 'center') {
                 var x = ((ca.width - gutterLeft - gutterRight) / 2) + gutterLeft;
-            } else if (obj.type === 'hbar' && prop['chart.yaxispos'] === 'right') {
+            } else if ((obj.type === 'hbar' || obj.type === 'bar') && prop['chart.yaxispos'] === 'right') {
                 var x = ca.width - gutterRight;
             } else {
                 var x = gutterLeft;
             }
 
-            RG.path(co, [
-                'b',
-                'm', x,gutterTop,
-                'l',x + offsetx,gutterTop - offsety,
-                'l',x + offsetx,ca.height - gutterBottom - offsety,
-                'l',x,ca.height - gutterBottom,
-                's','#aaa','f','#ddd'
-            ]);
+            RG.path2(
+                co,
+                'b m % % l % % l % % l % % s #aaa f #ddd',
+                x,gutterTop,
+                x + offsetx,gutterTop - offsety,
+                x + offsetx,ca.height - gutterBottom - offsety,
+                x,ca.height - gutterBottom
+            );
         //}
     };
 
@@ -3388,10 +3406,335 @@
     *          bounding         Whether to draw a bounding box for the text
     *          boundingStroke   The strokeStyle of the bounding box
     *          boundingFill     The fillStyle of the bounding box
+    *          accessible       If false this will cause the text to be
+    *                           rendered as native canvas text. DOM text otherwise
     */
     RG.text2 =
     RG.Text2 = function (obj, opt)
     {
+        /**
+        * Use DOM nodes to get better quality text. This option is BETA quality
+        * code and most likely and will not work if you use 3D or if you use
+        * your own transformations.
+        */
+        function domtext ()
+        {
+            /**
+            * Check the font property to see if it contains the italic keyword,
+            * and if it does then take it out and set the italic property
+            */
+            if (String(opt.size).toLowerCase().indexOf('italic') !== -1) {
+                opt.size = opt.size.replace(/ *italic +/, '');
+                opt.italic = true;
+            }
+
+
+
+            // Used for caching the DOM node
+            var cacheKey = ma.abs(parseInt(opt.x)) + '_' + ma.abs(parseInt(opt.y)) + '_' + String(opt.text).replace(/[^a-zA-Z0-9]+/g, '_') + '_' + obj.canvas.id;
+
+
+
+            // Wrap the canvas in a DIV
+            if (!ca.rgraph_domtext_wrapper) {
+
+                var wrapper = document.createElement('div');
+                    wrapper.id        = ca.id + '_rgraph_domtext_wrapper';
+                    wrapper.className = 'rgraph_domtext_wrapper';
+
+                    // The wrapper can be configured to hide or show the
+                    // overflow with the textAccessibleOverflow option
+                    wrapper.style.overflow = obj.properties['chart.text.accessible.overflow'] != false && obj.properties['chart.text.accessible.overflow'] != 'hidden' ? 'visible' : 'hidden';
+                    
+                    wrapper.style.width    = ca.offsetWidth + 'px';
+                    wrapper.style.height   = ca.offsetHeight + 'px';
+
+                    wrapper.style.cssFloat = ca.style.cssFloat;
+                    wrapper.style.display  = ca.style.display || 'inline-block';
+                    wrapper.style.position = ca.style.position || 'relative';
+                    wrapper.style.left     = ca.style.left;
+                    wrapper.style.top      = ca.style.top;
+                    wrapper.style.width    = ca.width + 'px';
+                    wrapper.style.height   = ca.height + 'px';
+
+                    ca.style.position      = 'absolute';
+                    ca.style.left          = 0;
+                    ca.style.top           = 0;
+                    ca.style.display       = 'inline';
+                    ca.style.cssFloat      = 'none';
+
+                    
+                    if ((obj.type === 'bar' || obj.type === 'bipolar' || obj.type === 'hbar') && obj.properties['chart.variant'] === '3d') {
+                        wrapper.style.transform = 'skewY(5.7deg)';
+                    }
+
+                ca.parentNode.insertBefore(wrapper, ca);
+                
+                // Remove the canvas from the DOM and put it in the wrapper
+                ca.parentNode.removeChild(ca);
+                wrapper.appendChild(ca);
+                
+                ca.rgraph_domtext_wrapper = wrapper;
+                
+                // TODO Add a subwrapper here
+
+            } else {
+                wrapper = ca.rgraph_domtext_wrapper;
+            }
+
+
+
+            var defaults = {
+                size: 12,
+                font: 'Arial',
+                italic: 'normal',
+                bold: 'normal',
+                valign: 'bottom',
+                halign: 'left',
+                marker: true,
+                color: co.fillStyle,
+                bounding: {
+                    enabled: false,
+                    fill: 'rgba(255,255,255,0.7)',
+                    stroke: '#666'
+                }
+            }
+            
+            
+            // Transform \n to the string [[RETURN]] which is then replaced
+            // further down
+            opt.text = String(opt.text).replace(/\r?\n/g, '[[RETURN]]');
+
+            
+            // Create the node cache array that nodes
+            // already created are stored in
+            if (typeof RG.text2.domNodeCache === 'undefined') {
+                RG.text2.domNodeCache = new Array();
+            }
+            
+            if (typeof RG.text2.domNodeCache[obj.id] === 'undefined') {
+                RG.text2.domNodeCache[obj.id] = new Array();
+            }
+            
+            // Create the dimension cache array that node
+            // dimensions are stored in
+            if (typeof RG.text2.domNodeDimensionCache === 'undefined') {
+                RG.text2.domNodeDimensionCache = new Array();
+            }
+            
+            if (typeof RG.text2.domNodeDimensionCache[obj.id] === 'undefined') {
+                RG.text2.domNodeDimensionCache[obj.id] = new Array();
+            }
+
+
+
+            // Create the DOM node
+            if (!RG.text2.domNodeCache[obj.id] || !RG.text2.domNodeCache[obj.id][cacheKey]) {
+
+                var span = document.createElement('span');
+                    span.style.position   = 'absolute';
+                    span.style.display    = 'inline';
+                    
+                    span.style.left       = (opt.x * (parseInt(ca.offsetWidth) / parseInt(ca.width))) + 'px';
+                    span.style.top        = (opt.y * (parseInt(ca.offsetHeight) / parseInt(ca.height)))  + 'px';
+                    span.style.color      = opt.color || defaults.color;
+                    span.style.fontFamily = opt.font || defaults.font;
+                    span.style.fontWeight = opt.bold ? 'bold' : defaults.bold;
+                    span.style.fontStyle  = opt.italic ? 'italic' : defaults.italic;
+                    span.style.fontSize   = (opt.size || defaults.size) + 'pt';
+                    span.style.whiteSpace = 'nowrap';
+                    span.tag              = opt.tag;
+
+                    if (opt.bounding) {
+                        span.style.border          = '1px solid ' + (opt['bounding.stroke'] || defaults.bounding.stroke);
+                        span.style.backgroundColor = opt['bounding.fill'] || defaults.bounding.fill;
+                    }
+                    // Pointer events
+                    if ((typeof obj.properties['chart.text.accessible.pointerevents'] === 'undefined' ||
+                        obj.properties['chart.text.accessible.pointerevents']) &&
+                        obj.properties['chart.text.accessible.pointerevents'] !== 'none') {
+                        
+                        span.style.pointerEvents =  'auto';
+                    } else {
+                        span.style.pointerEvents =  'none';
+                    }
+
+                    span.style.padding = opt.bounding ? '2px' : null;
+                    span.innerHTML     = opt.text.replace('&', '&amp;')
+                                                 .replace('<', '&lt;')
+                                                 .replace('>', '&gt;');
+                    
+                    // Now replace the string [[RETURN]] with a <br />
+                    span.innerHTML = span.innerHTML.replace(/\[\[RETURN\]\]/g, '<br />');
+
+                wrapper.appendChild(span);
+
+                // Alignment defaults
+                opt.halign = opt.halign || 'left';
+                opt.valign = opt.valign || 'bottom';
+                
+                // Horizontal alignment
+                if (opt.halign === 'right') {
+                    span.style.left      = parseFloat(span.style.left) - span.offsetWidth + 'px';
+                    span.style.textAlign = 'right';
+                } else if (opt.halign === 'center') {
+                    span.style.left      = parseFloat(span.style.left) - (span.offsetWidth  / 2) + 'px';
+                    span.style.textAlign = 'center';
+                }
+                
+                // Vertical alignment
+                if (opt.valign === 'top') {
+                    // Nothing to do here
+                } else if (opt.valign === 'center') {
+                    span.style.top = parseFloat(span.style.top) - (span.offsetHeight / 2) + 'px';
+                } else {
+                    span.style.top = parseFloat(span.style.top) - span.offsetHeight + 'px';
+                }
+                        
+                
+                var offsetWidth  = parseFloat(span.offsetWidth),
+                    offsetHeight = parseFloat(span.offsetHeight),
+                    top          = parseFloat(span.style.top),
+                    left         = parseFloat(span.style.left);
+
+                RG.text2.domNodeCache[obj.id][cacheKey] = span;
+                RG.text2.domNodeDimensionCache[obj.id][cacheKey] = {
+                      left: left,
+                       top: top,
+                     width: offsetWidth,
+                    height: offsetHeight
+                };
+                span.id = cacheKey;
+
+
+            
+            } else {
+                span = RG.text2.domNodeCache[obj.id][cacheKey];
+                span.style.display = 'inline';
+                
+                var offsetWidth  = RG.text2.domNodeDimensionCache[obj.id][cacheKey].width,
+                    offsetHeight = RG.text2.domNodeDimensionCache[obj.id][cacheKey].height,
+                    top          = RG.text2.domNodeDimensionCache[obj.id][cacheKey].top,
+                    left         = RG.text2.domNodeDimensionCache[obj.id][cacheKey].left;
+            }
+
+
+            
+
+            
+            
+            // If requested, draw a marker to indicate the coords
+            if (opt.marker) {
+                RG.path2(context, 'b m % % l % % m % % l % % s',
+                    opt.x - 5, opt.y,
+                    opt.x + 5, opt.y,
+                    opt.x, opt.y - 5,
+                    opt.x, opt.y + 5
+                );
+            }
+            
+            /**
+            * If its a drawing API text object then allow
+            * for events and tooltips
+            */
+            if (obj.type === 'drawing.text') {
+
+                // Mousemove
+                if (obj.properties['chart.events.mousemove']) {
+                    span.addEventListener('mousemove', function (e) {(obj.properties['chart.events.mousemove'])(e, obj);}, false);
+                }
+                
+                // Click
+                if (obj.properties['chart.events.click']) {
+                    span.addEventListener('click', function (e) {(obj.properties['chart.events.click'])(e, obj);}, false);
+                }
+                
+                // Tooltips
+                if (obj.properties['chart.tooltips']) {
+                    span.addEventListener(
+                        obj.properties['chart.tooltips.event'].indexOf('mousemove') !== -1 ? 'mousemove' : 'click',
+                        function (e)
+                        {
+                            if (   !RG.Registry.get('chart.tooltip')
+                                || RG.Registry.get('chart.tooltip').__index__ !== 0
+                                || RG.Registry.get('chart.tooltip').__object__.uid != obj.uid
+                               ) {
+                               
+                                RG.hideTooltip();
+                                RG.redraw();
+                                RG.tooltip(obj, obj.properties['chart.tooltips'][0], opt.x, opt.y, 0, e);
+                            }
+                        },
+                        false
+                    );
+                }
+            }
+
+            // Build the return value
+            var ret    = {};
+            ret.x      = left;
+            ret.y      = top;
+            ret.width  = offsetWidth;
+            ret.height = offsetHeight;
+            ret.object = obj;
+            ret.text   = opt.text;
+            ret.tag    = opt.tag;
+
+            
+            // The reset() function clears the domNodeCache
+            ////
+            // @param object OPTIONAL You can pass in the canvas to limit the
+            //                        clearing to that canvas.
+            RG.text2.domNodeCache.reset = function ()
+            {
+                // Limit the clearing to a single canvas tag
+                if (arguments[0]) {
+                
+                    var nodes = RG.text2.domNodeCache[arguments[0].id];
+                
+                    for (j in nodes) {
+                        
+                        var node = RG.text2.domNodeCache[arguments[0].id][j];
+                        
+                        if (node && node.parentNode) {
+                            node.parentNode.removeChild(node);
+                        }
+                    }
+
+                // Clear all DOM text from all tags
+                } else {
+                    for (i in RG.text2.domNodeCache) {
+                        for (j in RG.text2.domNodeCache[i]) {
+                            if (RG.text2.domNodeCache[i][j] && RG.text2.domNodeCache[i][j].parentNode) {
+                                RG.text2.domNodeCache[i][j].parentNode.removeChild(RG.text2.domNodeCache[i][j]);
+                            }
+                        }
+                    }
+                }
+            };
+            
+            //
+            // Add the SPAN tag to the return value
+            //
+            ret.node = span;
+
+
+            /**
+            * Save and then return the details of the text (but oly
+            * if it's an RGraph object that was given)
+            */
+            if (obj && obj.isRGraph && obj.coordsText) {
+                obj.coordsText.push(ret);
+            }
+
+
+            return ret;
+        }
+        
+        
+
+    
+    
         /**
         * An RGraph object can be given, or a string or the 2D rendering context
         * The coords are placed on the obj.coordsText variable ONLY if it's an RGraph object. The function
@@ -3421,62 +3764,74 @@
             var obj = ca.__object__;
         }
 
-        var x              = opt.x;
-        var y              = opt.y;
-        var originalX      = x;
-        var originalY      = y;
-        var text           = opt.text;
-        var text_multiline = typeof text === 'string' ? text.split(/\r?\n/g) : '';
-        var numlines       = text_multiline.length;
-        var font           = opt.font ? opt.font : 'Arial';
-        var size           = opt.size ? opt.size : 10;
-        var size_pixels    = size * 1.5;
-        var bold           = opt.bold;
-        var italic         = opt.italic;
-        var halign         = opt.halign ? opt.halign : 'left';
-        var valign         = opt.valign ? opt.valign : 'bottom';
-        var tag            = typeof opt.tag == 'string' && opt.tag.length > 0 ? opt.tag : '';
-        var marker         = opt.marker;
-        var angle          = opt.angle || 0;
-
-
-
-        
-        
-        
-        
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         /**
         * Changed the name of boundingFill/boundingStroke - this allows you to still use those names
         */
         if (typeof opt.boundingFill === 'string')   opt['bounding.fill']   = opt.boundingFill;
         if (typeof opt.boundingStroke === 'string') opt['bounding.stroke'] = opt.boundingStroke;
+        
 
-        var bounding                = opt.bounding;
-        var bounding_stroke         = opt['bounding.stroke'] ? opt['bounding.stroke'] : 'black';
-        var bounding_fill           = opt['bounding.fill'] ? opt['bounding.fill'] : 'rgba(255,255,255,0.7)';
-        var bounding_shadow         = opt['bounding.shadow'];
-        var bounding_shadow_color   = opt['bounding.shadow.color'] || '#ccc';
-        var bounding_shadow_blur    = opt['bounding.shadow.blur'] || 3;
-        var bounding_shadow_offsetx = opt['bounding.shadow.offsetx'] || 3;
-        var bounding_shadow_offsety = opt['bounding.shadow.offsety'] || 3;
-        var bounding_linewidth      = opt['bounding.linewidth'] || 1;
+
+        if (obj && obj.properties['chart.text.accessible'] && opt.accessible !== false) {
+            return domtext();
+        }
+
+
+
+
+        var x              = opt.x,
+            y              = opt.y,
+            originalX      = x,
+            originalY      = y,
+            text           = opt.text,
+            text_multiline = typeof text === 'string' ? text.split(/\r?\n/g) : '',
+            numlines       = text_multiline.length,
+            font           = opt.font ? opt.font : 'Arial',
+            size           = opt.size ? opt.size : 10,
+            size_pixels    = size * 1.5,
+            bold           = opt.bold,
+            italic         = opt.italic,
+            halign         = opt.halign ? opt.halign : 'left',
+            valign         = opt.valign ? opt.valign : 'bottom',
+            tag            = typeof opt.tag == 'string' && opt.tag.length > 0 ? opt.tag : '',
+            marker         = opt.marker,
+            angle          = opt.angle || 0
+
+
+
+        
+        
+        
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        var bounding                = opt.bounding,
+            bounding_stroke         = opt['bounding.stroke'] ? opt['bounding.stroke'] : 'black',
+            bounding_fill           = opt['bounding.fill'] ? opt['bounding.fill'] : 'rgba(255,255,255,0.7)',
+            bounding_shadow         = opt['bounding.shadow'],
+            bounding_shadow_color   = opt['bounding.shadow.color'] || '#ccc',
+            bounding_shadow_blur    = opt['bounding.shadow.blur'] || 3,
+            bounding_shadow_offsetx = opt['bounding.shadow.offsetx'] || 3,
+            bounding_shadow_offsety = opt['bounding.shadow.offsety'] || 3,
+            bounding_linewidth      = opt['bounding.linewidth'] || 1;
 
 
 
@@ -3899,11 +4254,26 @@
     */
     RG.parseDate = function (str)
     {
+
         str = RG.trim(str);
 
         // Allow for: now (just the word "now")
         if (str === 'now') {
             str = (new Date()).toString();
+        }
+
+
+        // Allow for: 22-11-2013
+        // Allow for: 22/11/2013
+        // Allow for: 22-11-2013 12:09:09
+        // Allow for: 22/11/2013 12:09:09
+        if (str.match(/^(\d\d)(?:-|\/)(\d\d)(?:-|\/)(\d\d\d\d)(.*)$/)) {
+            str = '{1}/{2}/{3}{4}'.format(
+                RegExp.$3,
+                RegExp.$2,
+                RegExp.$1,
+                RegExp.$4
+            );
         }
 
         // Allow for: 2013-11-22 12:12:12 or  2013/11/22 12:12:12
@@ -3915,6 +4285,7 @@
         if (str.match(/^\d\d\d\d-\d\d-\d\d$/)) {
             str = str.replace(/-/g, '/');
         }
+
 
         // Allow for: 12:09:44 (time only using todays date)
         if (str.match(/^\d\d:\d\d:\d\d$/)) {
@@ -3968,74 +4339,6 @@
         obj.colorsParsed = false;
     };
 
-
-
-
-    /**
-    * This function is a short-cut for the canvas path syntax (which can be rather verbose)
-    * 
-    * @param mixed  obj  This can either be the 2D context or an RGraph object
-    * @param array  path The path details
-    */
-    RG.path =
-    RG.Path = function (obj, path)
-    {
-        /**
-        * Allow either the RGraph object or the context to be used as the first argument
-        */
-        if (obj.isRGraph && typeof obj.type === 'string') {
-            var co = obj.context;
-        } else {
-            var co = obj,
-               obj = obj.canvas.__object__;
-        }
-
-        /**
-        * If the Path information has been passed as a  string - split it up
-        */
-        if (typeof path == 'string') {
-            path = path.split(/ +/);
-        }
-
-        /**
-        * Go through the path information
-        */
-        for (var i=0,len=path.length; i<len; i+=1) {
-            
-            var op = path[i];
-            
-            // 100,100,50,0,Math.PI * 1.5, false
-            switch (op) {
-                case 'b':co.beginPath();break;
-                case 'c':co.closePath();break;
-                case 'm':co.moveTo(parseFloat(path[i+1]),parseFloat(path[i+2]));i+=2;break;
-                case 'l':co.lineTo(parseFloat(path[i+1]),parseFloat(path[i+2]));i+=2;break;
-                case 's':if(path[i+1])co.strokeStyle=obj.parseSingleColorForGradient(path[i+1]);co.stroke();i++;break;
-                case 'f':if(path[i+1]){co.fillStyle = obj.parseSingleColorForGradient(path[i+1]);}co.fill();i++;break;
-                case 'qc':co.quadraticCurveTo(parseFloat(path[i+1]),parseFloat(path[i+2]),parseFloat(path[i+3]),parseFloat(path[i+4]));i+=4;break;
-                case 'bc':co.bezierCurveTo(parseFloat(path[i+1]),parseFloat(path[i+2]),parseFloat(path[i+3]),parseFloat(path[i+4]),parseFloat(path[i+5]),parseFloat(path[i+6]));i+=6;break;
-                case 'r':co.rect(parseFloat(path[i+1]),parseFloat(path[i+2]),parseFloat(path[i+3]),parseFloat(path[i+4]));i+=4;break;
-                case 'a':co.arc(parseFloat(path[i+1]),parseFloat(path[i+2]),parseFloat(path[i+3]),parseFloat(path[i+4]),parseFloat(path[i+5]),path[i+6]==='true'||path[i+6]===true?true:false);i+=6;break;
-                case 'at':co.arcTo(parseFloat(path[i+1]),parseFloat(path[i+2]),parseFloat(path[i+3]),parseFloat(path[i+4]),parseFloat(path[i+5]));i+=5;break;
-                case 'lw':co.lineWidth=parseFloat(path[i+1]);i++;break;
-                case 'lj':co.lineJoin=path[i+1];i++;break;
-                case 'lc':co.lineCap=path[i+1];i++;break;
-                case 'sc':co.shadowColor=path[i+1];i++;break;
-                case 'sb':co.shadowBlur=parseFloat(path[i+1]);i++;break;
-                case 'sx':co.shadowOffsetX=parseFloat(path[i+1]);i++;break;
-                case 'sy':co.shadowOffsetY=parseFloat(path[i+1]);i++;break;
-                case 'fu':(path[i+1])(obj);i++;break;
-                case 'fs':co.fillStyle=obj.parseSingleColorForGradient(path[i+1]);i++;break;
-                case 'ss':co.strokeStyle=obj.parseSingleColorForGradient(path[i+1]);i++;break;
-                case 'fr':co.fillRect(parseFloat(path[i+1]),parseFloat(path[i+2]),parseFloat(path[i+3]),parseFloat(path[i+4]));i+=4;break;
-                case 'sr':co.strokeRect(parseFloat(path[i+1]),parseFloat(path[i+2]),parseFloat(path[i+3]),parseFloat(path[i+4]));i+=4;break;
-                case 'cl':co.clip();break;
-                case 'ct':co.save();co.beginPath();RG.path(co, path[i+1]);co.clip();i++;break;
-                case 'sa':co.save();break;
-                case 'rs':co.restore();break;
-            }
-        }
-    };
 
 
 
@@ -4188,12 +4491,12 @@
     /**
     * 
     */
+    RG.arrayRand =
+    RG.arrayRandom =
     RG.random.array = function (num, min, max)
     {
-        var arr = [];
-        
-        for(var i=0; i<num; i+=1) {
-            arr.push(RG.random(min,max));
+        for(var i=0,arr=[]; i<num; i+=1) {
+            arr.push(RG.random(min,max, arguments[3]));
         }
         
         return arr;
@@ -4435,24 +4738,17 @@
         
         ca.__rgraph_aa_translated__ = false;
 
+        if (RG.text2.domNodeCache && RG.text2.domNodeCache.reset) {
+            RG.text2.domNodeCache.reset(ca);
+        }
 
+        // Create the node and dimension caches if they don't already exist
+        if (!RG.text2.domNodeCache)          { RG.text2.domNodeCache          = []; }
+        if (!RG.text2.domNodeDimensionCache) { RG.text2.domNodeDimensionCache = []; }
 
-
-
-        //
-        // Clear any text objects that are in the cache
-        //
-        //var len = (ca.id + '-text-').length;
-
-        //for (i in RG.cache) {
-        //
-        //    var value = RG.cache[i];
-
-        //    if (i.substr(0, len) === (ca.id + '-text-') && typeof value === 'object' && value) {
-        //        RG.cache[i].parentNode.removeChild(RG.cache[i]);
-        //        RG.cache[i] = null;
-        //    }
-        //}
+        // Create/reset the specific canvas arrays in the caches
+        RG.text2.domNodeCache[ca.id]          = [];
+        RG.text2.domNodeDimensionCache[ca.id] = [];
     };
 
 
@@ -4461,9 +4757,7 @@
     /**
     * NOT USED ANY MORE
     */
-    RG.att = function (ca)
-    {
-    }
+    RG.att = function (ca){}
 
 
 
@@ -4579,30 +4873,28 @@
     */
     RG.cachedDraw = function (obj, id, func)
     {
-        //If the cache entry xists - just copy it across to the main canvas
+        //If the cache entry exists - just copy it across to the main canvas
         if (!RG.cache[id]) {
 
             RG.cache[id] = {};
-            RG.cache[id].object = obj;
-             RG.cache[id].canvas = document.createElement('canvas');
-             RG.cache[id].canvas.setAttribute('width', obj.canvas.width);
-             RG.cache[id].canvas.setAttribute('height', obj.canvas.height);
-             RG.cache[id].canvas.setAttribute('id', 'background_cached_canvas' + obj.canvas.id);
-                        
-            //Add MSIE support
-            if (typeof G_vmlCanvasManager === 'object' && G_vmlCanvasManager.initElement) {
-                G_vmlCanvasManager.initElement(RG.cache[id].canvas);
-            }
 
+            RG.cache[id].object = obj;
+            RG.cache[id].canvas = document.createElement('canvas');
+
+            RG.cache[id].canvas.setAttribute('width', obj.canvas.width);
+            RG.cache[id].canvas.setAttribute('height', obj.canvas.height);
+            RG.cache[id].canvas.setAttribute('id', 'background_cached_canvas' + obj.canvas.id);
+
+            RG.cache[id].canvas.__object__ = obj;
             RG.cache[id].context = RG.cache[id].canvas.getContext('2d');
             
             // Antialiasing on the cache canvas
             RG.cache[id].context.translate(0.5,0.5);
-            
+
             // Call the function
             func(obj, RG.cache[id].canvas, RG.cache[id].context);
         }
-        
+
         // Now copy the contents of the cached canvas over to the main one.
         // The coordinates are -0.5 because of the anti-aliasing effect in
         // use on the main canvas
@@ -4707,7 +4999,7 @@
     {
         // Save this functions arguments
         var args = arguments;
-        
+
         
         // If the path was a string - split it then collapse quoted bits together
         if (typeof p === 'string') {
@@ -4762,6 +5054,7 @@
                 case 'tbl':co.textBaseline=p[i+1];i++;break;
                 case 'ga':co.globalAlpha=parseFloat(p[i+1]);i++;break;
                 case 'gco':co.globalCompositeOperation=p[i+1];i++;break;
+                case 'fu':(p[i+1])(co.canvas.__object__);i++;break;
                 
                 // Empty option - ignore it
                 case '':break;
@@ -4871,3 +5164,25 @@
     {
         return console.log(v);
     };
+
+
+
+
+    /**
+    * A basic string formatting function. Use it like this:
+    * 
+    * var str = '{0} {1} {2}'.format('a', 'b', 'c');
+    * 
+    * Outputs: a b c
+    */
+    if (!String.prototype.format) {
+      String.prototype.format = function()
+      {
+        var args = arguments;
+
+        return this.replace(/{(\d+)}/g, function(str, idx)
+        {
+          return typeof args[idx - 1] !== 'undefined' ? args[idx - 1] : str;
+        });
+      };
+    }

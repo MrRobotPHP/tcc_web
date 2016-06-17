@@ -22,7 +22,7 @@
     <h1>A Horizontal Bar chart example showing the XAxis drawing API object</h1>
 
 
-   <canvas id="cvs" width="600" height="400">[No canvas support]</canvas>
+   <canvas id="cvs" width="600" height="450">[No canvas support]</canvas>
 
     <script>
         window.onload = function ()
@@ -34,7 +34,7 @@
                     gutterLeft: 165,
                     gutterRight: 20,
                     gutterTop: 35,
-                    labels: ['Improved','Worsened', 'No change - \r\n peoples perceptions\r\nare generally positive','No change - \r\n peoples perceptions\r\nare generally negative',"Don't know"],
+                    labels: ['Improved','Worsened', 'No change - \r\npeoples perceptions\r\nare generally positive','No change - \r\n peoples perceptions\r\nare generally negative',"Don't know"],
                     colors: ['#F68B23','#164366'],
                     xmax: 100,
                     backgroundGrid: false,
@@ -45,18 +45,18 @@
                     keyPosition: 'gutter',
                     keyPositionGutterBoxed: false,
                     keyPositionY: 0,
-                    tooltips: ['A','B','C','D','E','F','G','H','I','J']
+                    tooltips: ['Improved','Improved','Worsened','Worsened', 'No change - \r\npeoples perceptions\r\nare generally positive','No change - \r\npeoples perceptions\r\nare generally positive','No change - \r\n peoples perceptions\r\nare generally negative','No change -\r\npeoples perceptions\r\nare generally negative',"Don't know", "Don't know"],
+                    gutterLeft: 175
                 }
-            })
-            .on('beforedraw', function (obj)
+            }).on('beforedraw', function (obj)
             {
                 obj.context.fillStyle = '#eee';
                 obj.context.fillRect(obj.gutterLeft, obj.gutterTop, obj.canvas.width - obj.gutterLeft - obj.gutterRight, obj.canvas.height - obj.gutterTop - obj.gutterBottom);
-            })
-            .on('draw', function (obj)
+            }).on('draw', function (obj)
             {
+                obj.context.strokeStyle = '#aaa';
                 obj.context.strokeRect(obj.gutterLeft, obj.gutterTop, obj.canvas.width - obj.gutterLeft - obj.gutterRight, obj.canvas.height - obj.gutterTop - obj.gutterBottom);
-            }).grow()
+            }).grow();
 
 
 
@@ -107,9 +107,10 @@
             id: 'cvs',
             data: [[80,64],[1,2],[11,12],[3,12],[5,7]],
             options: {
-                gutterLeft: 135,
+                gutterLeft: 165,
+                gutterRight: 20,
                 gutterTop: 35,
-                labels: ['Improved','Worsened', 'No change - \r\n peoples perceptions\r\nare generally positive','No change - \r\n peoples perceptions\r\nare generally negative',"Don't know"],
+                labels: ['Improved','Worsened', 'No change - \r\npeoples perceptions\r\nare generally positive','No change - \r\n peoples perceptions\r\nare generally negative',"Don't know"],
                 colors: ['#F68B23','#164366'],
                 xmax: 100,
                 backgroundGrid: false,
@@ -120,7 +121,8 @@
                 keyPosition: 'gutter',
                 keyPositionGutterBoxed: false,
                 keyPositionY: 0,
-                tooltips: ['A','B','C','D','E','F','G','H','I','J']
+                tooltips: ['A','B','C','D','E','F','G','H','I','J'],
+                gutterLeft: 175
             }
         })
         .on('beforedraw', function (obj)
@@ -130,8 +132,9 @@
         })
         .on('draw', function (obj)
         {
+            obj.context.strokeStyle = '#aaa';
             obj.context.strokeRect(obj.gutterLeft, obj.gutterTop, obj.canvas.width - obj.gutterLeft - obj.gutterRight, obj.canvas.height - obj.gutterTop - obj.gutterBottom);
-        }).grow()
+        }).grow();
 
 
 
@@ -141,9 +144,11 @@
             y: 35,
             options: {
                 gutterLeft: hbar.get('gutterLeft'),
+                gutterRight: hbar.get('gutterRight'),
                 max: 100,
                 align: 'top',
-                clearto: 'white'
+                clearto: 'white',
+                textAccessible: true
             }
             }).draw();
     };

@@ -20,53 +20,55 @@
     <canvas id="cvs" width="475" height="350" style="border:1px solid #ddd">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var pie = new RGraph.Pie({
-                id: 'cvs',
-                data: [41,37,16,3,3],
-                options: {
-                    variant: 'pie',
-                    radius: 75,
-                    centerx: 170,
-                    linewidth: 2,
-                    strokestyle: 'white',
-                    shadow: false
-                }
-            }).roundRobin();
+        new RGraph.Pie({
+            id: 'cvs',
+            data: [41,37,16,3,3],
+            options: {
+                colors: ['red','#ccc','#0f0','blue','pink'],
+                variant: 'pie',
+                radius: 75,
+                centerx: 170,
+                linewidth: 2,
+                strokestyle: 'white',
+                shadow: false,
+                textAccessible: true
+            }
+        }).roundRobin();
 
-            var donut1 = new RGraph.Pie({
-                id: 'cvs',
-                data: [36,42,8,10,4],
-                options: {
-                    variant: 'donut',
-                    radius: 100,
-                    centerx: 170,
-                    variantDonutWidth: 50,
-                    linewidth: 2,
-                    strokestyle: 'white',
-                    shadow: false
-                }
-            }).roundRobin();
+        new RGraph.Pie({
+            id: 'cvs',
+            data: [36,42,8,10,4],
+            options: {
+                colors: ['red','#ccc','#0f0','blue','pink'],
+                variant: 'donut',
+                radius: 100,
+                centerx: 170,
+                variantDonutWidth: 50,
+                linewidth: 2,
+                strokestyle: 'white',
+                shadow: false
+            }
+        }).roundRobin();
 
-            var donut2 = new RGraph.Pie({
-                id: 'cvs',
-                data: [40,35,10,7,8],
-                options: {
-                    key: ['Internet Explorer','Chrome','Firefox','Safari','Opera'],
-                    keyColors: ['red','#ccc','#0f0','blue','pink'],
-                    keyPositionGraphBoxed: false,
-                    keyPositionY: 125,
-                    variant: 'donut',
-                    radius: 125,
-                    centerx: 170,
-                    variantDonutWidth: 35,
-                    linewidth: 2,
-                    strokestyle: 'white',
-                    shadow: false
-                }
-            }).roundRobin();
-        };
+        new RGraph.Pie({
+            id: 'cvs',
+            data: [40,35,10,7,8],
+            options: {
+                key: ['Internet Explorer','Chrome','Firefox','Safari','Opera'],
+                colors: ['red','#ccc','#0f0','blue','pink'],
+                keyColors: ['red','#ccc','#0f0','blue','pink'],
+                keyPositionGraphBoxed: false,
+                keyPositionY: 125,
+                variant: 'donut',
+                radius: 125,
+                centerx: 170,
+                variantDonutWidth: 35,
+                linewidth: 2,
+                strokestyle: 'white',
+                shadow: false,
+                textAccessible: true
+            }
+        }).roundRobin();
     </script>
 
 
@@ -105,7 +107,8 @@
                 centerx: 170,
                 linewidth: 2,
                 strokestyle: 'white',
-                shadow: false
+                shadow: false,
+                textAccessible: true
             }
         }).roundRobin();
 
@@ -119,7 +122,8 @@
                 variantDonutWidth: 50,
                 linewidth: 2,
                 strokestyle: 'white',
-                shadow: false
+                shadow: false,
+                textAccessible: true
             }
         }).roundRobin();
 
@@ -137,7 +141,8 @@
                 variantDonutWidth: 35,
                 linewidth: 2,
                 strokestyle: 'white',
-                shadow: false
+                shadow: false,
+                textAccessible: true
             }
         }).roundRobin();
     };

@@ -40,9 +40,14 @@
                     linewidth: 3,
                     hmargin: 5,
                     labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-                    tooltips: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+                    tooltips: [
+                        'Mon','Tue','Wed','Thu','Fri','Sat','Sun',
+                        'Mon','Tue','Wed','Thu','Fri','Sat','Sun'
+                    ],
                     tickmarks: 'circle',
-                    ticksize: 5
+                    ticksize: 5,
+                    textAccessible: true,
+                    highlightStyle: 'halo'
                 }
             }).trace2();
         };
@@ -93,7 +98,8 @@
                 labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
                 tooltips: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
                 tickmarks: 'circle',
-                ticksize: 5
+                ticksize: 5,
+                textAccessible: true
             }
         }).trace2();
     };

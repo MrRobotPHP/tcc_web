@@ -25,31 +25,43 @@
     <canvas id="cvs" width="600" height="200">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var data1 = [['2012-02-12 15:51:55', 5],['2012-03-01 21:45',10],[],[],['August 15 2012',7],['15 Nov 2012', 16]];
-            var data2 = [['2012/01/05 12:45:45', 6], ['2012/03/05 09:45:45',17],['2012/05/05 12:48:45',13],['2012/09/09 15:45:45',19],['2012/12/31 23:59:59',2]];
+        var data1 = [
+            ['2012-02-12 15:51:55', 5],
+            ['2012-03-01 21:45',10],
+            [],
+            [],
+            ['August 15 2012',7],
+            ['15 Nov 2012', 16]
+        ];
+        
+        var data2 = [
+            ['2012/01/05 12:45:45', 6],
+            ['2012/03/05 09:45:45',17],
+            ['2012/05/05 12:48:45',13],
+            ['2012/09/09 15:45:45',19],
+            ['2012/12/31 23:59:59',2]
+        ];
 
-            var scatter = new RGraph.Scatter({
-                id: 'cvs',
-                data: [data1, data2],
-                options: {
-                    xmin: '2012-01-01',          // Start of year
-                    xmax: '2012-12-31 23:59:59', // End of year
-                    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-                    line: true,
-                    lineLinewidth: 1,
-                    lineStepped: [false, true],
-                    lineColors: ['red'],
-                    lineShadowColor: '#999',
-                    lineShadowBlur: 15,
-                    lineShadowOffsetx: 0,
-                    lineShadowOffsety: 0,
-                    noxaxis: true,
-                    backgroundGridAutofitNumvlines: 12
-                }
-            }).draw();
-        };
+        var scatter = new RGraph.Scatter({
+            id: 'cvs',
+            data: [data1, data2],
+            options: {
+                xmin: '2012-01-01',          // Start of year
+                xmax: '2012-12-31 23:59:59', // End of year
+                labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+                line: true,
+                lineLinewidth: 1,
+                lineStepped: [false, true],
+                lineColors: ['red'],
+                lineShadowColor: '#999',
+                lineShadowBlur: 15,
+                lineShadowOffsetx: 0,
+                lineShadowOffsety: 0,
+                noxaxis: true,
+                backgroundGridAutofitNumvlines: 12,
+                textAccessible: true
+            }
+        }).draw();
     </script>
 
 
@@ -74,31 +86,43 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var data1 = [['2012-02-12 15:51:55', 5],['2012-03-01 21:45',10],[],[],['August 15 2012',7],['15 Nov 2012', 16]];
-        var data2 = [['2012/01/05 12:45:45', 6], ['2012/03/05 09:45:45',17],['2012/05/05 12:48:45',13],['2012/09/09 15:45:45',19],['2012/12/31 23:59:59',2]];
+    var data1 = [
+        ['2012-02-12 15:51:55', 5],
+        ['2012-03-01 21:45',10],
+        [],
+        [],
+        ['August 15 2012',7],
+        ['15 Nov 2012', 16]
+    ];
+    
+    var data2 = [
+        ['2012/01/05 12:45:45', 6],
+        ['2012/03/05 09:45:45',17],
+        ['2012/05/05 12:48:45',13],
+        ['2012/09/09 15:45:45',19],
+        ['2012/12/31 23:59:59',2]
+    ];
 
-        var scatter = new RGraph.Scatter({
-            id: 'cvs',
-            data: [data1, data2],
-            options: {
-                xmin: '2012-01-01',          <span>// Start of year</span>
-                xmax: '2012-12-31 23:59:59', <span>// End of year</span>
-                labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-                line: true,
-                lineLinewidth: 1,
-                lineStepped: [false, true],
-                lineColors: ['red'],
-                lineShadowColor: '#999',
-                lineShadowBlur: 15,
-                lineShadowOffsetx: 0,
-                lineShadowOffsety: 0,
-                noxaxis: true,
-                backgroundGridAutofitNumvlines: 12
-            }
-        }).draw();
-    };
+    var scatter = new RGraph.Scatter({
+        id: 'cvs',
+        data: [data1, data2],
+        options: {
+            xmin: '2012-01-01',          // Start of year
+            xmax: '2012-12-31 23:59:59', // End of year
+            labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            line: true,
+            lineLinewidth: 1,
+            lineStepped: [false, true],
+            lineColors: ['red'],
+            lineShadowColor: '#999',
+            lineShadowBlur: 15,
+            lineShadowOffsetx: 0,
+            lineShadowOffsety: 0,
+            noxaxis: true,
+            backgroundGridAutofitNumvlines: 12,
+            textAccessible: true
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

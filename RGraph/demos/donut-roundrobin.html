@@ -17,23 +17,22 @@
 
     <h1>An animated Donut chart (RoundRobin effect)</h1>
 
-    <canvas id="cvs" width="350" height="300">[No canvas support]</canvas>
+    <canvas id="cvs" width="400" height="300">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var donut = new RGraph.Pie({
-                id: 'cvs',
-                data: [4,6,3,5,8,6,5],
-                options: {
-                    variant: 'donut',
-                    labels: ['John','Luis','Olga','Beverly','Jack','Kevin','Jill'],
-                    strokestyle: 'transparent',
-                    exploded: 3,
-                    shadow: false
-                }
-            }).roundRobin({'radius': false,'frames':60})
-        };
+        new RGraph.Pie({
+            id: 'cvs',
+            data: [4,6,3,5,8,6,5],
+            options: {
+                textSize: 14,
+                variant: 'donut',
+                labels: ['John','Luis','Olga','Beverly','Jack','Kevin','Jill'],
+                strokestyle: 'transparent',
+                exploded: 3,
+                shadow: false,
+                textAccessible: true
+            }
+        }).roundRobin({'radius': false,'frames':60});
     </script>
 
 
@@ -53,7 +52,7 @@
     
     Put this where you want the chart to show up:
     <pre class="code">
-&lt;canvas id="cvs" width="350" height="300"&gt;
+&lt;canvas id="cvs" width="400" height="300"&gt;
     [No canvas support]
 &lt;/canvas&gt;
 </pre>
@@ -61,20 +60,19 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var donut = new RGraph.Pie({
-            id: 'cvs',
-            data: [4,6,3,5,8,6,5],
-            options: {
-                variant: 'donut',
-                labels: ['John','Luis','Olga','Beverly','Jack','Kevin','Jill'],
-                strokestyle: 'transparent',
-                exploded: 3,
-                shadow: false
-            }
-        }).roundRobin({'radius': false,'frames':60});
-    };
+    new RGraph.Pie({
+        id: 'cvs',
+        data: [4,6,3,5,8,6,5],
+        options: {
+            textSize: 14,
+            variant: 'donut',
+            labels: ['John','Luis','Olga','Beverly','Jack','Kevin','Jill'],
+            strokestyle: 'transparent',
+            exploded: 3,
+            shadow: false,
+            textAccessible: true
+        }
+    }).roundRobin({'radius': false,'frames':60});
 &lt;/script&gt;
 </pre>
 

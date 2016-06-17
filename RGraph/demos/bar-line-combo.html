@@ -1,4 +1,4 @@
-<!DOCTYPE html >
+    <!DOCTYPE html >
 <html>
 <head>
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
@@ -19,7 +19,7 @@
     <h1>A Bar chart combined with a Line chart</h1>
     
 
-    <canvas id="cvs" width="900" height="250">[No canvas support]</canvas>
+    <canvas id="cvs" width="900" height="350">[No canvas support]</canvas>
     
     <script>
         window.onload = function ()
@@ -41,7 +41,8 @@
                         'Q1\r\n2011','Q2\r\n2011','Q3\r\n2011','Q4\r\n2011',
                         'Q1\r\n2012','Q2\r\n2012','Q3\r\n2012','Q4\r\n2012'
                     ],
-                    ymax: 8
+                    ymax: 8,
+                    textAccessible: true
                 }
             })
 
@@ -66,7 +67,8 @@
                     xaxispos: 'center',
                     ymax: 8,
                     linewidth: 4,
-                    tickmarks: null
+                    tickmarks: null,
+                    textAccessible: true
                 }
             })
 
@@ -121,7 +123,8 @@
                     'Q1\r\n2011','Q2\r\n2011','Q3\r\n2011','Q4\r\n2011',
                     'Q1\r\n2012','Q2\r\n2012','Q3\r\n2012','Q4\r\n2012'
                 ],
-                ymax: 8
+                ymax: 8,
+                textAccessible: true
             }
         })
 
@@ -146,7 +149,8 @@
                 xaxispos: 'center',
                 ymax: 8,
                 linewidth: 4,
-                tickmarks: null
+                tickmarks: null,
+                textAccessible: true
             }
         })
 

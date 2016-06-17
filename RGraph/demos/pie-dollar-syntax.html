@@ -21,7 +21,7 @@
         This is a Pie chart that uses dollar syntax to attach a custom click event handler to the third segment.
     </p>
 
-    <canvas id="cvs" width="350" height="250">[No canvas support]</canvas>
+    <canvas id="cvs" width="450" height="250">[No canvas support]</canvas>
     
     <script>
         window.onload = function ()
@@ -30,7 +30,9 @@
                 id: 'cvs',
                 data: [4,8,4,6,5,3,2,5],
                 options: {
-                    labels: ['Alvin','Pete','Hoolio','Jack','Kev','Luis','Lou','Jesse']
+                    labelsSticksList: true,
+                    labels: ['Alvin','Pete','Hoolio','Jack','Kev','Luis','Lou','Jesse'],
+                    textAccessible: true
                 }
             }).draw();
             
@@ -41,7 +43,7 @@
             
             pie.$2.onmousemove = function (e, shape)
             {
-                e.target.style.cursor = 'pointer';
+                return true;
             }
         };
     </script>
@@ -61,7 +63,7 @@
     
     Put this where you want the chart to show up:
     <pre class="code">
-&lt;canvas id="cvs" width="350" height="250"&gt;
+&lt;canvas id="cvs" width="450" height="250"&gt;
     [No canvas support]
 &lt;/canvas&gt;
 </pre>
@@ -75,7 +77,9 @@
             id: 'cvs',
             data: [4,8,4,6,5,3,2,5],
             options: {
-                labels: ['Alvin','Pete','Hoolio','Jack','Kev','Luis','Lou','Jesse']
+                labelsSticksList: true,
+                labels: ['Alvin','Pete','Hoolio','Jack','Kev','Luis','Lou','Jesse'],
+                textAccessible: true
             }
         }).draw();
         
@@ -86,7 +90,7 @@
         
         pie.$2.onmousemove = function (e, shape)
         {
-            e.target.style.cursor = 'pointer';
+            return true;
         }
     };
 &lt;/script&gt;

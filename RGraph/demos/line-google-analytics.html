@@ -36,7 +36,7 @@
                 data: data,
                 options: {
                     tooltips: tooltips,
-                    tooltipsHighlight: false,
+                    highlightStyle: 'halo',
                     colors: ['#058DC7'],
                     filled: true,
                     fillstyle: 'rgba(229,243,249,0.5)',
@@ -52,7 +52,8 @@
                     ylabelsCount: 2,
                     axisColor: '#aaa',
                     textColor: '#aaa',
-                    labels: ['00:00','04:00','08:00','12:00','16:00','20:00','00:00']
+                    labels: ['00:00','04:00','08:00','12:00','16:00','20:00','00:00'],
+                    textAccessible: true
                 }
             }).trace2();
         };
@@ -115,7 +116,8 @@
                 ylabelsCount: 2,
                 axisColor: '#aaa',
                 textColor: '#aaa',
-                labels: ['00:00','04:00','08:00','12:00','16:00','20:00','00:00']
+                labels: ['00:00','04:00','08:00','12:00','16:00','20:00','00:00'],
+                textAccessible: true
             }
         }).trace2();
     };

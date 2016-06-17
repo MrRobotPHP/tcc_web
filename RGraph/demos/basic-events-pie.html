@@ -41,7 +41,7 @@
             */
             function myMousemove (e, segment)
             {
-                e.target.style.cursor = 'pointer';
+                return true;
             }
 
 
@@ -61,6 +61,7 @@
                 id: 'cvs',
                 data: [12,13,16,15,16],
                 options: {
+                    textAccessible: true,
                     eventsMousemove: myMousemove,
                     eventsClick: myClick,
                     labels: ['Charly','Lou','Pete','Jim','Fred']
@@ -119,7 +120,7 @@
         */</span>
         function myMousemove (e, segment)
         {
-            e.target.style.cursor = 'pointer';
+            return true;
         }
 
 
@@ -139,6 +140,7 @@
             id: 'cvs',
             data: [12,13,16,15,16],
             options: {
+                textAccessible: true,
                 eventsMousemove: myMousemove,
                 eventsClick: myClick,
                 labels: ['Charly','Lou','Pete','Jim','Fred']

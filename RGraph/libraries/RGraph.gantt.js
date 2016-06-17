@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -59,10 +59,6 @@
         this.firstDraw         = true; // After the first draw this will be false
 
 
-        /**
-        * Compatibility with older browsers
-        */
-        //RGraph.OldBrowserCompat(this.context);
 
         
         // Set some defaults
@@ -85,8 +81,11 @@
             'chart.vbars':                  [],
             'chart.hbars':                  [],
             'chart.text.size':              12,
-            'chart.text.font':              'Arial',
+            'chart.text.font':              'Segoe UI, Arial, Verdana, sans-serif',
             'chart.text.color':             'black',
+            'chart.text.accessible':               true,
+            'chart.text.accessible.overflow':      'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.gutter.left':            75,
             'chart.gutter.right':           25,
             'chart.gutter.top':             35,
@@ -99,7 +98,7 @@
             'chart.labels.inbar.bgcolor':   null,
             'chart.labels.inbar.align':     'left',
             'chart.labels.inbar.size':      10,
-            'chart.labels.inbar.font':      'Arial',
+            'chart.labels.inbar.font':      'Segoe UI, Arial, Verdana, sans-serif',
             'chart.labels.inbar.above':     false,
             'chart.labels.percent':         true,
             'chart.vmargin':                 2,
@@ -153,7 +152,8 @@
             'chart.resize.handle.background': null,
             'chart.adjustable':             false,
             'chart.events.click':           null,
-            'chart.events.mousemove':       null
+            'chart.events.mousemove':       null,
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
 
@@ -162,11 +162,19 @@
         */
         if (!data) {
             alert('[GANTT] The Gantt chart event data is now supplied as the second argument to the constructor - please update your code');
+        } else {
+            // Go through the data converting relevant args to numbers
+            for (var i=0,idx=0; i<data.length; ++i) {
+                if (typeof data[i][0] === 'string') data[i][0] = parseFloat(data[i][0]);
+                if (typeof data[i][1] === 'string') data[i][1] = parseFloat(data[i][1]);
+                if (typeof data[i][2] === 'string') data[i][2] = parseFloat(data[i][2]);
+                if (typeof data[i][7] === 'string') data[i][7] = parseFloat(data[i][7]);
+            }
         }
         
-        // Linearize the data (DON'T use RGraph.array_linearize() here)
+        // Linearize the data (DON'T use RGraph.arrayLinearize() here)
         for (var i=0,idx=0; i<data.length; ++i) {
-            if (RGraph.is_array(this.data[i][0])) {
+            if (RGraph.isArray(this.data[i][0])) {
                 for (var j=0; j<this.data[i].length; ++j) {
                     this['$' + (idx++)] = {};
                 }
@@ -195,7 +203,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -248,10 +255,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
     
             if (name == 'chart.margin') {
                 name = 'chart.vmargin'
@@ -765,8 +771,11 @@
         this.highlight =
         this.Highlight = function (shape)
         {
-            // Add the new highlight
-            RG.Highlight.Rect(this, shape);
+            if (typeof prop['chart.highlight.style'] === 'function') {
+                (prop['chart.highlight.style'])(shape);
+            } else {
+                RG.Highlight.Rect(this, shape);
+            }
         };
 
 
@@ -887,38 +896,29 @@
             var gutterTop  = obj.gutterTop;
             var width      = tooltip.offsetWidth;
             var height     = tooltip.offsetHeight;
+            var mouseXY    = RG.getMouseXY(window.event);
     
             // Set the top position
             tooltip.style.left = 0;
-            tooltip.style.top  = canvasXY[1] + coordY - height - 7 + 'px';
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
             
             // By default any overflow is hidden
             tooltip.style.overflow = '';
     
-            // The arrow
-            var img = new Image();
-                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                img.style.position = 'absolute';
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.top = (tooltip.offsetHeight - 2) + 'px';
-            tooltip.appendChild(img);
             
             // Reposition the tooltip if at the edges:
             
             // LEFT edge
-            if ((canvasXY[0] + coordX - (width / 2)) < 10) {
-                tooltip.style.left = (canvasXY[0] + coordX - (width * 0.1)) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.1) - 8.5) + 'px';
+            if (canvasXY[0] + mouseXY[0] - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + (width / 2)) > document.body.offsetWidth) {
-                tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-                tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 

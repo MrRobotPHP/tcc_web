@@ -3,9 +3,8 @@
 <head>
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
     
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script type="text/javascript" src="../libraries/RGraph.common.core.js" ></script>
-    <script type="text/javascript" src="../libraries/RGraph.line.js" ></script>
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.line.js" ></script>
     
     <title>Line chart UnfoldFromCenterTrace effect</title>
     
@@ -18,10 +17,6 @@
 
     <h1>Line chart UnfoldFromCenterTrace effect</h1>
 
-    <p>
-        <span style="color: red; font-weight: bold">This effect requires jQuery</span>
-    </p>
-
     <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
     
     <script>
@@ -29,7 +24,10 @@
         {
             var line = new RGraph.Line({
                 id: 'cvs',
-                data: [10,1,10,7,4,9,5,6,3,5]
+                data: [10,1,10,7,4,9,5,6,3,5],
+                options: {
+                    textAccessible: true
+                }
             }).unfoldFromCenterTrace()
         };
     </script>
@@ -38,7 +36,6 @@
 
     This goes in the documents header:
     <pre class="code">
-    &lt;script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"&gt;&lt;/script&gt;
 &lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
 &lt;script src="RGraph.line.js"&gt;&lt;/script&gt;
 </pre>
@@ -57,7 +54,10 @@
     {
         var line = new RGraph.Line({
             id: 'cvs',
-            data: [10,1,10,7,4,9,5,6,3,5]
+            data: [10,1,10,7,4,9,5,6,3,5],
+            options: {
+                textAccessible: true
+            }
         }).unfoldFromCenterTrace()
     };
 &lt;/script&gt;

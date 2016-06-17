@@ -28,7 +28,7 @@ class Login extends Conexao_sql {
 
 		$pdo = parent::getDB();
 
-		$logar = $pdo -> prepare("SELECT * FROM usuario WHERE user = ? AND senha = ?");
+		$logar = $pdo -> prepare("SELECT * FROM funcionario WHERE email = ? AND senha = ?");
 		$logar -> bindValue(1, $this -> getLogin());
 		$logar -> bindValue(2, $this -> getSenha());
 		$logar -> execute();
@@ -36,7 +36,8 @@ class Login extends Conexao_sql {
 		if ($logar -> rowCount() == 1) {
 
 			$dados = $logar -> fetch(PDO::FETCH_OBJ);
-			$_SESSION['usuario'] = $dados -> nome;
+			$_SESSION['usuario'] = $dados -> NOME;
+			$_SESSION['id'] = $dados -> ID;
 			$_SESSION['logado'] = true;
 
 			return true;

@@ -17,26 +17,23 @@
     <canvas id="cvs" width="900" height="250">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var data = [4,8,6,3,1,2,5];
-
-            var bar = new RGraph.Bar({
-                id: 'cvs',
-                data: data,
-                options: {
-                    labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
-					shadowBlur: 0,
-					shadowOffsetx: 2,
-					shadowOffsety: 2,
-					strokestyle: 'rgba(0,0,0,0)',
-					backgroundGridVlines: false,
-					backgroundGridBorder: false,
-					noxaxis: true,
-					colors: ['Gradient(#ddd:#999)']
-                }
-            }).grow();
-        };
+        new RGraph.Bar({
+            id: 'cvs',
+            data: [4,8,6,3,1,2,5],
+            options: {
+                textSize: 16,
+                textAccessible: true,
+                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                shadowBlur: 0,
+                shadowOffsetx: 2,
+                shadowOffsety: 2,
+                strokestyle: 'rgba(0,0,0,0)',
+                backgroundGridVlines: false,
+                backgroundGridBorder: false,
+                noxaxis: true,
+                colors: ['Gradient(#d0d:#303)']
+            }
+        }).grow();
     </script>
 
     <p></p>
@@ -57,26 +54,23 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var data = [4,8,6,3,1,2,5];
-
-        var bar = new RGraph.Bar({
-            id: 'cvs',
-            data: data,
-            options: {
-                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
-                shadowBlur: 0,
-                shadowOffsetx: 2,
-                shadowOffsety: 2,
-                strokestyle: 'rgba(0,0,0,0)',
-                backgroundGridVlines: false,
-                backgroundGridBorder: false,
-                noxaxis: true,
-                colors: ['Gradient(#ddd:#999)']
-            }
-        }).grow()
-    };
+    new RGraph.Bar({
+        id: 'cvs',
+        data: [4,8,6,3,1,2,5],
+        options: {
+            textSize: 16,
+            textAccessible: true,
+            labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+            shadowBlur: 0,
+            shadowOffsetx: 2,
+            shadowOffsety: 2,
+            strokestyle: 'rgba(0,0,0,0)',
+            backgroundGridVlines: false,
+            backgroundGridBorder: false,
+            noxaxis: true,
+            colors: ['Gradient(#d0d:#303)']
+        }
+    }).grow();
 &lt;/script&gt;
 </pre>
 

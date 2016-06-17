@@ -31,7 +31,10 @@
                     id: 'cvs',
                     min: 0,
                     max: 100,
-                    value: value
+                    value: value,
+                    options: {
+                        textAccessible: true
+                    }
                 });
             } else {
                 thermometer.value = value;
@@ -82,7 +85,10 @@
                 id: 'cvs',
                 min: 0,
                 max: 100,
-                value: value
+                value: value,
+                options: {
+                    textAccessible: true
+                }
             });
         } else {
             thermometer.value = value;

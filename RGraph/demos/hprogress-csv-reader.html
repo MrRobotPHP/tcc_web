@@ -36,13 +36,14 @@
                 // Fetch the the first row, 
                 var row = csv.getRow(0, 1);
 
-                var pie = new RGraph.HProgress({
+                var progress = new RGraph.HProgress({
                     id: 'cvs',
                     min: 0,
                     max: 10,
                     value: row[0],
                     options: {
-                        margin: 10
+                        margin: 10,
+                        textAccessible: true
                     }
                 }).draw();
             });
@@ -79,13 +80,14 @@
             // Fetch the the first row, 
             var row = csv.getRow(0, 1);
 
-            var pie = new RGraph.HProgress({
+            var progress = new RGraph.HProgress({
                 id: 'cvs',
                 min: 0,
                 max: 10,
                 value: row[0],
                 options: {
-                    margin: 10
+                    margin: 10,
+                    textAccessible: true
                 }
             }).draw();
         });

@@ -28,21 +28,22 @@
     <script>
         window.onload = function ()
         {
-            var bar = new RGraph.Bar({
+            new RGraph.Bar({
                 id: 'cvs',
                 data: [[45,60],[65,30],[40,80],[62,48]],
                 options: {
                     labels: ['Luis', 'Kevin', 'John', 'Gregory'],
                     tooltips: ['Luis','Luis','Kevin','Kevin','John','John','Gregory','Gregory'],
-                    tooltipsEvent: 'onmousemove',
+                    textAccessible: true,
                     ymax: 100,
                     strokestyle: 'white',
                     linewidth: 2,
+                    shadow: true,
                     shadowOffsetx: 0,
                     shadowOffsety: 0,
                     shadowBlur: 10,
                     hmarginGrouped: 2,
-                    unitsPre: '£',
+                    unitsPre: '$',
                     title: 'An example Bar chart',
                     gutterBottom: 25,
                     gutterLeft: 40,
@@ -91,15 +92,16 @@
             options: {
                 labels: ['Luis', 'Kevin', 'John', 'Gregory'],
                 tooltips: ['Luis','Luis','Kevin','Kevin','John','John','Gregory','Gregory'],
-                tooltipsEvent: 'onmousemove',
+                textAccessible: true,
                 ymax: 100,
                 strokestyle: 'white',
                 linewidth: 2,
+                shadow: true,
                 shadowOffsetx: 0,
                 shadowOffsety: 0,
                 shadowBlur: 10,
                 hmarginGrouped: 2,
-                unitsPre: '£',
+                unitsPre: '$',
                 title: 'An example Bar chart',
                 gutterBottom: 25,
                 gutterLeft: 40,

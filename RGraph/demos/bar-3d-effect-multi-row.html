@@ -32,7 +32,7 @@
     <canvas id="cvs" width="650" height="300">[No canvas support]</canvas>
 
     <script>
-        var gutterLeft   = 85,
+        var gutterLeft   = 120,
             gutterRight  = 25,
             gutterTop    = 45,
             gutterBottom = 125,
@@ -45,10 +45,10 @@
                 // dataset and replace it with the word: null
 
                 // null, // [12,16,10,12,13,15,16]
-                [12,16,10,12,13,15,16],
+                [5,16,10,12,13,15,16],
 
                 [20,21,24,23,18,19,20],
-                [31,34,32,28,26,35,34]
+                [35,34,32,28,26,35,34]
             ],
             
             colors = [
@@ -66,6 +66,7 @@
             id: 'cvs',
             data: data[2],
             options: {
+                textAccessible: true,
                 variant: '3d',
                 variantThreedYaxis: false,
                 variantThreedXaxis: false,
@@ -94,6 +95,7 @@
             id: 'cvs',
             data: data[1],
             options: {
+                textAccessible: true,
                 variant: '3d',
                 variantThreedYaxis: false,
                 variantThreedXaxis: false,
@@ -122,6 +124,7 @@
                 id: 'cvs',
                 data: data[0],
                 options: {
+                    textAccessible: true,
                     variant: '3d',
                     variantThreedYaxis: false,
                     variantThreedXaxis: false,
@@ -143,26 +146,6 @@
                     noaxes: true,
                     scaleZerostart: true
                 }
-            }).on('draw', function (obj)
-            {
-                RGraph.path2(
-                    obj.context,
-                    'gco destination-over b m % % l % % l % % l % % c s #ddd f rgba(0,0,0,0)',
-                    gutterLeft  - 40, gutterTop + 20,
-                    gutterLeft + 10, gutterTop - 5,
-                    gutterLeft + 10, gutterTop - 5 + (obj.canvas.height - gutterTop - gutterBottom),
-                    gutterLeft + 10 - 50, gutterTop - 5 + (obj.canvas.height - gutterTop - gutterBottom) + 25
-                );
-                
-                // Fioll the left-side back face again with a gradient
-                var grad = obj.context.createLinearGradient(0,0,0,300);
-                grad.addColorStop(0, 'white');
-                grad.addColorStop(0.75, '#999');
-
-                obj.context.fillStyle = grad;
-                obj.context.fill();
-
-                
             }).draw();
         }
     </script>
@@ -190,7 +173,7 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    var gutterLeft   = 85,
+    var gutterLeft   = 120,
         gutterRight  = 25,
         gutterTop    = 45,
         gutterBottom = 125,
@@ -199,14 +182,14 @@
         
         data = [
 
-            <span>// If you don't need a third dataset take out this FIRST
+            // If you don't need a third dataset take out this FIRST
             // dataset and replace it with the word: null
 
-            // null, // [12,16,10,12,13,15,16]</span>
-            [12,16,10,12,13,15,16],
+            // null, // [12,16,10,12,13,15,16]
+            [5,16,10,12,13,15,16],
 
             [20,21,24,23,18,19,20],
-            [31,34,32,28,26,35,34]
+            [35,34,32,28,26,35,34]
         ],
         
         colors = [
@@ -224,6 +207,7 @@
         id: 'cvs',
         data: data[2],
         options: {
+            textAccessible: true,
             variant: '3d',
             variantThreedYaxis: false,
             variantThreedXaxis: false,
@@ -252,6 +236,7 @@
         id: 'cvs',
         data: data[1],
         options: {
+            textAccessible: true,
             variant: '3d',
             variantThreedYaxis: false,
             variantThreedXaxis: false,
@@ -280,6 +265,7 @@
             id: 'cvs',
             data: data[0],
             options: {
+                textAccessible: true,
                 variant: '3d',
                 variantThreedYaxis: false,
                 variantThreedXaxis: false,
@@ -301,26 +287,6 @@
                 noaxes: true,
                 scaleZerostart: true
             }
-        }).on('draw', function (obj)
-        {
-            RGraph.path2(
-                obj.context,
-                'gco destination-over b m % % l % % l % % l % % c s #ddd f rgba(0,0,0,0)',
-                gutterLeft  - 40, gutterTop + 20,
-                gutterLeft + 10, gutterTop - 5,
-                gutterLeft + 10, gutterTop - 5 + (obj.canvas.height - gutterTop - gutterBottom),
-                gutterLeft + 10 - 50, gutterTop - 5 + (obj.canvas.height - gutterTop - gutterBottom) + 25
-            );
-            
-            <span>// Fill the left-side back face again with a gradient</span>
-            var grad = obj.context.createLinearGradient(0,0,0,300);
-            grad.addColorStop(0, 'white');
-            grad.addColorStop(0.75, '#999');
-
-            obj.context.fillStyle = grad;
-            obj.context.fill();
-
-            
         }).draw();
     }
 &lt;/script&gt;

@@ -45,16 +45,18 @@
                     needleColors: ['red'],
                     needleType: 'line',
                     needleTail: true,
+                    needleWidth: 7,
                     centerpinRadius: 0.1,
                     titleTop: 'Speed',
                     titleTopColor: 'white',
                     labelsCentered: true,
-                    labelsOffset: 7
+                    labelsOffset: 7,
+                    textAccessible: true
                 }
             }).on('draw', function (obj)
             {
                 // This circle becomes the border of the centerpin
-                RGraph.path(obj.context, ['b','a',obj.centerx, obj.centery, 10, 0, RGraph.TWOPI, false,'f','#aaa']);
+                RGraph.path2(obj.context, ['b','a',obj.centerx, obj.centery, 10, 0, RGraph.TWOPI, false,'f','#aaa']);
             }).draw();
             
             //
@@ -123,12 +125,13 @@
                 titleTop: 'Speed',
                 titleTopColor: 'white',
                 labelsCentered: true,
-                labelsOffset: 7
+                labelsOffset: 7,
+                textAccessible: true
             }
         }).on('draw', function (obj)
         {
             <span>// This circle becomes the border of the centerpin</span>
-            RGraph.path(obj.context, ['b','a',obj.centerx, obj.centery, 10, 0, RGraph.TWOPI, false,'f','#aaa']);
+            RGraph.path2(obj.context, ['b','a',obj.centerx, obj.centery, 10, 0, RGraph.TWOPI, false,'f','#aaa']);
         }).draw();
         
         <span>//

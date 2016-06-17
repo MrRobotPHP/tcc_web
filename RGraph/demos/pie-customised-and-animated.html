@@ -22,27 +22,23 @@
     <canvas id="cvs" width="480" height="250">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var pie = new RGraph.Pie({
-                id: 'cvs',
-                data: [1750, 6250],
-                options: {
-                    strokestyle: 'white',
-                    colors: ['#DDDF0D','#7798BF'],
-                    linewidth: 3,
-                    exploded: [15, ],
-                    textSize:16,
-                    shadowOffsetx: 0,
-                    shadowOffsety: 0,
-                    shadowBlur: 20,
-                    labels: ['Jerry'],
-                    labelsSticks: [true, false],
-                    labelsSticksLength: 20,
-                    clearto: 'white'
-                }
-            }).roundRobin();
-        };
+        new RGraph.Pie({
+            id: 'cvs',
+            data: [1750, 6250],
+            options: {
+                strokestyle: 'white',
+                colors: ['#DDDF0D','#7798BF'],
+                linewidth: 3,
+                exploded: [15],
+                shadowOffsetx: 2,
+                shadowOffsety: 2,
+                shadowBlur: 5,
+                labels: ['Jerry'],
+                labelsSticksList: true,
+                textSize:12,
+                textAccessible: true
+            }
+        }).roundRobin();
     </script>
 
 
@@ -70,27 +66,25 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var pie = new RGraph.Pie({
-            id: 'cvs',
-            data: [1750, 6250],
-            options: {
-                strokestyle: 'white',
-                colors: ['#DDDF0D','#7798BF'],
-                linewidth: 3,
-                exploded: [15, ],
-                textSize:16,
-                shadowOffsetx: 0,
-                shadowOffsety: 0,
-                shadowBlur: 20,
-                labels: ['Jerry'],
-                labelsSticks: [true, false],
-                labelsSticksLength: 20,
-                clearto: 'white'
-            }
-        }).roundRobin();
-    };
+    new RGraph.Pie({
+        id: 'cvs',
+        data: [1750, 6250],
+        options: {
+            strokestyle: 'white',
+            colors: ['#DDDF0D','#7798BF'],
+            linewidth: 3,
+            exploded: [15],
+            shadowOffsetx: 2,
+            shadowOffsety: 2,
+            shadowBlur: 5,
+            labels: ['Jerry'],
+            labelsSticksList: true,
+            labelsSticksUsecolors: false,
+            textColor: '#000',
+            textSize:12,
+            textAccessible: true
+        }
+    }).roundRobin();
 &lt;/script&gt;
 </pre>
 

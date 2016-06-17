@@ -17,6 +17,21 @@
             padding: 0;
             text-align: left;
         }
+
+        .RGraph_tooltip {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            padding: 10px !important;
+            opacity: 1 !important;
+            background-color: white !important;
+            border-width: 3px !important;
+            border-style: solid !important;
+        }
+
+        .RGraph_tooltip b {
+            display: block;
+            font-size: 16pt;
+        }
     </style>
 
     <link rel="icon" type="image/png" href="images/favicon.png">
@@ -44,7 +59,7 @@
     </a>
     
 
-    <canvas width="600" height="350" id="cvs_bar" style="float: right"></canvas>
+    <canvas width="600" height="350" id="cvs" style="float: right"></canvas>
 
 
 
@@ -131,33 +146,51 @@
     <script>
         window.onload = function ()
         {
-            var bar = new RGraph.Bar('cvs_bar', [[45,-60],[-65,-30],[40,80],[-59,48]])
-                .set('colors', [
-                    'rgba(255, 176, 176, 1)',
-                    'rgba(153, 208, 249,1)'
-                ]) 
-                .set('labels', ['Luis', 'Kevin', 'John', 'Gregory'])
-                .set('tooltips', ['Luis','Luis','Kevin','Kevin','John','John','Gregory','Gregory'])
-                .set('tooltips.event', 'onmousemove')
-                .set('ymax', 100)
-                .set('ylabels.count', 4)
-                .set('numyticks', 8)
-                .set('strokestyle', 'rgba(0,0,0,0)')
-                .set('hmargin.grouped', 2)
-                .set('units.pre', '$')
-                .set('title', 'Bar chart with tooltips')
-                .set('title.y', 25)
-                .set('gutter.top', 55)
-                .set('gutter.left', 40)
-                .set('gutter.right', 15)
-                .set('gutter.bottom', 80)
-                .set('xaxispos', 'center')
-                .set('key', ['Results from Monday','Results from Tuesday'])
-                .set('key.position', 'gutter')
-                .set('key.position.y', 30)
-                .set('variant', '3d')
-                .set('axis.color', '#aaa')
-                .draw()
+            var bar = new RGraph.Bar({
+                id: 'cvs',
+                data:[[45,-60],[-65,-30],[40,80],[-59,48]],
+                options: {
+                    colors: ['rgba(255, 176, 176, 1)', 'rgba(153, 208, 249,1)'],
+                    labels: ['Luis', 'Kevin', 'John', 'Gregory'],
+                    tooltips: [
+                        '<b>Luis</b><br />Made acceptable progress in the<br /> amount of sales made',
+                        '<b>Luis</b><br />A significant loss in sales accounts',
+                        '<b>Kevin</b><br />A significant loss in sales accounts',
+                        '<b>Kevin</b><br />A smaller loss - but still a loss!',
+                        '<b>John</b><br />Acceptable sales',
+                        '<b>John</b><br />Good rate of sales this month',
+                        '<b>Gregory</b><br />A bad loss this month',
+                        '<b>Gregory</b><br />A good upturn in sales'
+                    ],
+                    ymax: 100,
+                    ylabelsCount: 4,
+                    numyticks: 8,
+                    strokestyle: 'rgba(0,0,0,0)',
+                    hmarginGrouped: 2,
+                    textAccessible: true,
+                    unitsPre: '$',
+                    title: 'Bar chart with tooltips',
+                    titleY: 25,
+                    gutterTop: 55,
+                    gutterLeft: 40,
+                    gutterRight: 15,
+                    gutterBottom: 80,
+                    xaxispos: 'center',
+                    key: ['Results from Monday','Results from Tuesday'],
+                    keyPosition: 'gutter',
+                    keyPositionY: 30,
+                    variant: '3d',
+                    axisColor: '#aaa',
+                    shadowColor: '#ddd'
+                }
+            }).draw().on('tooltip', function (obj)
+            {
+                var tooltip = RGraph.Registry.get('chart.tooltip'),
+                idx     = RGraph.sequentialIndexToGrouped(tooltip.__index__, obj.data),
+                colors  = ['pink','blue']
+        
+                tooltip.style.borderColor = str = colors[idx[1]];
+            });
         };
     </script>
 

@@ -28,8 +28,8 @@
             var data_tan = [];
 
             for (var i=-360; i<360; i+=1) {
-                data_sin.push([i, Math.sin(i / (180 / Math.PI))]);
-                data_cos.push([i, Math.cos(i / (180 / Math.PI))]);
+                data_sin.push([i, Math.sin(i / (180 / Math.PI))]).toString();
+                data_cos.push([i, Math.cos(i / (180 / Math.PI))]).toString();
                 
                 var tan_value = Math.tan(i / (180 / Math.PI));
                 data_tan.push([i, (tan_value < 1 && tan_value > -1) ? tan_value : null]);
@@ -43,17 +43,24 @@
                     yaxispos: 'center',
                     numlabels: 4,
                     numticks: 16,
-                    max: 360
+                    max: 360,
+                    textAccessible: true
                 }
-            }).draw()
+            }).draw();
+
 
             var scatter = new RGraph.Scatter({
                 id: 'cvs',
-                data: [data_sin, data_cos, data_tan],
+                data: [
+                    data_sin,
+                    data_cos,
+                    data_tan
+                ],
                 options: {
                     ymax: 1,
                     xmax: 360,
                     scaleDecimals: 1,
+                    scaleZerostart: false,
                     gutterLeft: 500,
                     line: true,
                     lineLinewidth: 3,
@@ -61,9 +68,10 @@
                     xaxispos: 'center',
                     xaxis: false,
                     backgroundGrid: false,
-                    outofbounds: false
+                    outofbounds: false,
+                    textAccessible: true
                 }
-            }).draw();
+            }).trace2();
         };
     </script>
 
@@ -113,7 +121,8 @@
                 yaxispos: 'center',
                 numlabels: 4,
                 numticks: 16,
-                max: 360
+                max: 360,
+                textAccessible: true
             }
         }).draw()
 
@@ -131,9 +140,10 @@
                 xaxispos: 'center',
                 xaxis: false,
                 backgroundGrid: false,
-                outofbounds: false
+                outofbounds: false,
+                textAccessible: true
             }
-        }).draw();
+        }).trace2();
     };
 &lt;/script&gt;
 </pre>

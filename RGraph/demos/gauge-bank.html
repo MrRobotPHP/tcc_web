@@ -19,12 +19,14 @@
     <h1>A bank of adjustable Gauge charts</h1>
     
     <p>
-        These Gauge charts are adjustable and are brought to the "front" of the stacking order when mouseover'ed
+        These Gauge charts are adjustable and are brought to the "front" of the
+        stacking order when mouseover'ed. Note that because of the use of the overlap
+        the textAccessible option won't work and thus is disabled.
     </p>
     
     <button onclick="gauge2.value = 100; gauge2.grow()">Click me to animate centerGauge</button><br /><br />
 
-    <canvas id="cvs" width="500" height="250" style="border: 1px solid gray">[No canvas support]</canvas>
+    <canvas id="cvs" width="600" height="350" style="border: 1px solid gray">[No canvas support]</canvas>
 
     <script>
         window.onload = function ()
@@ -39,9 +41,10 @@
                     title: 'Pressure',
                     titleBottom: 'Pa',
                     titleBottomColor: '#aaa',
-                    centerx: 125,
-                    radius: 100,
-                    adjustable: true
+                    centerx: 175,
+                    radius: 150,
+                    adjustable: true,
+                    textAccessible: false
                 }
             }).draw();
 
@@ -51,12 +54,12 @@
                 max: 100,
                 value: 78,
                 options: {
-                    centerx: 250,
-                    radius: 100,
+                    centerx: 275,
+                    radius: 150,
                     adjustable: true,
                     title: 'Volume',
-                    titleBottom: 'm³',
-                    titleBottomColor: '#aaa'
+                    titleBottomColor: '#aaa',
+                    textAccessible: false
                 }
             }).draw();
 
@@ -66,12 +69,12 @@
                 max: 100,
                 value: 78,
                 options: {
-                    centerx: 375,
-                    radius: 100,
+                    centerx: 400,
+                    radius: 150,
                     adjustable: true,
                     title: 'Flow rate',
-                    titleBottom: 'm³/s',
-                    titleBottomColor: '#aaa'
+                    titleBottomColor: '#aaa',
+                    textAccessible: false
                 }
             }).draw();
             

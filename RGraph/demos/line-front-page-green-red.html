@@ -16,7 +16,7 @@
 
     <h1>The green and red Line chart from the front page (at one time)</h1>
 
-    <canvas id="cvs" width="600" height="250" style="background-color: black">[No canvas support]</canvas>
+    <canvas id="cvs" width="750" height="250" style="background-color: black">[No canvas support]</canvas>
     
     <script>
         window.onload = function ()
@@ -44,7 +44,9 @@
                     ],
                     gutterLeft: 35,
                     gutterRight: 15,
-                    gutterTop: 15
+                    gutterTop: 15,
+                    textAccessible: true,
+                    scaleZerostart: true
                 }
             }).draw();
         };
@@ -66,7 +68,7 @@
     
     Put this where you want the chart to show up:
     <pre class="code">
-&lt;canvas id="cvs" width="600" height="250" style="background-color: black"&gt;
+&lt;canvas id="cvs" width="750" height="250" style="background-color: black"&gt;
     [No canvas support]
 &lt;/canvas&gt;
 </pre>
@@ -99,7 +101,9 @@
                 ],
                 gutterLeft: 35,
                 gutterRight: 15,
-                gutterTop: 15
+                gutterTop: 15,
+                textAccessible: true,
+                scaleZerostart: 0
             }
         }).draw();
     };

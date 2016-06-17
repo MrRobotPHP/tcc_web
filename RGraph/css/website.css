@@ -16,15 +16,13 @@
     body {
         margin-left: 90px;
         font-family: "Segoe UI Light", "Segoe UI", "Verdana";
-        font-size: 1.25em;
+        font-family: Arial, Verdana, sans-serif;
+        font-family: Helmet, Freesans, Helvetica, Arial, sans-serif;
+        font-size: 1em;
         overflow-x: hidden;
         color: #666;
-        padding: 2%;
-        padding-top: 1%;
         margin-top: 0;
         text-align: center;
-        background-color: #ccc;
-        background-image: linear-gradient(135deg, white, #ccc 500px);
         height: 100%;
     }
     
@@ -46,6 +44,7 @@
         opacity: .75;
         border-bottom-left-radius: 15px;
         border-bottom-right-radius: 15px;
+        z-index: 5;
     }
 
 
@@ -56,7 +55,6 @@
 
 
     div#main-body-container {
-        box-shadow: 0 0 10px gray;
         background-color: white;
         padding: 20px;
         padding-bottom: 5px;
@@ -188,19 +186,12 @@
     }
     
     div.warning {
-        border: 1px solid black;
-        _text-align: center;
         background-color: #ffa;
-        padding: 5px;
+        padding: 10px;
         margin-top: 5px;
         border-radius: 15px;
-        -moz-border-radius: 15px;
-        -webkit-border-radius: 15px;
-        webkit-box-shadow: #aaa 1px 1px 15px;
-        -moz-box-shadow: #aaa 1px 1px 15px;
-        box-shadow: #aaa 1px 1px 15px;
-        filter: progid:DXImageTransform.Microsoft.Shadow(color=#666666,direction=135); z-index: 98;
-        opacity: 0.9;
+        opacity: 1;
+        box-shadow: 2px 2px 2px #ccc;
     }
     
     
@@ -428,5 +419,28 @@
     }
 
     ul#news img:hover {
+        transform: scale(1.1);
+    }
+
+
+    div#navigation-top-bar-text-menu {
+        display: none;
+    }
+
+    p#summary {
+        background-color: rgba(240,240,240,0.75);
+        padding: 15px;
+    }
+    
+    div.example-chart-thumbnails img {
+        box-shadow: 0 0 15px #ddd;
+        transition: transform .25s;
+        padding: 5px;
+        margin: 15px;
+        width: 200px;
+        height: 150px;
+    }
+    
+    div.example-chart-thumbnails img:hover {
         transform: scale(1.1);
     }

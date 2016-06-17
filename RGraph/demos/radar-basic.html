@@ -21,16 +21,14 @@
     <canvas id="cvs" width="500" height="400">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var radar = new RGraph.Radar({
-                id: 'cvs',
-                data: [4,3,8,4,6,7,5],
-                options: {
-                    labels: ['Jeff','Luis','Norman','Janice','Bill','Henry','Kev']
-                }
-            }).draw()
-        };
+        new RGraph.Radar({
+            id: 'cvs',
+            data: [4,3,8,4,6,7,5],
+            options: {
+                labels: ['Jeff','Luis','Norman','Janice','Bill','Henry','Kev'],
+                textAccessible: true
+            }
+        }).draw()
     </script>
 
 
@@ -57,11 +55,12 @@
 &lt;script&gt;
     window.onload = function ()
     {
-        var radar = new RGraph.Radar({
+        new RGraph.Radar({
             id: 'cvs',
             data: [4,3,8,4,6,7,5],
             options: {
-                labels: ['Jeff','Luis','Norman','Janice','Bill','Henry','Kev']
+                labels: ['Jeff','Luis','Norman','Janice','Bill','Henry','Kev'],
+                textAccessible: true
             }
         }).draw();
     };

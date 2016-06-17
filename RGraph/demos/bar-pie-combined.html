@@ -49,6 +49,7 @@
                     ],
                     highlightStroke: 'rgba(0,0,0,0.1)',
                     strokestyle: 'rgba(0,0,0,0)',
+                    shadow: true,
                     shadowOffsetx: -2,
                     shadowOffsety: -2,
                     shadowBlur: 15,
@@ -58,7 +59,8 @@
                     labels: ['Bob', 'Jamie', 'Cynthia', 'Peter'],
                     labelsAbove: true,
                     linewidth: 2,
-                    hmargin: 15
+                    hmargin: 15,
+                    textAccessible: true
                 }
             }).draw()
 
@@ -82,12 +84,14 @@
                     colors: ['Gradient(white:#c11:#c11:#c11)', 'Gradient(white:#1cc:#1cc:#1cc)', 'Gradient(white:#11c:#11c:#11c)'],
                     tooltips: ['Total Monday sales: 270', 'Total Tuesday sales: 270', 'Total Wednesday sales: 264'],
                     tooltipsEvent: 'mousemove',
-                    strokestyle: 'rgba(0,0,0,0)'
+                    strokestyle: 'rgba(0,0,0,0)',
+                    textAccessible: true
                 }
             }).draw()
 
 
 
+            $('#cvs').parent().addClass('animated expand');
             $('#cvs').addClass('animated expand');
         };
     </script>
@@ -140,6 +144,7 @@
                 ],
                 highlightStroke: 'rgba(0,0,0,0.1)',
                 strokestyle: 'rgba(0,0,0,0)',
+                shadow: true,
                 shadowOffsetx: -2,
                 shadowOffsety: -2,
                 shadowBlur: 15,
@@ -149,7 +154,8 @@
                 labels: ['Bob', 'Jamie', 'Cynthia', 'Peter'],
                 labelsAbove: true,
                 linewidth: 2,
-                hmargin: 15
+                hmargin: 15,
+                textAccessible: true
             }
         }).draw();
 
@@ -173,12 +179,14 @@
                 colors: ['Gradient(white:#c11:#c11:#c11)', 'Gradient(white:#1cc:#1cc:#1cc)', 'Gradient(white:#11c:#11c:#11c)'],
                 tooltips: ['Total Monday sales: 270', 'Total Tuesday sales: 270', 'Total Wednesday sales: 264'],
                 tooltipsEvent: 'mousemove',
-                strokestyle: 'rgba(0,0,0,0)'
+                strokestyle: 'rgba(0,0,0,0)',
+                textAccessible: true
             }
         }).draw()
 
 
 
+        $('#cvs').parent().addClass('animated expand');
         $('#cvs').addClass('animated expand');
     };
 &lt;/script&gt;

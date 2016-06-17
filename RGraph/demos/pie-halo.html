@@ -16,7 +16,7 @@
 
     <h1>A Pie chart with a halo effect</h1>
 
-    <canvas id="cvs" width="350" height="250">[No canvas support]</canvas>
+    <canvas id="cvs" width="450" height="250">[No canvas support]</canvas>
     
     <script>
         var labels = [
@@ -33,13 +33,18 @@
             options: {
                 shadow: false,
                 linewidth: 5,
-                labels: labels
+                labels: labels,
+                labelsSticksList: true,
+                labelsSticksColors: '#aaa',
+                labelsSticksLinewidth: 2,
+                textAccessible: true,
+                textSize: 14
             }
         }).on('draw', function(obj)
         {
             RGraph.path2(
                 obj.context,
-                'b a % % % 0 6.2830 false s white',
+                'lw 5 b a % % % 0 6.2830 false s white',
                 obj.centerx,
                 obj.centery,
                 obj.radius - 12
@@ -84,13 +89,18 @@
         options: {
             shadow: false,
             linewidth: 5,
-            labels: labels
+            labels: labels,
+            labelsSticksList: true,
+            labelsSticksColors: '#aaa',
+            labelsSticksLinewidth: 2,
+            textAccessible: true,
+            textSize: 14
         }
     }).on('draw', function(obj)
     {
         RGraph.path2(
             obj.context,
-            'b a % % % 0 6.2830 false s white',
+            'lw 5 b a % % % 0 6.2830 false s white',
             obj.centerx,
             obj.centery,
             obj.radius - 12

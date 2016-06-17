@@ -4,8 +4,19 @@
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
     
     <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
+    <script src="../libraries/RGraph.common.tooltips.js" ></script>
     <script src="../libraries/RGraph.pie.js" ></script>
 
+    <style>
+        .RGraph_tooltip {
+            font-size: 16pt !important;
+            font-weight: bold;
+            text-align: center;
+            padding: 15px;
+        }
+    </style>
+    
     <title>A 3D Pie chart</title>
     
     <meta name="robots" content="noindex,nofollow" />
@@ -16,7 +27,7 @@
 
     <h1>A 3D Pie chart</h1>
 
-    <canvas id="cvs" width="550" height="350">[No canvas support]</canvas>
+    <canvas id="cvs" width="600" height="350">[No canvas support]</canvas>
     
     <script>
         window.onload = function ()
@@ -29,16 +40,18 @@
                     gutterRight: 50,
                     linewidth: 0,
                     strokestyle: 'rgba(0,0,0,0)',
+                    tooltips: ['Alvin','Pete','Hoolio','Jack','Kev','Luis','Lou','Jesse'],
                     labels: ['Alvin','Pete','Hoolio','Jack','Kev','Luis','Lou','Jesse'],
-                    colors: ['red','yellow','blue','cyan','green','pink','white','#ddd'],
+                    colors: ['red','yellow','blue','cyan','green','pink','white','#aaa'],
                     variant: 'pie3d',
                     radius: 100,
-                    labelsSticks: true,
-                    labelsSticksLength: 25,
+                    labelsSticksList: true,
+                    labelsSticksColors: [,'#cc0',,,'#0f0',,'black'],
                     radius: 80,
                     shadowOffsety: 5,
                     shadowColor: '#aaa',
-                    exploded: [,,20]
+                    exploded: [,,20],
+                    textAccessible: false
                 }
             }).draw();
         };
@@ -53,7 +66,18 @@
     This goes in the documents header:
     <pre class="code">
 &lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.common.dynamic.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.common.tooltips.js"&gt;&lt;/script&gt;
 &lt;script src="RGraph.pie.js"&gt;&lt;/script&gt;
+
+&lt;style&gt;
+    .RGraph_tooltip {
+        font-size: 16pt !important;
+        font-weight: bold;
+        text-align: center;
+        padding: 15px;
+    }
+&lt;/style&gt;
 </pre>
     
     Put this where you want the chart to show up:
@@ -76,16 +100,18 @@
                 gutterRight: 50,
                 linewidth: 0,
                 strokestyle: 'rgba(0,0,0,0)',
+                tooltips: ['Alvin','Pete','Hoolio','Jack','Kev','Luis','Lou','Jesse'],
                 labels: ['Alvin','Pete','Hoolio','Jack','Kev','Luis','Lou','Jesse'],
-                colors: ['red','green','blue','cyan','yellow','pink','white','#ddd'],
+                colors: ['red','yellow','blue','cyan','green','pink','white','#aaa'],
                 variant: 'pie3d',
                 radius: 100,
-                labelsSticks: true,
-                labelsSticksLength: 25,
+                labelsSticksList: true,
+                labelsSticksColors: [,'#cc0',,,'#0f0',,'black'],
                 radius: 80,
                 shadowOffsety: 5,
                 shadowColor: '#aaa',
-                exploded: [,,20]
+                exploded: [,,20],
+                textAccessible: false
             }
         }).draw();
     };

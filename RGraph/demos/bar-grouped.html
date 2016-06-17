@@ -23,7 +23,7 @@
         {
             var data = [[4,5,3],[4,8,6],[4,2,4],[4,2,3],[1,2,3],[8,8,4],[4,8,6]];
 
-            var bar = new RGraph.Bar({
+            new RGraph.Bar({
                 id: 'cvs',
                 data: data,
                 options: {
@@ -36,6 +36,7 @@
                         'Saturdays sales statistics',
                         'Sundays sales statistics'
                     ],
+                    labelsOffsety: 8,
                     colors: ['red','yellow', 'pink'],
                     grouping: 'stacked',
                     gutterLeft: 100,
@@ -43,6 +44,7 @@
                     gutterBottom: 150,
                     gutterRight: 5,
                     textAngle: 45,
+                    textAccessible: false,
                     strokestyle: 'rgba(0,0,0,0)'
                 }
             }).draw();
@@ -91,6 +93,7 @@
                     'Saturdays sales statistics',
                     'Sundays sales statistics'
                 ],
+                labelsOffsety: 8,
                 colors: ['red','yellow', 'pink'],
                 grouping: 'stacked',
                 gutterLeft: 100,
@@ -98,6 +101,7 @@
                 gutterBottom: 150,
                 gutterRight: 5,
                 textAngle: 45,
+                textAccessible: false,
                 strokestyle: 'rgba(0,0,0,0)'
             }
         }).draw();

@@ -20,10 +20,11 @@
     <canvas id="cvs" width="600" height="150">[No canvas support]</canvas>
     
     <script>
-        var hbar = new RGraph.HBar({
+        new RGraph.HBar({
             id: 'cvs',
             data: [51],
             options: {
+                textAccessible: true,
                 colors: ['Gradient(#fcc:red:red)'],
                 scaleZerostart: true,
                 variant: '3d',
@@ -68,6 +69,7 @@
         id: 'cvs',
         data: [51],
         options: {
+            textAccessible: true,
             colors: ['Gradient(#fcc:red:red)'],
             scaleZerostart: true,
             variant: '3d',

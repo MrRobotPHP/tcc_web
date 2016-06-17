@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -97,10 +97,13 @@
             'chart.strokestyle':            null,
             'chart.border':                 true,
             'chart.border.color':           'black',
-            'chart.text.font':              'Arial',
+            'chart.text.font':              'Segoe UI, Arial, Verdana, sans-serif',
             'chart.text.size':              12,
             'chart.text.color':             'black',
             'chart.text.valign':            'center',
+            'chart.text.accessible':               true,
+            'chart.text.accessible.overflow':      'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.value.text.decimals':    0,
             'chart.value.text.units.pre':   '',
             'chart.value.text.units.post':  '',
@@ -173,7 +176,8 @@
             'chart.angles.start':             RGraph.PI,
             'chart.angles.end':               RGraph.TWOPI,
             'chart.centerpin.stroke':         'black',
-            'chart.centerpin.fill':           'white'
+            'chart.centerpin.fill':           'white',
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
 
@@ -203,7 +207,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -255,10 +258,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
 
 
 
@@ -769,7 +771,6 @@
                     co.drawImage(this.__needle_image__,
                                  this.centerx + prop['chart.needle.image.offsetx'],
                                  this.centery + prop['chart.needle.image.offsety']);
-//pa(co, ['b', 'r', this.centerx, this.centery, 1, 1, 'f', 'red']);
                 co.restore();
             }
 

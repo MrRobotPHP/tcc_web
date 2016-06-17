@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license starts at just £99 (GBP) and      |
+    * | the terms of the GPL. The commercial license starts at just 99 GBP and      |
     * | you can read about it here:                                                    |
     * |                                                                                |
     * |                      http://www.rgraph.net/license                             |
@@ -58,9 +58,16 @@
         /**
         * chart.tooltip.override allows you to totally take control of rendering the tooltip yourself
         */
-        if (typeof(obj.Get('chart.tooltips.override')) == 'function') {
-            return obj.Get('chart.tooltips.override')(obj, text, x, y, idx);
+        if (typeof(obj.get('chart.tooltips.override')) == 'function') {
+            return obj.get('chart.tooltips.override')(obj, text, x, y, idx);
         }
+
+
+        /**
+        * Fire the beforetooltip event
+        */
+        RG.fireCustomEvent(obj, 'onbeforetooltip');
+
 
         /**
         * Save the X/Y coords
@@ -71,25 +78,25 @@
         /**
         * This facilitates the "id:xxx" format
         */
-        text = RGraph.getTooltipTextFromDIV(text);
+        text = RG.getTooltipTextFromDIV(text);
 
         /**
         * First clear any exising timers
         */
-        var timers = RGraph.Registry.Get('chart.tooltip.timers');
+        var timers = RG.Registry.Get('chart.tooltip.timers');
 
         if (timers && timers.length) {
             for (i=0; i<timers.length; ++i) {
                 clearTimeout(timers[i]);
             }
         }
-        RGraph.Registry.Set('chart.tooltip.timers', []);
+        RG.Registry.Set('chart.tooltip.timers', []);
 
         /**
         * Hide the context menu if it's currently shown
         */
         if (obj.Get('chart.contextmenu')) {
-            RGraph.HideContext();
+            RG.hideContext();
         }
 
         var effect = obj.Get('chart.tooltips.effect') ? obj.Get('chart.tooltips.effect').toLowerCase() : 'fade';
@@ -101,23 +108,18 @@
         var tooltipObj  = document.createElement('DIV');
         tooltipObj.className             = obj.Get('chart.tooltips.css.class');
         tooltipObj.style.display         = 'none';
-        tooltipObj.style.position        = RGraph.isFixed(obj.canvas) ? 'fixed' : 'absolute';
+        tooltipObj.style.position        = RG.isFixed(obj.canvas) ? 'fixed' : 'absolute';
         tooltipObj.style.left            = 0;
         tooltipObj.style.top             = 0;
         tooltipObj.style.backgroundColor = 'rgb(255,255,239)';
         tooltipObj.style.color           = 'black';
         if (!document.all) tooltipObj.style.border = '';
         tooltipObj.style.visibility      = 'visible';
-        tooltipObj.style.paddingLeft     = RGraph.tooltips.padding;
-        tooltipObj.style.paddingRight    = RGraph.tooltips.padding;
-        tooltipObj.style.fontFamily      = RGraph.tooltips.font_face;
-        tooltipObj.style.fontSize        = RGraph.tooltips.font_size;
+        tooltipObj.style.paddingLeft     = RG.tooltips.padding;
+        tooltipObj.style.paddingRight    = RG.tooltips.padding;
+        tooltipObj.style.fontFamily      = RG.tooltips.font_face;
+        tooltipObj.style.fontSize        = RG.tooltips.font_size;
         tooltipObj.style.zIndex          = 3;
-
-        // Only apply a border if there's content
-        if (RGraph.trim(text).length > 0) {
-            tooltipObj.style.border             = '1px #bbb solid';
-        }
 
         tooltipObj.style.borderRadius       = '5px';
         tooltipObj.style.MozBorderRadius    = '5px';
@@ -167,7 +169,7 @@
 
 
 
-        tooltipObj.style.top  = (y - height - 2) + 'px';
+        tooltipObj.style.top  = window.event.pageY - height - 5 + 'px';
 
         /**
         * If the function exists call the object specific tooltip positioning function
@@ -181,9 +183,15 @@
                 if (obj.Get('chart.tooltips.coords.page')) {
 
                     tooltipObj.style.left = e.pageX - (width / 2) - 4.25 + 'px';
-                    tooltipObj.style.top = e.pageY - height - 10 + 'px';
-                    
-                    document.getElementById('__rgraph_tooltip_pointer__').style.left = (parseInt(tooltipObj.offsetWidth) / 2)  - 8.5 + 'px';
+                    tooltipObj.style.top = e.pageY - height - 5 + 'px';
+
+                    // In case the value is negative - this positions the tooltip
+                    // underneath the click
+                    //if (obj.type === 'bar' && obj.data_arr[idx] < 0) {
+                        //tooltipObj.style.top = e.pageY + 10 + 'px';
+                    //}
+
+                    //document.getElementById('__rgraph_tooltip_pointer__').style.left = (parseInt(tooltipObj.offsetWidth) / 2)  - 8.5 + 'px';
                 }
             }
         } else {
@@ -226,7 +234,7 @@
         /**
         * Keep a reference to the tooltip in the registry
         */
-        RGraph.Registry.Set('chart.tooltip', tooltipObj);
+        RG.Registry.Set('chart.tooltip', tooltipObj);
 
         /**
         * Fire the tooltip event
@@ -263,16 +271,16 @@
     {
         var div = document.createElement('DIV');
             div.className             = obj.Get('chart.tooltips.css.class');
-            div.style.paddingLeft     = RGraph.tooltips.padding;
-            div.style.paddingRight    = RGraph.tooltips.padding;
-            div.style.fontFamily      = RGraph.tooltips.font_face;
-            div.style.fontSize        = RGraph.tooltips.font_size;
+            div.style.paddingLeft     = RG.tooltips.padding;
+            div.style.paddingRight    = RG.tooltips.padding;
+            div.style.fontFamily      = RG.tooltips.font_face;
+            div.style.fontSize        = RG.tooltips.font_size;
             div.style.visibility      = 'hidden';
             div.style.position        = 'absolute';
             div.style.top            = '300px';
             div.style.left             = 0;
             div.style.display         = 'inline';
-            div.innerHTML             = RGraph.getTooltipTextFromDIV(text);
+            div.innerHTML             = RG.getTooltipTextFromDIV(text);
         document.body.appendChild(div);
 
         return div.offsetWidth;
@@ -285,14 +293,14 @@
     RG.hideTooltip =
     RG.HideTooltip = function ()
     {
-        var tooltip = RGraph.Registry.Get('chart.tooltip');
+        var tooltip = RG.Registry.Get('chart.tooltip');
         var uid     = arguments[0] && arguments[0].uid ? arguments[0].uid : null;
 
         if (tooltip && tooltip.parentNode && (!uid || uid == tooltip.__canvas__.uid)) {
             tooltip.parentNode.removeChild(tooltip);
             tooltip.style.display = 'none';                
             tooltip.style.visibility = 'hidden';
-            RGraph.Registry.Set('chart.tooltip', null);
+            RG.Registry.Set('chart.tooltip', null);
         }
     };
 
@@ -498,7 +506,7 @@
     {
         var tooltips = obj.Get('chart.tooltips');
         
-        if (RGraph.hasTooltips(obj)) {
+        if (RG.hasTooltips(obj)) {
         
             if (obj.type == 'rscatter') {
                 tooltips = [];
@@ -558,7 +566,7 @@
             && obj.Get('chart.tooltips')[shape['index']]
            ) {
 
-            var text = RGraph.parseTooltipText(obj.Get('chart.tooltips'), shape['index']);
+            var text = RG.parseTooltipText(obj.Get('chart.tooltips'), shape['index']);
 
             if (text) {
 
@@ -571,15 +579,15 @@
 
                     // Show the tooltip if it's not the same as the one already visible
                     if (
-                           !RGraph.Registry.Get('chart.tooltip')
-                        || RGraph.Registry.Get('chart.tooltip').__object__.uid != obj.uid
-                        || RGraph.Registry.Get('chart.tooltip').__index__ != shape['index']
+                           !RG.Registry.Get('chart.tooltip')
+                        || RG.Registry.Get('chart.tooltip').__object__.uid != obj.uid
+                        || RG.Registry.Get('chart.tooltip').__index__ != shape['index']
                        ) {
 
-                        RGraph.HideTooltip();
-                        RGraph.Clear(obj.canvas);
-                        RGraph.Redraw();
-                        RGraph.Tooltip(obj, text, e.pageX, e.pageY, shape['index']);
+                        RG.hideTooltip();
+                        RG.Clear(obj.canvas);
+                        RG.redraw();
+                        RG.tooltip(obj, text, e.pageX, e.pageY, shape['index']);
                         obj.Highlight(shape);
                     }
                 }
@@ -590,7 +598,7 @@
         */
         } else if (shape && typeof(shape['index']) == 'number') {
 
-            var text = RGraph.parseTooltipText(obj.Get('chart.tooltips'), shape['index']);
+            var text = RG.parseTooltipText(obj.Get('chart.tooltips'), shape['index']);
 
             if (text) {
                 changeCursor_tooltips = true

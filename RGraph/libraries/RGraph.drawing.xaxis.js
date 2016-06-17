@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -101,8 +101,11 @@
             'chart.colors':          ['black'],
             'chart.title.color':     null, // Defaults to same as chart.colors
             'chart.text.color':      null, // Defaults to same as chart.colors
-            'chart.text.font':       'Arial',
+            'chart.text.font':       'Segoe UI, Arial, Verdana, sans-serif',
             'chart.text.size':       12,
+            'chart.text.accessible':        true,
+            'chart.text.accessible.overflow':'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.align':           'bottom',
             'chart.numlabels':       5,
             'chart.scale.visible':   true,
@@ -130,7 +133,8 @@
             'chart.events.click':     null,
             'chart.events.mousemove': null,
             'chart.xaxispos':         'bottom',
-            'chart.yaxispos':         'left'
+            'chart.yaxispos':         'left',
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
         /**
@@ -165,7 +169,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -216,10 +219,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
     
             /**
             * Make the tickmarks align if labels are specified
@@ -422,40 +424,31 @@
             var coordW     = ca.width - obj.gutterLeft - obj.gutterRight;
             var coordH     = prop['chart.text.size'] * 1.5;
             var canvasXY   = RG.getCanvasXY(ca);
+            var mouseXY    = RG.getMouseXY(window.event);
             var width      = tooltip.offsetWidth;
             var height     = tooltip.offsetHeight;
+
     
             // Set the top position
             tooltip.style.left = 0;
-            tooltip.style.top  = canvasXY[1] + this.y - height - 5 + (prop['chart.align'] == 'top' ? ((prop['chart.text.size'] * 1.5) / 2) * -1 : ((prop['chart.text.size'] * 1.5) / 2)) + 'px';
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
     
             // By default any overflow is hidden
             tooltip.style.overflow = '';
-    
-            // The arrow
-            var img = new Image();
-                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                img.style.position = 'absolute';
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.top = (tooltip.offsetHeight - 2) + 'px';
-            tooltip.appendChild(img);
             
             // Reposition the tooltip if at the edges:
-
+            
             // LEFT edge
-            if ((canvasXY[0] + coordX + (coordW / 2) - (width / 2)) < 10) {
-                tooltip.style.left = (canvasXY[0] + coordX - (width * 0.1)) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.1) - 8.5) + 'px';
+            if (canvasXY[0] + mouseXY[0] - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + (coordW / 2) + (width / 2)) > (doc.body.offsetWidth - 10) ) {
-                tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-                tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 
@@ -470,7 +463,9 @@
         this.highlight =
         this.Highlight = function (shape)
         {
-            // When showing tooltips, this method can be used to highlight the X axis
+            if (typeof prop['chart.highlight.style'] === 'function') {
+                (prop['chart.highlight.style'])(shape);
+            }
         };
 
 
@@ -608,7 +603,7 @@
                 /**
                 * Draw the main horizontal line
                 */
-                pa(co, ['b','m',x, Math.round(y),'l',x + width, Math.round(y),'s',co.strokeStyle]);
+                pa2(co, ['b','m',x, Math.round(y),'l',x + width, Math.round(y),'s',co.strokeStyle]);
     
                 /**
                 * Draw the axis tickmarks

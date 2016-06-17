@@ -18,6 +18,7 @@ session_start();
 
 			if ($login -> logar()) {
 				header("Location: principal.php");
+				$funcionario = new Funcionario($dados -> ID);
 			}
 			else {
 				echo "<script>";
@@ -39,20 +40,25 @@ session_start();
 	<title>Photus - Login</title>
 </head>
 <body>
-	<div class="container">
-		<h3 class="header">Photus Login</h3>
-	</div>
 
-	<div class="container d-login">
+	<div class="d-login">
+		
+		<div class="container">
+			<h1 class="header">Photus</h1>
+		</div>
+
+	
 		<div class="frm-login">
 			<form name="login" method="post" action="">
 				<label for="usuario">Usuário</label>
-				<p><input type="text" name="usuario" id="usuario" placeholder="Usuário" required /></p>
+				<p><input type="email" name="usuario" id="usuario" placeholder="Insira seu E-mail" required /></p>
 				<label for="senha">Senha</label>
 				<p><input type="password" name="senha" id="senha" placeholder="Senha" required /></p>
-				<p><button type="submit" name="enviaLogin" value="login">Login</button></p>
+				<p><button type="submit" class="submit" name="enviaLogin" value="login">Login</button></p>
 			</form>
 		</div>
+
 	</div>
+
 </body>
 </html>

@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -39,6 +39,15 @@
     
             // Install the event handlers
             window.onresize = ModalDialog.Resize;
+            
+            // Add an event listener so that the
+            // ESC key hides the dialog
+            document.body.addEventListener('keydown', function (e)
+            {
+                if (e.keyCode === 27) {
+                    ModalDialog.hide();
+                }
+            }, false);
     
             
             // Call them initially

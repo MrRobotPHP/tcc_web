@@ -3,7 +3,6 @@
 <head>
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
     
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="../libraries/RGraph.common.core.js" ></script>
     <script src="../libraries/RGraph.scatter.js" ></script>
     
@@ -19,40 +18,34 @@
 
     <h1>A Scatter chart customised to like the charts in Google Webmaster Tools</h1>
 
-    <p>
-        <span style="color: red; font-weight: bold">This effect requires jQuery</span>
-    </p>
 
     <canvas id="cvs" width="600" height="200">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var y = 21
+        // Create some sample data
+        for (var i=0, data = [], y=21; i<90; i+=1) {
+            data.push([i, y = Math.max(0,y + RGraph.random(-5,5))]);
+        }
 
-            // Create some sample data
-            for (var i=0, data = []; i<90; i+=1) {
-                data.push([i, y + RGraph.random(-5,5)]);
+        new RGraph.Scatter({
+            id: 'cvs',
+            data: data,
+            options: {
+                xmax: 90,
+                labels: [
+                    ['January', 0],
+                    ['February', 30],
+                    ['March', 60]
+                ],
+                labelsSpecificAlign: 'left',
+                line: true,
+                tickmarks: null,
+                backgroundGridAutofitNumvlines: 3,
+                //textAccessible: true,
+                textSize: 14,
+                textAccessible: true,
             }
-
-            var scatter = new RGraph.Scatter({
-                id: 'cvs',
-                data: data,
-                options: {
-                    textSize: 10,
-                    xmax: 90,
-                    labels: [
-                        ['January', 0],
-                        ['February', 30],
-                        ['March', 60]
-                    ],
-                    labelsSpecificAlign: 'left',
-                    line: true,
-                    tickmarks: null,
-                    backgroundGridAutofitNumvlines: 3
-                }
-            }).trace();
-        };
+        }).trace2({frames: 60});
     </script>
 
 
@@ -63,7 +56,6 @@
 
     This goes in the documents header:
     <pre class="code">
-&lt;script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"&gt;&lt;/script&gt;
 &lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
 &lt;script src="RGraph.scatter.js"&gt;&lt;/script&gt;
 </pre>
@@ -78,33 +70,30 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var y = 21
+    <span>// Create some sample data</span>
+    for (var i=0, data = [], y=21; i&lt;90; i+=1) {
+        data.push([i, y = Math.max(0,y + RGraph.random(-5,5))]);
+    }
 
-        <span>// Create some sample data</span>
-        for (var i=0, data = []; i&lt;90; i+=1) {
-            data.push([i, y + RGraph.random(-5,5)]);
+    new RGraph.Scatter({
+        id: 'cvs',
+        data: data,
+        options: {
+            xmax: 90,
+            labels: [
+                ['January', 0],
+                ['February', 30],
+                ['March', 60]
+            ],
+            labelsSpecificAlign: 'left',
+            line: true,
+            tickmarks: null,
+            backgroundGridAutofitNumvlines: 3,
+            //textAccessible: true,
+            textSize: 14,
+            textAccessible: true,
         }
-
-        var scatter = new RGraph.Scatter({
-            id: 'cvs',
-            data: data,
-            options: {
-                textSize: 10,
-                xmax: 90,
-                labels: [
-                    ['January', 0],
-                    ['February', 30],
-                    ['March', 60]
-                ],
-                labelsSpecificAlign: 'left',
-                line: true,
-                tickmarks: null,
-                backgroundGridAutofitNumvlines: 3
-            }
-        }).trace();
-    };
+    }).trace2({frames: 60});
 &lt;/script&gt;
 </pre>
 

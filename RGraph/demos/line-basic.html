@@ -27,36 +27,36 @@
     <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var background = new RGraph.Drawing.Background({
-                id: 'cvs',
-                options: {
-                    gutterLeft: 55,
-                    gutterRight: 35,
-                    gutterTop: 35,
-                    gutterBottom: 35,
-                    backgroundGridAutofitNumvlines:48,
-                    backgroundGridAutofitNumhlines: 20,
-                    backgroundGridColor: '#eee'
-                }
-            }).draw();
+        new RGraph.Drawing.Background({
+            id: 'cvs',
+            options: {
+                gutterLeft: 55,
+                gutterRight: 35,
+                gutterTop: 35,
+                gutterBottom: 35,
+                backgroundGridAutofitNumvlines:48,
+                backgroundGridAutofitNumhlines: 20,
+                backgroundGridColor: '#eee'
+            }
+        }).draw();
 
-            var line = new RGraph.Line({
-                id: 'cvs',
-                data: [5,4,1,6,8,5,3],
-                options: {
-                    labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
-                    gutterLeft: 55,
-                    gutterRight: 35,
-                    gutterBottom: 35,
-                    gutterTop: 35,
-                    title: 'A basic line chart',
-                    backgroundGridColor: '#aaa',
-                    backgroundGridDashed: true
-                }
-            }).draw();
-        };
+        new RGraph.Line({
+            id: 'cvs',
+            data: [5,4,1,6,8,5,3],
+            options: {
+                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                gutterLeft: 55,
+                gutterRight: 35,
+                gutterBottom: 35,
+                gutterTop: 35,
+                title: 'A basic line chart',
+                backgroundGridColor: '#aaa',
+                backgroundGridDashed: true,
+                textAccessible: true,
+                scaleZerostart: true,
+                labelsOffsety: 5
+            }
+        }).draw();
     </script>
 
 
@@ -84,7 +84,7 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    var background = new RGraph.Drawing.Background({
+    new RGraph.Drawing.Background({
         id: 'cvs',
         options: {
             gutterLeft: 55,
@@ -97,7 +97,7 @@
         }
     }).draw();
 
-    var line = new RGraph.Line({
+    new RGraph.Line({
         id: 'cvs',
         data: [5,4,1,6,8,5,3],
         options: {
@@ -108,7 +108,10 @@
             gutterTop: 35,
             title: 'A basic line chart',
             backgroundGridColor: '#aaa',
-            backgroundGridDashed: true
+            backgroundGridDashed: true,
+            textAccessible: true,
+            scaleZerostart: true,
+            labelsOffsety: 5
         }
     }).draw();
 &lt;/script&gt;

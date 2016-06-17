@@ -4,15 +4,27 @@ require_once "classes/conexao_sql.php";
 
 class Funcionario extends Conexao_sql {
 
+	private $id;
 	private $nome;
-	private $cpf;
+	private $email;
 	private $telefone;
-	private $cargo; //
 	private $funcao;
-	private $idade;
-	private $data_admissao;
+	private $tarefasPendentes;
+
+	/* Método construtor */
+	/*public function __construct($id) {
+		$this -> setId($id);
+	}*/
 
 	/* Métodos GET e SET */
+	public function getId() {
+		return $this -> id;
+	}
+
+	public function setId($id) {
+		$this -> id = $id;
+	}
+
 	public function getNome() {
 		return $this -> nome;
 	}
@@ -21,12 +33,12 @@ class Funcionario extends Conexao_sql {
 		$this -> nome = $nome;
 	}
 
-	public function getCpf() {
-		return $this -> cpf;
+	public function getEmail() {
+		return $this -> email;
 	}
 
-	public function setCpf($cpf) {
-		$this -> cpf = $cpf;
+	public function setEmail($email) {
+		$this -> email = $email;
 	}
 
 	public function getTelefone() {
@@ -35,14 +47,6 @@ class Funcionario extends Conexao_sql {
 
 	public function setTelefone($telefone) {
 		$this -> telefone = $telefone;
-	}
-
-	public function getCargo() {
-		return $this -> cargo;
-	}
-
-	public function setCargo($cargo) {
-		$this -> cargo = $cargo;
 	}
 
 	public function getFuncao() {
@@ -69,17 +73,40 @@ class Funcionario extends Conexao_sql {
 		$this -> data_admissao = $data_admissao;
 	}
 
-	/* Pega os dados necessarios do banco e passa para o JavaScript */
-	public static function alimentaGrafico() {
-		$pdo = parent::getDB();
-
-		$query = $pdo -> prepare("SELECT e.data AS DATA, t.status FROM tarefa t INNER JOIN evento AS e ON e.id = t.id");
-		$query -> execute();
-
-		$array = $pdo -> fetchAll(PDO::FETCH_ASSOC);
-		if($array["t.status"]); 
+	public function getTarefasPendentes() {
+		return $this -> tarefasPendentes;
 	}
 
+	public function setTarefasPendentes($tarefasPendentes) {
+		$this -> tarefasPendentes = $tarefasPendentes;
+	}
+
+	/* Pega dados do funcionário logado */
+	public function carregaDados($id) {
+		$pdo = parent::getDB();
+		
+		$query1 = $pdo -> prepare("SELECT F.NOME AS NOME, C.DESCRICAO AS CARGO, F.EMAIL AS EMAIL, F.TELEFONE1 AS TELEFONE
+								  FROM FUNCIONARIO F
+								  INNER JOIN CARGO AS C ON F.CARGO = C.ID
+								  WHERE F.ID = " . $this -> getId());
+		$query1 -> execute();
+
+		$dados1 = $query1 -> fetch(PDO::FETCH_OBJ);
+
+		$this -> setNome($dados1 -> NOME);
+		$this -> setFuncao($dados1 -> CARGO);
+		$this -> setEmail($dados1 -> EMAIL);
+		$this -> setTelefone($dados1 -> TELEFONE);
+
+		$query2 = $pdo -> prepare("SELECT COUNT(T.STATUS) AS TPEND
+								   FROM TAREFA T
+								   INNER JOIN FUNCIONARIO AS F ON T.FUNCIONARIO = F.ID");
+		$query2 -> execute();
+
+		$dados2 = $query2 -> fetch(PDO::FETCH_OBJ);
+
+		$this -> setTarefasPendentes($dados2 -> TPEND);
+	}
 }
 
 ?>

@@ -30,14 +30,15 @@
                 [27,5,null,'Paul','Gradient(gray:white)']
             ];
 
-            var gantt = new RGraph.Gantt({
+            new RGraph.Gantt({
                 id: 'cvs',
                 data: data,
                 options: {
                     borders: false,
                     xmax: 30,
                     backgroundGridAutofitNumhlines: 6,
-                    backgroundGridAutofitNumvlines: 30
+                    backgroundGridAutofitNumvlines: 30,
+                    textAccessible: true
                 }
             }).grow();
         };
@@ -79,7 +80,8 @@
                 borders: false,
                 xmax: 30,
                 backgroundGridAutofitNumhlines: 6,
-                backgroundGridAutofitNumvlines: 30
+                backgroundGridAutofitNumvlines: 30,
+                textAccessible: true
             }
         }).grow();
     };

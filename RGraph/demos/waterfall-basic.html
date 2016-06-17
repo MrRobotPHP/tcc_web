@@ -21,16 +21,14 @@
     <canvas id="cvs" width="900" height="250">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var waterfall = new RGraph.Waterfall({
-                id: 'cvs',
-                data: [10,10,5,-2,-5,6,-5],
-                options: {
-                    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Total']
-                }
-            }).draw();
-        };
+        new RGraph.Waterfall({
+            id: 'cvs',
+            data: [10,10,5,-2,-5,6,-5],
+            options: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Total'],
+                textAccessible: true
+            }
+        }).draw();
     </script>
 
 
@@ -56,16 +54,14 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var waterfall = new RGraph.Waterfall({
-            id: 'cvs',
-            data: [10,10,5,-2,-5,6,-5],
-            options: {
-                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Total']
-            }
-        }).draw();
-    };
+    new RGraph.Waterfall({
+        id: 'cvs',
+        data: [10,10,5,-2,-5,6,-5],
+        options: {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Total'],
+            textAccessible: true
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

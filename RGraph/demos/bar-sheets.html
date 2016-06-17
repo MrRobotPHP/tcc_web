@@ -25,21 +25,24 @@
         {
             var data   = sheet.get('B2:B13');
             var labels = sheet.get('A2:A13');
+            
+            for (var i=0; i<labels.length; i+=2) {
+                labels[i] = "\n" + labels[i];
+            }
 
             var bar = new RGraph.Bar({
                 id: 'cvs',
                 data: data,
                 options: {
                     labels: labels,
-                    textAngle: 45,
-                    xlabelsOffset: 10,
                     colors: ['#f66'],
                     shadow: false,
                     strokestyle: 'rgba(0,0,0,0)',
                     scaleZerostart: true,
                     noxaxis: true,
                     gutterLeft: 50,
-                    gutterBottom: 70
+                    gutterBottom: 70,
+                    textAccessible: true
                 }
             }).wave();
         });
@@ -74,21 +77,24 @@
     {
         var data   = sheet.get('B2:B13');
         var labels = sheet.get('A2:A13');
+        
+        for (var i=0; i&lt;labels.length; i+=2) {
+            labels[i] = "\n" + labels[i];
+        }
 
         var bar = new RGraph.Bar({
             id: 'cvs',
             data: data,
             options: {
                 labels: labels,
-                textAngle: 45,
-                xlabelsOffset: 10,
                 colors: ['#f66'],
                 shadow: false,
                 strokestyle: 'rgba(0,0,0,0)',
                 scaleZerostart: true,
                 noxaxis: true,
                 gutterLeft: 50,
-                gutterBottom: 70
+                gutterBottom: 70,
+                textAccessible: true
             }
         }).wave();
     });

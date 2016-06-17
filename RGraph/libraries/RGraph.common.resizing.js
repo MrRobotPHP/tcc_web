@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license starts at just £99 (GBP) and      |
+    * | the terms of the GPL. The commercial license starts at just 99 GBP and      |
     * | you can read about it here:                                                    |
     * |                                                                                |
     * |                      http://www.rgraph.net/license                             |
@@ -33,9 +33,9 @@
     RGraph.allowResizing =
     RGraph.AllowResizing = function (obj)
     {
-        var ca = obj.canvas,
-            co = obj.context,
-            pa = RGraph.path;
+        var ca  = obj.canvas,
+            co  = obj.context,
+            pa2 = RG.path2;
         
         ca.resizing = ca.resizing || {};
         ca.resizing.placeHolders = ca.resizing.placeHolders || [];
@@ -80,31 +80,42 @@
 
 
         // Draw the resize handle
-        pa(co, ['b','m', ca.width - resizeHandleSize - resizeHandleSize + ca.resizing.adjustX, ca.height - resizeHandleSize,'r', ca.width - resizeHandleSize - resizeHandleSize + ca.resizing.adjustX, ca.height - resizeHandleSize + ca.resizing.adjustY, 2 * resizeHandleSize, resizeHandleSize,'f', ca.resizing.bgcolor]);
+        pa2(co,  
+            'b m % % r % % % % f %',
+            ca.width - resizeHandleSize - resizeHandleSize + ca.resizing.adjustX, ca.height - resizeHandleSize,
+            ca.width - resizeHandleSize - resizeHandleSize + ca.resizing.adjustX, ca.height - resizeHandleSize + ca.resizing.adjustY, 2 * resizeHandleSize, resizeHandleSize,
+            ca.resizing.bgcolor
+        );
 
         // Draw the arrows
-        pa(co, ['b','lw', 1,'m', ma.round(ca.width - (resizeHandleSize / 2) + ca.resizing.adjustX), ca.height - resizeHandleSize + ca.resizing.adjustY,'l', ma.round(ca.width - (resizeHandleSize / 2) + ca.resizing.adjustX), ca.height + ca.resizing.adjustY,'m',ca.width + ca.resizing.adjustX, ma.round(ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY),'l',  ca.width - resizeHandleSize + ca.resizing.adjustX, ma.round(ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY), 's', 'gray', 'f', 'transparent']);
+        pa2(co,
+            'b lw 1 m % % l % % m % % l % % s gray f transparent',
+            ma.round(ca.width - (resizeHandleSize / 2) + ca.resizing.adjustX), ca.height - resizeHandleSize + ca.resizing.adjustY,
+            ma.round(ca.width - (resizeHandleSize / 2) + ca.resizing.adjustX), ca.height + ca.resizing.adjustY,
+            ca.width + ca.resizing.adjustX, ma.round(ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY),
+            ca.width - resizeHandleSize + ca.resizing.adjustX, ma.round(ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY)
+        );
 
         // Top arrow head
-        pa(co, [ 'b', 'm', ca.width - (resizeHandleSize / 2) + ca.resizing.adjustX, ca.height - resizeHandleSize + ca.resizing.adjustY, 'l',ca.width - (resizeHandleSize / 2) + 3 + ca.resizing.adjustX, ca.height - resizeHandleSize + 3 + ca.resizing.adjustY, 'l',ca.width - (resizeHandleSize / 2) - 3 + ca.resizing.adjustX, ca.height - resizeHandleSize + 3 + ca.resizing.adjustY, 'c', 'f','gray']);
+        pa2(co, [ 'b', 'm', ca.width - (resizeHandleSize / 2) + ca.resizing.adjustX, ca.height - resizeHandleSize + ca.resizing.adjustY, 'l',ca.width - (resizeHandleSize / 2) + 3 + ca.resizing.adjustX, ca.height - resizeHandleSize + 3 + ca.resizing.adjustY, 'l',ca.width - (resizeHandleSize / 2) - 3 + ca.resizing.adjustX, ca.height - resizeHandleSize + 3 + ca.resizing.adjustY, 'c', 'f','gray']);
 
         // Bottom arrow head
-        pa(co, ['b','m', ca.width - (resizeHandleSize / 2) + ca.resizing.adjustX, ca.height + ca.resizing.adjustY,'l', ca.width - (resizeHandleSize / 2) + 3 + ca.resizing.adjustX, ca.height - 3 + ca.resizing.adjustY,'l', ca.width - (resizeHandleSize / 2) - 3 + ca.resizing.adjustX, ca.height - 3 + ca.resizing.adjustY,'c','f', 'gray']);
+        pa2(co, ['b','m', ca.width - (resizeHandleSize / 2) + ca.resizing.adjustX, ca.height + ca.resizing.adjustY,'l', ca.width - (resizeHandleSize / 2) + 3 + ca.resizing.adjustX, ca.height - 3 + ca.resizing.adjustY,'l', ca.width - (resizeHandleSize / 2) - 3 + ca.resizing.adjustX, ca.height - 3 + ca.resizing.adjustY,'c','f', 'gray']);
 
         // Left arrow head
-        pa(co, ['b','m', ca.width - resizeHandleSize + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY,'l', ca.width - resizeHandleSize + 3 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + 3 + ca.resizing.adjustY,'l', ca.width - resizeHandleSize + 3 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) - 3 + ca.resizing.adjustY,'c','f', 'gray']);
+        pa2(co, ['b','m', ca.width - resizeHandleSize + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY,'l', ca.width - resizeHandleSize + 3 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + 3 + ca.resizing.adjustY,'l', ca.width - resizeHandleSize + 3 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) - 3 + ca.resizing.adjustY,'c','f', 'gray']);
         
         // Right arrow head
-        pa(co, ['b','m',ca.width + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY,'l',ca.width - 3 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + 3 + ca.resizing.adjustY,'l',ca.width  - 3 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) - 3 + ca.resizing.adjustY,'c','f', 'gray']);
+        pa2(co, ['b','m',ca.width + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY,'l',ca.width - 3 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + 3 + ca.resizing.adjustY,'l',ca.width  - 3 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) - 3 + ca.resizing.adjustY,'c','f', 'gray']);
         
         // Square at the centre of the arrows
-        pa(co, ['b','m',ca.width + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY,'r',ca.width - (resizeHandleSize / 2) - 2 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) - 2 + ca.resizing.adjustY, 4, 4,'r',ca.width - (resizeHandleSize / 2) - 2 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) - 2 + ca.resizing.adjustY, 4, 4,'s','gray','f','white']);
+        pa2(co, ['b','m',ca.width + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY,'r',ca.width - (resizeHandleSize / 2) - 2 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) - 2 + ca.resizing.adjustY, 4, 4,'r',ca.width - (resizeHandleSize / 2) - 2 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) - 2 + ca.resizing.adjustY, 4, 4,'s','gray','f','white']);
 
         // Draw the "Reset" button
-        pa(co, ['b','m',ma.round(ca.width - resizeHandleSize - 3 + ca.resizing.adjustX), ca.height - resizeHandleSize / 2 + ca.resizing.adjustY,'l',ma.round(ca.width - resizeHandleSize - resizeHandleSize + ca.resizing.adjustX), ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY,'l',ca.width - resizeHandleSize - resizeHandleSize + 2 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) - 2 + ca.resizing.adjustY,'l',ca.width - resizeHandleSize - resizeHandleSize + 2 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + 2 + ca.resizing.adjustY,'l',ca.width - resizeHandleSize - resizeHandleSize + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY,'s','gray','f','gray']);
+        pa2(co, ['b','m',ma.round(ca.width - resizeHandleSize - 3 + ca.resizing.adjustX), ca.height - resizeHandleSize / 2 + ca.resizing.adjustY,'l',ma.round(ca.width - resizeHandleSize - resizeHandleSize + ca.resizing.adjustX), ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY,'l',ca.width - resizeHandleSize - resizeHandleSize + 2 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) - 2 + ca.resizing.adjustY,'l',ca.width - resizeHandleSize - resizeHandleSize + 2 + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + 2 + ca.resizing.adjustY,'l',ca.width - resizeHandleSize - resizeHandleSize + ca.resizing.adjustX, ca.height - (resizeHandleSize / 2) + ca.resizing.adjustY,'s','gray','f','gray']);
 
         // The vertical line at the end of the reset button
-        pa(co, ['b','m', ma.round(ca.width - resizeHandleSize - resizeHandleSize - 1 + ca.resizing.adjustX), ca.height - (resizeHandleSize / 2) - 3 + ca.resizing.adjustY,'l', ma.round(ca.width - resizeHandleSize - resizeHandleSize - 1 + ca.resizing.adjustX), ca.height - (resizeHandleSize / 2) + 3 + ca.resizing.adjustY,'s','f']);
+        pa2(co, ['b','m', ma.round(ca.width - resizeHandleSize - resizeHandleSize - 1 + ca.resizing.adjustX), ca.height - (resizeHandleSize / 2) - 3 + ca.resizing.adjustY,'l', ma.round(ca.width - resizeHandleSize - resizeHandleSize - 1 + ca.resizing.adjustX), ca.height - (resizeHandleSize / 2) + 3 + ca.resizing.adjustY,'s','f']);
 
 
 
@@ -142,8 +153,9 @@ ca.style.left  = 0;
 
             var window_onmousemove = function (e)
             {
-                var ca = active;
-                
+                var ca  = active,
+                    obj = ca ? ca.__object__ : null;
+
                 if (ca) {
 
                     e = RG.fixEventObject(e);
@@ -153,11 +165,13 @@ ca.style.left  = 0;
                         var newWidth  = ca.width + (e.pageX - ca.resizing.originalx);
                         var newHeight = ca.height + (e.pageY - ca.resizing.originaly);
 
-                        if (newWidth > (ca.resizing.originalw / 2)) {
+                        if (    newWidth > (ca.resizing.originalw / 2)
+                            && (typeof obj.get('resizableMaxwidth') === 'number' ? newWidth < obj.get('resizableMaxwidth') : true)
+                           ) {
                             ca.resizing.div.style.width = newWidth + 'px';
                         }
                         
-                        if (newHeight > (ca.resizing.originalh / 2)) {
+                        if (newHeight > (ca.resizing.originalh / 2) && (typeof obj.get('resizableMaxheight') === 'number' ? newHeight < obj.get('resizableMaxheight') : true) ) {
                             ca.resizing.div.style.height = newHeight + 'px';
                         }
                         
@@ -165,10 +179,13 @@ ca.style.left  = 0;
                     }
                 }
             }
+
+
+
             // Install the function as an event listener - but only once
-            if (typeof(canvas.rgraph_resize_window_mousemove_listener_installed) != 'boolean') {
+            if (typeof ca.rgraph_resize_window_mousemove_listener_installed != 'boolean') {
                 window.addEventListener('mousemove', window_onmousemove, false);
-                canvas.rgraph_resize_window_mousemove_listener_installed = true;
+                ca.rgraph_resize_window_mousemove_listener_installed = true;
             }
 
             // The window onmouseup function
@@ -244,7 +261,7 @@ ca.style.left  = 0;
                 
 
                     // Fire the onresize event
-                    RG.fireCustomEvent(canvas.__object__, 'onresizebeforedraw');
+                    RG.fireCustomEvent(ca.__object__, 'onresizebeforedraw');
 
                     RG.redrawCanvas(ca);
                     

@@ -22,33 +22,31 @@
     <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
 
     <script>
-        window.onload = function ()
-        {
-            var line = new RGraph.Line({
-                id: 'cvs',
-                data: [5,8,6,4,3,5,2],
-                options: {
-                    hmargin: 5,
-                    labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
-                    backgroundGridVlinesBorder: false
-                }
-            }).draw();
-            
-            var coords = line.coords[2];
-            
-            var rect = new RGraph.Drawing.Rect({
-                id: 'cvs',
-                x: coords[0] - 15,
-                y: coords[1] - 15,
-                width: 30,
-                height: 30,
-                options: {
-                    fillstyle: 'rgba(255,0,0,0.25)',
-                    strokestyle: '#000',
-                    tooltips: ['The tooltip for the rect object!']
-                }
-            }).draw();
-        };
+        var line = new RGraph.Line({
+            id: 'cvs',
+            data: [5,8,6,4,3,5,2],
+            options: {
+                hmargin: 5,
+                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                backgroundGridVlinesBorder: false,
+                textAccessible: true
+            }
+        }).draw();
+        
+        var coords = line.coords[2];
+        
+        var rect = new RGraph.Drawing.Rect({
+            id: 'cvs',
+            x: coords[0] - 15,
+            y: coords[1] - 15,
+            width: 30,
+            height: 30,
+            options: {
+                fillstyle: 'rgba(255,0,0,0.25)',
+                strokestyle: '#000',
+                tooltips: ['The tooltip for the rect object!']
+            }
+        }).draw();
     </script>
 
 
@@ -78,34 +76,31 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var line = new RGraph.Line({
-            id: 'cvs',
-            data: [5,8,6,4,3,5,2],
-            options: {
-                hmargin: 5,
-                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
-                backgroundGridVlines: false,
-                backgroundGridBorder: false
-            }
-        }).draw()
-        
-        var coords = line.coords[2];
-        
-        var rect = new RGraph.Drawing.Rect({
-            id: 'cvs',
-            x: coords[0] - 15,
-            y: coords[1] - 15,
-            width: 30,
-            height: 30,
-            options: {
-                fillstyle: 'rgba(255,0,0,0.25)',
-                strokestyle: '#000',
-                tooltips: ['The tooltip for the rect object!']
-            }
-        }).draw();
-    };
+    var line = new RGraph.Line({
+        id: 'cvs',
+        data: [5,8,6,4,3,5,2],
+        options: {
+            hmargin: 5,
+            labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+            backgroundGridVlinesBorder: false,
+            textAccessible: true
+        }
+    }).draw();
+    
+    var coords = line.coords[2];
+    
+    var rect = new RGraph.Drawing.Rect({
+        id: 'cvs',
+        x: coords[0] - 15,
+        y: coords[1] - 15,
+        width: 30,
+        height: 30,
+        options: {
+            fillstyle: 'rgba(255,0,0,0.25)',
+            strokestyle: '#000',
+            tooltips: ['The tooltip for the rect object!']
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

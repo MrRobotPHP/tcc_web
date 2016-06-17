@@ -3,8 +3,8 @@
 <head>
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
     
-    <script type="text/javascript" src="../libraries/RGraph.common.core.js" ></script>
-    <script type="text/javascript" src="../libraries/RGraph.fuel.js" ></script>
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.fuel.js" ></script>
     
     <title>Fuel gauge grow effect</title>
     <meta name="robots" content="noindex,nofollow" />
@@ -25,7 +25,10 @@
                 id: 'cvs',
                 min: 0,
                 max: 100,
-                value: 56
+                value: 56,
+                options: {
+                    textAccessible: true
+                }
             }).grow();
             
             
@@ -63,7 +66,10 @@
             id: 'cvs',
             min: 0,
             max: 100,
-            value: 56
+            value: 56,
+            options: {
+                textAccessible: true
+            }
         }).grow();
         
         

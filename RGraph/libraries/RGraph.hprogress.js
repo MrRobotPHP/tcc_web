@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -89,7 +89,7 @@
             'chart.gutter.bottom':      25,
             'chart.numticks':           10,
             'chart.numticks.inner':     50,
-            'chart.background.color':   '#eee',
+            'chart.background.color':   'Gradient(#ccc:#eee:#efefef)',
             'chart.shadow':             false,
             'chart.shadow.color':       'rgba(0,0,0,0.5)',
             'chart.shadow.blur':        3,
@@ -105,7 +105,10 @@
             'chart.title.valign':       null,
             'chart.text.size':          12,
             'chart.text.color':         'black',
-            'chart.text.font':          'Arial',
+            'chart.text.font':          'Segoe UI, Arial, Verdana, sans-serif',
+            'chart.text.accessible':               true,
+            'chart.text.accessible.overflow':      'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.contextmenu':        null,
             'chart.units.pre':          '',
             'chart.units.post':         '',
@@ -134,6 +137,8 @@
             'chart.resize.handle.background':null,
             'chart.labels.specific':    null,
             'chart.labels.count':       10,
+            'chart.labels.offsetx':     0,
+            'chart.labels.offsety':     0,
             'chart.adjustable':         false,
             'chart.scale.decimals':     0,
             'chart.scale.point':        '.',
@@ -163,7 +168,8 @@
             'chart.labels.position':     'bottom',
             'chart.events.mousemove':    null,
             'chart.events.click':        null,
-            'chart.border.inner':        true
+            'chart.border.inner':        true,
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
 
@@ -200,7 +206,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -253,10 +258,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
 
             
             /**
@@ -354,7 +358,7 @@
             this.coords     = [];
             this.coordsText = [];
     
-            this.Drawbar();
+            this.drawbar();
             this.DrawTickMarks();
             this.DrawLabels();
             this.DrawTitle();
@@ -448,24 +452,18 @@
                 'max':this.max,
                 'min':this.min,
                 'strict':true,
-                'scale.thousand':prop['chart.scale.thousand'],
-                'scale.point':prop['chart.scale.point'],
-                'scale.decimals':prop['chart.scale.decimals'],
-                'ylabels.count':prop['chart.labels.count'],
-                'scale.round':prop['chart.scale.round'],
-                'units.pre': prop['chart.units.pre'],
-                'units.post': prop['chart.units.post']
+                'scale.thousand': prop['chart.scale.thousand'],
+                'scale.point':    prop['chart.scale.point'],
+                'scale.decimals': prop['chart.scale.decimals'],
+                'ylabels.count':  prop['chart.labels.count'],
+                'scale.round':    prop['chart.scale.round'],
+                'units.pre':      prop['chart.units.pre'],
+                'units.post':     prop['chart.units.post']
             });
 
             // Set a shadow if requested
             if (prop['chart.shadow']) {
                 RG.SetShadow(this, prop['chart.shadow.color'], prop['chart.shadow.offsetx'], prop['chart.shadow.offsety'], prop['chart.shadow.blur']);
-            }
-    
-            // Draw the shadow for MSIE
-            if (RG.ISOLD && prop['chart.shadow']) {
-                co.fillStyle = prop['chart.shadow.color'];
-                co.fillRect(this.gutterLeft + prop['chart.shadow.offsetx'], this.gutterTop + prop['chart.shadow.offsety'], this.width, this.height);
             }
     
             // Draw the outline
@@ -475,7 +473,7 @@
             co.fillRect(this.gutterLeft, this.gutterTop, this.width, this.height);
     
             // Turn off any shadow
-            RG.NoShadow(this);
+            RG.noShadow(this);
     
             co.fillStyle   = prop['chart.colors'][0];
             co.strokeStyle = prop['chart.strokestyle.outer'];
@@ -483,7 +481,7 @@
             var margin = prop['chart.margin'];
     
             // Draw the actual bar itself
-            var barWidth = Math.min(this.width, ((RG.array_sum(this.value) - this.min) / (this.max - this.min) ) * this.width);
+            var barWidth = ma.min(this.width, ((RG.array_sum(this.value) - this.min) / (this.max - this.min) ) * this.width);
     
             if (prop['chart.tickmarks.inner']) {
     
@@ -506,45 +504,71 @@
             /**
             * This bit draws the actual progress bar
             */
-            if (typeof(this.value) == 'number') {
-                co.beginPath();
-                co.strokeStyle = prop['chart.strokestyle.inner'];
-                co.fillStyle = prop['chart.colors'][0];
-    
+            if (typeof this.value === 'number') {
+
                 if (prop['chart.border.inner']) {
-                    co.strokeRect(this.gutterLeft, this.gutterTop + margin, barWidth, this.height - margin - margin);
+                    this.drawCurvedBar({
+                        x: this.gutterLeft,
+                        y: this.gutterTop + margin,
+                        width: barWidth,
+                        height: this.height - margin - margin,
+                        stroke: prop['chart.strokestyle.inner']
+                    });
                 }
-                co.fillRect(this.gutterLeft, this.gutterTop + margin, barWidth, this.height - margin - margin);
+
+                this.drawCurvedBar({
+                    x: this.gutterLeft,
+                    y: this.gutterTop + margin,
+                    width: barWidth,
+                    height: this.height - margin - margin,
+                    fill: prop['chart.colors'][0]
+                });
     
                 // Store the coords
-                this.coords.push([this.gutterLeft,
-                                  this.gutterTop + margin,
-                                  barWidth,
-                                  this.height - margin - margin]);
+                this.coords.push([
+                    this.gutterLeft,
+                    this.gutterTop + margin,
+                    barWidth,
+                    this.height - margin - margin
+                ]);
     
-            } else if (typeof(this.value) == 'object') {
-    
+            } else if (typeof this.value === 'object') {
+
                 co.beginPath();
-                co.strokeStyle = prop['chart.strokestyle.inner'];
     
                 var startPoint = this.gutterLeft;
                 
-                for (var i=0; i<this.value.length; ++i) {
+                for (var i=0,len=this.value.length; i<len; ++i) {
     
-                    var segmentLength = (this.value[i] / RG.array_sum(this.value)) * barWidth;
-                    co.fillStyle = prop['chart.colors'][i];
+                    var segmentLength = (this.value[i] / RG.arraySum(this.value)) * barWidth;
     
                     if (prop['chart.border.inner']) {
-                        co.strokeRect(startPoint, this.gutterTop + margin, segmentLength, this.height - margin - margin);
+                        this.drawCurvedBar({
+                            x:      startPoint,
+                            y:      this.gutterTop + margin,
+                            width:  segmentLength,
+                            height: this.height - margin - margin,
+                            fill: prop['chart.colors'][i],
+                            stroke: prop['chart.strokestyle.inner']
+                        });
                     }
-                    co.fillRect(startPoint, this.gutterTop + margin, segmentLength, this.height - margin - margin);
+
+                    this.drawCurvedBar({
+                        x:      startPoint,
+                        y:      this.gutterTop + margin,
+                        width:  segmentLength,
+                        height: this.height - margin - margin,
+                        fill: prop['chart.colors'][i]
+                    });
     
     
                     // Store the coords
-                    this.coords.push([startPoint,
-                                      this.gutterTop + margin,
-                                      segmentLength,
-                                      this.height - margin - margin]);
+                    this.coords.push([
+                        startPoint,
+                        this.gutterTop + margin,
+                        segmentLength,
+                        this.height - margin - margin
+                    ]);
     
                     startPoint += segmentLength;
                 }
@@ -586,17 +610,18 @@
             */
             if (prop['chart.label.inner']) {
                 co.fillStyle = 'black';
-                RG.Text2(this, {'font':prop['chart.text.font'],
-                               'size':prop['chart.text.size'] + 2,
-                               'x':this.gutterLeft + barWidth + 5,
-                               'y':this.gutterTop + (this.height / 2),
-                               'text': String(prop['chart.units.pre'] + this.value + prop['chart.units.post']),
-                               'valign':'bottom',
-                               'halign':'left',
-                               'bounding':true,
-                               'boundingFill':'white',
-                                'tag': 'label.inner'
-                               });
+                RG.Text2(this, {
+                    'font':prop['chart.text.font'],
+                    'size':prop['chart.text.size'] + 2,
+                    'x':this.gutterLeft + barWidth + 5,
+                    'y':this.gutterTop + (this.height / 2),
+                    'text': String(prop['chart.units.pre'] + this.value + prop['chart.units.post']),
+                    'valign':'bottom',
+                    'halign':'left',
+                    'bounding':true,
+                    'boundingFill':'white',
+                    'tag': 'label.inner'
+                });
             }
         };
 
@@ -653,10 +678,12 @@
     
             co.fillStyle = prop['chart.text.color'];
     
-            var xPoints = [];
-            var yPoints = [];
-            var font = prop['chart.text.font'];
-            var size = prop['chart.text.size'];
+            var xPoints = [],
+                yPoints = [],
+                font    = prop['chart.text.font'],
+                size    = prop['chart.text.size'],
+                offsetx = prop['chart.labels.offsetx'],
+                offsety = prop['chart.labels.offsety'];
     
             for (i=0,len=this.scale2.labels.length; i<len; i++) {
     
@@ -671,38 +698,41 @@
                     var valign = 'top';
                 }
     
-                RG.Text2(this, {'font':font,
-                                'size':size,
-                                'x':x,
-                                'y':y,
-                                'text': this.scale2.labels[i],
-                                'valign':valign,
-                                'halign':'center',
-                                 'tag': 'scale'
-                                });
+                RG.text2(this, {
+                    'font':font,
+                    'size':size,
+                    'x':x + offsetx,
+                    'y':y + offsety,
+                    'text': this.scale2.labels[i],
+                    'valign':valign,
+                    'halign':'center',
+                    'tag': 'scale'
+                });
             }
             
             if (prop['chart.tickmarks.zerostart']) {
                 if (prop['chart.labels.position'] == 'top') {
-                    RG.Text2(this, {'font':font,
-                                    'size':size,
-                                    'x':this.gutterLeft,
-                                    'y':this.gutterTop - 6,
-                                    'text': prop['chart.units.pre'] + Number(this.min).toFixed(prop['chart.scale.decimals']) + prop['chart.units.post'],
-                                    'valign':'bottom',
-                                    'halign':'center',
-                                    'tag': 'scale'
-                                    });
+                    RG.text2(this, {
+                        'font':font,
+                        'size':size,
+                        'x':this.gutterLeft + offsetx,
+                        'y':this.gutterTop - 6 + offsety,
+                        'text': prop['chart.units.pre'] + Number(this.min).toFixed(prop['chart.scale.decimals']) + prop['chart.units.post'],
+                        'valign':'bottom',
+                        'halign':'center',
+                        'tag': 'scale'
+                    });
                 } else {
-                    RG.Text2(this, {'font':font,
-                                    'size':size,
-                                    'x':this.gutterLeft,
-                                    'y':ca.height - this.gutterBottom + 5,
-                                    'text': prop['chart.units.pre'] + Number(this.min).toFixed(prop['chart.scale.decimals']) + prop['chart.units.post'],
-                                    'valign':'top',
-                                    'halign':'center',
-                                    'tag': 'scale'
-                                    });
+                    RG.text2(this, {
+                        'font':font,
+                        'size':size,
+                        'x':this.gutterLeft + offsetx,
+                        'y':ca.height - this.gutterBottom + 5 + offsety,
+                        'text': prop['chart.units.pre'] + Number(this.min).toFixed(prop['chart.scale.decimals']) + prop['chart.units.post'],
+                        'valign':'top',
+                        'halign':'center',
+                        'tag': 'scale'
+                    });
                 }
             }
         };
@@ -718,27 +748,34 @@
         this.getShape =
         this.getBar = function (e)
         {
-            var mouseCoords = RG.getMouseXY(e)
+            var mouseXY = RG.getMouseXY(e),
+                mouseX = mouseXY[0],
+                mouseY = mouseXY[1];
+
+            for (var i=0,len=this.coords.length; i<len; i++) {
     
-            for (var i=0; i<this.coords.length; i++) {
+                    var x   = this.coords[i][0],
+                        y   = this.coords[i][1],
+                        w   = this.coords[i][2],
+                        h   = this.coords[i][3],
+                        idx = i;
+
+                    co.beginPath();
+                    this.drawCurvedBar({
+                        x: x,
+                        y: y,
+                        height: h,
+                        width: w
+                    });
     
-                var mouseCoords = RG.getMouseXY(e);
-                var mouseX = mouseCoords[0];
-                var mouseY = mouseCoords[1];
-                var left   = this.coords[i][0];
-                var top    = this.coords[i][1];
-                var width  = this.coords[i][2];
-                var height = this.coords[i][3];
-                var idx    = i;
-    
-                if (mouseX >= left && mouseX <= (left + width) && mouseY >= top && mouseY <= (top + height) ) {
+                if (co.isPointInPath(mouseX, mouseY)) {
                 
                     var tooltip = RG.parseTooltipText(prop['chart.tooltips'], idx);
                 
                     return {
-                            0: this, 1: left, 2: top, 3: width, 4: height, 5: idx,
-                            'object':this, 'x':left, 'y':top, 'width': width, 'height': height, 'index': idx, 'tooltip': tooltip
-                           }
+                        0: this, 1: x, 2: y, 3: w, 4: h, 5: idx,
+                        'object':this, 'x':x, 'y':y, 'width': w, 'height': h, 'index': idx, 'tooltip': tooltip
+                    }
                 }
             }
         };
@@ -781,8 +818,21 @@
         this.highlight =
         this.Highlight = function (shape)
         {
-            // Add the new highlight
-            RG.Highlight.Rect(this, shape);
+            var last = shape.index === this.coords.length - 1;
+
+            if (typeof prop['chart.highlight.style'] === 'function') {
+                (prop['chart.highlight.style'])(shape);
+            } else {
+
+                this.drawCurvedBar({
+                    x: shape.x,
+                    y: shape.y,
+                    width: shape.width,
+                    height: shape.height,
+                    stroke: prop['chart.highlight.stroke'],
+                    fill: prop['chart.highlight.fill']
+                });
+            }
         };
 
 
@@ -853,23 +903,26 @@
             
             if (labels) {
     
-                var font   = prop['chart.text.font'];
-                var size   = prop['chart.text.size'];
-                var valign = (prop['chart.labels.position'] == 'top' ? 'bottom' : 'top');
-                var step   = this.width / (labels.length - 1);
+                var font    = prop['chart.text.font'],
+                    size    = prop['chart.text.size'],
+                    valign  = (prop['chart.labels.position'] == 'top' ? 'bottom' : 'top'),
+                    step    = this.width / (labels.length - 1),
+                    offsetx = prop['chart.labels.offsetx'],
+                    offsety = prop['chart.labels.offsety']
         
                 co.beginPath();
                     co.fillStyle = prop['chart.text.color'];
                     for (var i=0; i<labels.length; ++i) {
-                        RG.Text2(this, {'font':font,
-                                        'size':size,
-                                        'x': this.gutterLeft + (step * i),
-                                        'y':prop['chart.labels.position'] == 'top' ? this.gutterTop - 7  : ca.height - this.gutterBottom + 7,
-                                        'text': labels[i],
-                                        'valign':valign,
-                                        'halign':'center',
-                                        'tag': 'labels.specific'
-                                        });
+                        RG.Text2(this, {
+                            font:font,
+                            size:size,
+                            x: this.gutterLeft + (step * i) + offsetx,
+                            y: prop['chart.labels.position'] == 'top' ? this.gutterTop - 7  + offsety: ca.height - this.gutterBottom + 7 + offsety,
+                            text: labels[i],
+                            valign:valign,
+                            halign:'center',
+                            tag: 'labels.specific'
+                        });
                     }
                 co.fill();
             }
@@ -897,38 +950,28 @@
             var gutterTop  = this.gutterTop;
             var width      = tooltip.offsetWidth;
             var height     = tooltip.offsetHeight;
+            var mouseXY    = RG.getMouseXY(window.event);
     
             // Set the top position
             tooltip.style.left = 0;
-            tooltip.style.top  = canvasXY[1] + coordY - height - 7 + 'px';
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
             
             // By default any overflow is hidden
             tooltip.style.overflow = '';
-    
-            // The arrow
-            var img = new Image();
-                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                img.style.position = 'absolute';
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.top = (tooltip.offsetHeight - 2) + 'px';
-            tooltip.appendChild(img);
             
             // Reposition the tooltip if at the edges:
             
             // LEFT edge
-            if ((canvasXY[0] + coordX  + (coordW / 2) - (width / 2)) < 10) {
-                tooltip.style.left = (canvasXY[0] + coordX - (width * 0.1)) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.1) - 8.5) + 'px';
+            if (canvasXY[0] + mouseXY[0] - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + (coordW / 2) + coordX + (width / 2)) > document.body.offsetWidth) {
-                tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-                tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 
@@ -1075,23 +1118,45 @@
             co.save();
                 // Draw a path to clip to
                 co.beginPath();
-                    co.rect(this.coords[0][0], this.coords[0][1], len, this.coords[0][3]);
-                    co.clip();
-                
-                // Now draw the rect with a shadow
-                co.beginPath();
+                co.rect(
+                    this.coords[0][0],
+                    this.coords[0][1],
+                    len,
+                    this.coords[0][3]
+                );
+                co.clip();
 
-                    co.shadowColor = 'black';
-                    co.shadowOffsetX = 0;
-                    co.shadowOffsetY = 0;
-                    co.shadowBlur    = 15;
+                co.save();
+                    // Draw a path to clip to
+                    co.beginPath();
+                        this.drawCurvedBar({
+                            x: this.coords[0][0],
+                            y: this.coords[0][1],
+                            width: len,
+                            height: this.coords[0][3]
+                        });
+                        co.clip();
                     
-                    co.lineWidth = 2;
-                    
-                    co.rect(this.coords[0][0] - 1, this.coords[0][1] - 1, len + 2, this.coords[0][3] + 2);
-                
-                co.stroke();
+                    // Now draw the rect with a shadow
+                    co.beginPath();
     
+                        co.shadowColor = 'black';
+                        co.shadowOffsetX = 0;
+                        co.shadowOffsetY = 0;
+                        co.shadowBlur    = 15;
+                        
+                        co.lineWidth = 2;
+                        
+                        this.drawCurvedBar({
+                            x: this.coords[0][0] - 51,
+                            y: this.coords[0][1] - 1,
+                            width: len + 52,
+                            height: this.coords[0][3] + 2
+                        });
+                    
+                    co.stroke();
+        
+                co.restore();
             co.restore();
         };
 
@@ -1123,18 +1188,19 @@
                 }
     
     
-                RG.Text2(this, {'font':font,
-                                'size':size,
-                                'x': typeof(prop['chart.title.x']) == 'number' ? prop['chart.title.x'] : x,
-                                'y': typeof(prop['chart.title.y']) == 'number' ? prop['chart.title.y'] : y,
-                                'text': text,
-                                'valign': prop['chart.title.valign'] ? prop['chart.title.valign'] : valign,
-                                'halign': prop['chart.title.halign'] ? prop['chart.title.halign'] : 'center',
-                                'bold':prop['chart.title.bold'],
-                                'bounding': prop['chart.title.background'] ? true : false,
-                                'boundingFill': prop['chart.title.background'],
-                                'tag': 'title'
-                                });
+                RG.Text2(this, {
+                    'font':font,
+                    'size':size,
+                    'x': typeof(prop['chart.title.x']) == 'number' ? prop['chart.title.x'] : x,
+                    'y': typeof(prop['chart.title.y']) == 'number' ? prop['chart.title.y'] : y,
+                    'text': text,
+                    'valign': prop['chart.title.valign'] ? prop['chart.title.valign'] : valign,
+                    'halign': prop['chart.title.halign'] ? prop['chart.title.halign'] : 'center',
+                    'bold':prop['chart.title.bold'],
+                    'bounding': prop['chart.title.background'] ? true : false,
+                    'boundingFill': prop['chart.title.background'],
+                    'tag': 'title'
+                });
             }
         };
 
@@ -1184,6 +1250,34 @@
     
             return this;
         };
+
+
+
+
+        /**
+        * Draws a bar with a curved end.
+        * 
+        * DOESN'T DRAW A CURVED BAR ANY MORE - JUST A REGULAR SQUARE ENDED BAR
+        * 
+        * @param object opt The coords and colours
+        */
+        this.drawCurvedBar = function (opt)
+        {
+            pa2(co, 'b r % % % %',
+                opt.x, opt.y,
+                opt.width, opt.height
+            );
+
+            if (opt.stroke) {
+                co.strokeStyle = opt.stroke;
+                co.stroke();
+            }
+            
+            if (opt.fill) {
+                co.fillStyle = opt.fill;
+                co.fill();
+            }
+        }
 
 
 

@@ -19,7 +19,7 @@
 
     <h1>A Bar chart capable of drilldown</h1>
 
-    <canvas id="cvs" width="500" height="250">[No canvas support]</canvas><br />
+    <canvas id="cvs" width="650" height="250">[No canvas support]</canvas><br />
     
     <button id="butBack">Show the overview chart</button>
     
@@ -56,10 +56,12 @@
                     data: data,
                     options: {
                         labels: labels,
-                        bevel: !RGraph.ISOLD,
+                        bevel: true,
                         title: 'The whole teams statistics for sales of widgets',
                         backgroundGridAutofitNumvlines: data.length,
-                        strokestyle:'rgba(0,0,0,0)'
+                        strokestyle:'rgba(0,0,0,0)',
+                        textAccessible: true,
+                        shadow: true
                     }
                 }).fadeIn();
 
@@ -91,7 +93,8 @@
                                 bevel: true,
                                 strokestyle: 'rgba(0,0,0,0)',
                                 title: 'Specific statistics for: ' + labels[idx],
-                                backgroundGridAutofitNumvlines: 7
+                                backgroundGridAutofitNumvlines: 7,
+                                textAccessible: true
                             }
                         }).fadeIn();
                     });
@@ -102,7 +105,7 @@
                 */
                 bar.onmousemove = function (e, shape)
                 {
-                    e.target.style.cursor = 'pointer';
+                    return true;
                 }
                 
                 return bar;
@@ -183,7 +186,9 @@
                     bevel: !RGraph.ISOLD,
                     title: 'The whole teams statistics for sales of widgets',
                     backgroundGridAutofitNumvlines: data.length,
-                    strokestyle:'rgba(0,0,0,0)'
+                    strokestyle:'rgba(0,0,0,0)',
+                    textAccessible: true,
+                    shadow: true
                 }
             }).fadeIn();
 
@@ -215,7 +220,8 @@
                             bevel: true,
                             strokestyle: 'rgba(0,0,0,0)',
                             title: 'Specific statistics for: ' + labels[idx],
-                            backgroundGridAutofitNumvlines: 7
+                            backgroundGridAutofitNumvlines: 7,
+                            textAccessible: true
                         }
                     }).fadeIn();
                 });
@@ -226,7 +232,7 @@
             */</span>
             bar.onmousemove = function (e, shape)
             {
-                e.target.style.cursor = 'pointer';
+                return true;
             }
             
             return bar;

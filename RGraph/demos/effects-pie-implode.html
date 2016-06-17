@@ -17,7 +17,7 @@
 
     <h1>Pie chart Implode effect</h1>
 
-    <canvas id="cvs" width="300" height="300">[No canvas support]</canvas>
+    <canvas id="cvs" width="400" height="300">[No canvas support]</canvas>
     
     <script>
         window.onload = function ()
@@ -25,6 +25,10 @@
             var pie = new RGraph.Pie({
                 id: 'cvs',
                 data: [8,6,4,8,7,5],
+                options: {
+                    labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+                    textAccessibleOverflow: 'hidden'
+                }
             }).implode();
         };
     </script>
@@ -47,13 +51,14 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var pie = new RGraph.Pie({
-            id: 'cvs',
-            data: [8,6,4,8,7,5]
-        }).implode();
-    };
+    new RGraph.Pie({
+        id: 'cvs',
+        data: [8,6,4,8,7,5],
+        options: {
+            labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+            textAccessibleOverflow: 'hidden'
+        }
+    }).implode();
 &lt;/script&gt;
 </pre>
 

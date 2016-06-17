@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
     
     <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.key.js" ></script>
     <script src="../libraries/RGraph.common.effects.js" ></script>
     <script src="../libraries/RGraph.pie.js" ></script>
     
@@ -17,32 +18,48 @@
 
     <h1>3D Pie chart</h1>
 
-    <canvas id="cvs" width="450" height="300">[No canvas support]</canvas>
+    <div id="container" style="display: inline-block; position: relative">
+        <canvas id="cvs" width="375" height="300">[No canvas support]</canvas>
+    </div>
 
     <script>
-        window.onload = function ()
+        var colors = ['red','yellow','blue','cyan','green','pink','white','#ddd'];
+        var data   = [4,5,5,7,5,8,4,9];
+        var labels = ['Mavis','Kevin','Luis','June','Olga','Luis','Pete','Bridget'];
+        
+        for (var i=0; i<data.length; i++) {
+            labels[i] = '{1}: {2}%'.format(labels[i], data[i]);
+        }
+
+        var key = RGraph.HTML.Key('container',
         {
-            var pie = new RGraph.Pie({
-                id: 'cvs',
-                data: [4,5,5,7,5,8,4,9],
-                options: {
-                    strokestyle: '#e8e8e8',
-                    variant: 'pie3d',
-                    linewidth: 2,
-                    shadowOffsetx: 0,
-                    shadowOffsety: 15,
-                    shadowColor: '#aaa',
-                    exploded: 10,
-                    radius: 80,
-                    labels: ['Mavis','Kevin','Luis','June','Olga','Luis','Pete','Bridget'],
-                    labelsSticks: true,
-                    labelsSticksLength: 15
-                }
-            }).implode(null, function (obj)
-            {
-                obj.explodeSegment(5, 25);
-            })
-        };
+            colors: colors,
+            labels: labels,
+            tableCss: {
+                position: 'absolute',
+                top: '50%',
+                right: '-70px',
+                transform: 'translateY(-50%)'
+            }
+        });
+
+
+
+        new RGraph.Pie({
+            id: 'cvs',
+            data: data,
+            options: {
+                strokestyle: '#e8e8e8',
+                variant: 'pie3d',
+                linewidth: 2,
+                shadowOffsetx: 0,
+                shadowOffsety: 7,
+                shadowColor: '#ddd',
+                shadowBlur: 15,
+                radius: 80,
+                colors: colors
+            }
+        }).draw();
     </script>
 
 
@@ -54,40 +71,57 @@
     This goes in the documents header:
     <pre class="code">
 &lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
-&lt;script src="RGraph.common.effects.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.common.key.js"&gt;&lt;/script&gt;
 &lt;script src="RGraph.pie.js"&gt;&lt;/script&gt;
 </pre>
     
     Put this where you want the chart to show up:
     <pre class="code">
-&lt;canvas id="cvs" width="450" height="300"&gt;
-    [No canvas support]
-&lt;/canvas&gt;
+&lt;div id="container" style="display: inline-block; position: relative"&gt;
+    &lt;canvas id="cvs" width="450" height="300"&gt;[No canvas support]&lt;/canvas&gt;
+&lt;div&gt;
 </pre>
 
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
+    var colors = ['red','yellow','blue','cyan','green','pink','white','#ddd'];
+    var data   = [4,5,5,7,5,8,4,9];
+    var labels = ['Mavis','Kevin','Luis','June','Olga','Luis','Pete','Bridget'];
+    
+    for (var i=0; i&lt;data.length; i++) {
+        labels[i] = '{1}: {2}%'.format(labels[i], data[i]);
+    }
+
+    var key = RGraph.HTML.Key('container',
     {
-        var pie = new RGraph.Pie({
-            id: 'cvs',
-            data: [4,5,5,7,5,8,4,9],
-            options: {
-                strokestyle: '#e8e8e8',
-                variant: 'pie3d',
-                linewidth: 2,
-                shadowOffsetx: 0,
-                shadowOffsety: 15,
-                shadowColor: '#aaa',
-                exploded: 10,
-                radius: 80,
-                labels: ['Mavis','Kevin','Luis','June','Olga','Luis','Pete','Bridget'],
-                labelsSticks: true,
-                labelsSticksLength: 15
-            }
-        }).draw()
-    };
+        colors: colors,
+        labels: labels,
+        tableCss: {
+            position: 'absolute',
+            top: '50%',
+            right: '-70px',
+            transform: 'translateY(-50%)'
+        }
+    });
+
+
+
+    new RGraph.Pie({
+        id: 'cvs',
+        data: data,
+        options: {
+            strokestyle: '#e8e8e8',
+            variant: 'pie3d',
+            linewidth: 2,
+            shadowOffsetx: 0,
+            shadowOffsety: 7,
+            shadowColor: '#ddd',
+            shadowBlur: 15,
+            radius: 80,
+            colors: colors
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

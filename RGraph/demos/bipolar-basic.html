@@ -19,17 +19,16 @@
     <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
     
     <script>
-        window.onload = function ()
-        {
-            var bipolar = new RGraph.Bipolar({
-                id: 'cvs',
-                left: [4,6,3,5,8],
-                right: [4,6,5,9,2],
-                options: {
-                    labels: ['John','Luke','Pete','Jane','Fred']
-                }
-            }).draw();
-        };
+        new RGraph.Bipolar({
+            id: 'cvs',
+            left: [4,6,3,5,8],
+            right: [4,6,5,9,2],
+            options: {
+                scaleZerostart: true,
+                textAccessible: true,
+                labels: ['John','Luke','Pete','Jane','Fred']
+            }
+        }).draw();
     </script>
 
 
@@ -53,17 +52,16 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var bipolar = new RGraph.Bipolar({
-            id: 'cvs',
-            left: [4,6,3,5,8],
-            right: [4,6,5,9,2],
-            options: {
-                labels: ['John','Luke','Pete','Jane','Fred']
-            }
-        }).draw();
-    };
+    new RGraph.Bipolar({
+        id: 'cvs',
+        left: [4,6,3,5,8],
+        right: [4,6,5,9,2],
+        options: {
+            scaleZerostart: true,
+            textAccessible: true,
+            labels: ['John','Luke','Pete','Jane','Fred']
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

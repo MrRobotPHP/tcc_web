@@ -40,7 +40,14 @@
                     data: data,
                     options: {
                         labels: labels,
-                        exploded: 5
+                        exploded: 5,
+                        textAccessible: true,
+                        labelsSticksList: true,
+                        labelsSticksColors: [
+                            'red','gray',
+                            'green','blue',
+                            'pink','#aa0'
+                        ]
                     }
                 }).draw();
             });
@@ -85,7 +92,14 @@
                 data: data,
                 options: {
                     labels: labels,
-                    exploded: 5
+                    exploded: 5,
+                    textAccessible: true,
+                    labelsSticksList: true,
+                    labelsSticksColors: [
+                        'red','gray',
+                        'green','blue',
+                        'pink','#aa0'
+                    ]
                 }
             }).draw();
         });

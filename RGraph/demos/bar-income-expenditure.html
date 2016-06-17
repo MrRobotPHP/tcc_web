@@ -19,43 +19,44 @@
     <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
 
     <script>
-        window.onload = function ()
-        {
-            var data1 = [[2,5,9],[4,2,6],[6,5,8]];
-            var data2 = [[-2,-1,-6],[0,0,-6],[0,-5,-8]];
-            
-            
-            var bar1 = new RGraph.Bar({
-                id: 'cvs',
-                data: data1,
-                options: {
-                    shadow: false,
-                    strokestyle: 'rgba(0,0,0,0)',
-                    noaxes: true,
-                    ylabels: false,
-                    colors: RGraph.ISOLD ? ['black','black','black'] : ['Gradient(black:#aaa:black)', 'Gradient(black:#aaa:black)', 'Gradient(black:#aaa:black)'],
-                    hmargin: 25,
-                    backgroundGridAutofitNumvlines: 3,
-                    xaxispos: 'center',
-                    'text.size': 14,
-                    ymax: 10
-                }
-            }).wave()
+        var data1 = [[2,5,9],[4,2,6],[6,5,8]],
+            data2 = [[-2,-1,-6],[0,0,-6],[0,-5,-8]];
 
-            var bar2 = new RGraph.Bar({
-                id: 'cvs',
-                data: data2,
-                options: {
-                    shadow: false,
-                    colors: RGraph.ISOLD ? ['red', 'red', 'red'] : ['Gradient(red:#faa:red)', 'Gradient(red:#faa:red)', 'Gradient(red:#faa:red)'],
-                    hmargin: 25,
-                    xaxispos: 'center',
-                    'text.size': 14,
-                    backgroundGrid: false,
-                    ymax: 10
-                }
-            }).wave()
-        };
+
+        new RGraph.Bar({
+            id: 'cvs',
+            data: data1,
+            options: {
+                gutterLeft: 35,
+                shadow: false,
+                strokestyle: 'rgba(0,0,0,0)',
+                noaxes: true,
+                ylabels: false,
+                colors: RGraph.ISOLD ? ['black','black','black'] : ['Gradient(black:#aaa:black)', 'Gradient(black:#aaa:black)', 'Gradient(black:#aaa:black)'],
+                hmargin: 25,
+                backgroundGridAutofitNumvlines: 3,
+                xaxispos: 'center',
+                'text.size': 14,
+                ymax: 10,
+                textAccessible: true
+            }
+        }).wave();
+
+        new RGraph.Bar({
+            id: 'cvs',
+            data: data2,
+            options: {
+                gutterLeft: 35,
+                shadow: false,
+                colors: RGraph.ISOLD ? ['red', 'red', 'red'] : ['Gradient(red:#faa:red)', 'Gradient(red:#faa:red)', 'Gradient(red:#faa:red)'],
+                hmargin: 25,
+                xaxispos: 'center',
+                'text.size': 14,
+                backgroundGrid: false,
+                ymax: 10,
+                textAccessible: true
+            }
+        }).wave();
     </script>
 
 
@@ -83,43 +84,44 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var data1 = [[2,5,9],[4,2,6],[6,5,8]];
-        var data2 = [[-2,-1,-6],[0,0,-6],[0,-5,-8]];
-        
-        
-        var bar1 = new RGraph.Bar({
-            id: 'cvs',
-            data: data1,
-            options: {
-                shadow: false,
-                strokestyle: 'rgba(0,0,0,0)',
-                noaxes: true,
-                ylabels: false,
-                colors: RGraph.ISOLD ? ['black','black','black'] : ['Gradient(black:#aaa:black)', 'Gradient(black:#aaa:black)', 'Gradient(black:#aaa:black)'],
-                hmargin: 25,
-                backgroundGridAutofitNumvlines: 3,
-                xaxispos: 'center',
-                textSize: 14,
-                ymax: 10
-            }
-        }).wave()
+    var data1 = [[2,5,9],[4,2,6],[6,5,8]],
+        data2 = [[-2,-1,-6],[0,0,-6],[0,-5,-8]];
 
-        var bar2 = new RGraph.Bar({
-            id: 'cvs',
-            data: data2,
-            options: {
-                shadow: false,
-                colors: RGraph.ISOLD ? ['red', 'red', 'red'] : ['Gradient(red:#faa:red)', 'Gradient(red:#faa:red)', 'Gradient(red:#faa:red)'],
-                hmargin: 25,
-                xaxispos: 'center',
-                textSize: 14,
-                backgroundGrid: false,
-                ymax: 10
-            }
-        }).wave()
-    };
+
+    new RGraph.Bar({
+        id: 'cvs',
+        data: data1,
+        options: {
+            gutterLeft: 35,
+            shadow: false,
+            strokestyle: 'rgba(0,0,0,0)',
+            noaxes: true,
+            ylabels: false,
+            colors: RGraph.ISOLD ? ['black','black','black'] : ['Gradient(black:#aaa:black)', 'Gradient(black:#aaa:black)', 'Gradient(black:#aaa:black)'],
+            hmargin: 25,
+            backgroundGridAutofitNumvlines: 3,
+            xaxispos: 'center',
+            'text.size': 14,
+            ymax: 10,
+            textAccessible: true
+        }
+    }).wave();
+
+    new RGraph.Bar({
+        id: 'cvs',
+        data: data2,
+        options: {
+            gutterLeft: 35,
+            shadow: false,
+            colors: RGraph.ISOLD ? ['red', 'red', 'red'] : ['Gradient(red:#faa:red)', 'Gradient(red:#faa:red)', 'Gradient(red:#faa:red)'],
+            hmargin: 25,
+            xaxispos: 'center',
+            'text.size': 14,
+            backgroundGrid: false,
+            ymax: 10,
+            textAccessible: true
+        }
+    }).wave();
 &lt;/script&gt;
 </pre>
 

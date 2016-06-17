@@ -60,7 +60,8 @@
                     tickmarks: null,
                     gutterBottom: 50,
                     numxticks: 11,
-                    noxaxis: true
+                    noxaxis: true,
+                    textAccessible: true
                 }
             }).draw();
 
@@ -72,6 +73,7 @@
                 options: {
                     colors: ['#00830B'],
                     backgroundGrid: false,
+                    textAccessible: true,
                     noaxes: true,
                     ylabels: false,
                     gutterBottom: 50,
@@ -148,7 +150,8 @@
                 tickmarks: null,
                 gutterBottom: 50,
                 numxticks: 11,
-                noxaxis: true
+                noxaxis: true,
+                textAccessible: true
             }
         }).draw();
 
@@ -167,7 +170,8 @@
                 ymax: line.max,
                 shadow: false,
                 linewidth: 2,
-                labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+                labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+                textAccessible: true
             }
         }).draw();
     };

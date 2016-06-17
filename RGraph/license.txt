@@ -7,11 +7,11 @@ a commercial licensing scheme available which you can read about here:
 
             http://www.rgraph.net/license
 
-For commercial license there is a one-time fee of £99 that covers most use cases. The only exception is for OEM
-use - the OEM license is described on the website and costs £499. You can read the details about RGraph
-licensing here:
+If you don't wish to be bound by the GPL license then you can opt to purchase a
+commercial license instead. The commercial license starts at just 99GBP for a single
+site license. More options are described here:
 
-            http://www.rgraph.net/license
+                        http://www.rgraph.net/license
 
 
 Support

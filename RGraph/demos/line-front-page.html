@@ -10,7 +10,7 @@
     <script src="../libraries/RGraph.drawing.image.js" ></script>
     <script src="../libraries/RGraph.line.js" ></script>
     
-    <title>The front page line chart (grayscale version)</title>
+    <title>The front page line chart (grayscale version) (an old version of the front page)</title>
     
     <meta name="robots" content="noindex,nofollow" />
     <meta name="description" content="The front page line chart" />
@@ -18,9 +18,9 @@
 </head>
 <body>
 
-    <h1>The line chart from the front page(grayscale version)</h1>
+    <h1>The line chart from the front page(grayscale version) (an old version of the front page)</h1>
 
-    <canvas id="cvs" width="400" height="200">[No canvas support]</canvas>
+    <canvas id="cvs" width="600" height="300">[No canvas support]</canvas>
     
     <script>
         window.onload = function ()
@@ -51,7 +51,8 @@
                     title: 'An example Line chart',
                     axisColor: '#666',
                     textColor: '#666',
-                    spline: true
+                    spline: true,
+                    textAccessible: true
                 }
             }).on('draw', function (obj)
             {
@@ -72,48 +73,37 @@
             /**
             * Use the Trace animation to show the chart
             */
-            if (RGraph.ISOLD) {
-                // IE7/8 don't support shadow blur, so set custom shadow properties
-                myLine.set({
-                    shadow: {
-                        offsetx: 3,
-                        offsety: 3,
-                        color: '#aaa'
-                    }
-                })
-            } else {
-                myLine.set({
-                    tooltips: [
-                        '<b>January</b><br />Started off the year quite averagely',
-                        '<b>February</b><br />Better than January, rising quite nicely',
-                        '<b>March</b><br />March was quite a spike',
-                        '<b>April</b><br />Rising very impressively',
-                        '<b>May</b><br />Dropping after the last two month spike',
-                        '<b>June</b><br />Still dropping',
-                        '<b>July</b><br />The fall is beginning to subside, but still dropping',
-                        '<b>August</b><br />A good rise after the fall',
-                        '<b>September</b><br />A very good peak',
-                        '<b>October</b><br />The peak is now subsiding',
-                        '<b>November</b><br />Still subsiding',
-                        '<b>December</b><br />Rising again after the last fall',
-                        
-                        
-                        '<b>January</b><br />Started off the year quite averagely as with Robert',
-                        '<b>February</b><br />Rising as with Robert',
-                        '<b>March</b><br />Not as good as Robert, but OK',
-                        '<b>April</b><br />Dropping after the peak',
-                        '<b>May</b><br />The low point as with last year',
-                        '<b>June</b><br />Rising higher than Robert',
-                        '<b>July</b><br />Consistent with last month',
-                        '<b>August</b><br />A nice high point',
-                        '<b>September</b><br />A low point',
-                        '<b>October</b><br />A nice rise',
-                        '<b>November</b><br />Falling for fall...',
-                        '<b>December</b><br />Rising again for Christmas'
-                    ]
-                })
-                .trace2();
-            }
+            myLine.set({
+                tooltips: [
+                    '<b>January</b><br />Started off the year quite averagely',
+                    '<b>February</b><br />Better than January, rising quite nicely',
+                    '<b>March</b><br />March was quite a spike',
+                    '<b>April</b><br />Rising very impressively',
+                    '<b>May</b><br />Dropping after the last two month spike',
+                    '<b>June</b><br />Still dropping',
+                    '<b>July</b><br />The fall is beginning to subside, but still dropping',
+                    '<b>August</b><br />A good rise after the fall',
+                    '<b>September</b><br />A very good peak',
+                    '<b>October</b><br />The peak is now subsiding',
+                    '<b>November</b><br />Still subsiding',
+                    '<b>December</b><br />Rising again after the last fall',
+                    
+                    
+                    '<b>January</b><br />Started off the year quite averagely as with Robert',
+                    '<b>February</b><br />Rising as with Robert',
+                    '<b>March</b><br />Not as good as Robert, but OK',
+                    '<b>April</b><br />Dropping after the peak',
+                    '<b>May</b><br />The low point as with last year',
+                    '<b>June</b><br />Rising higher than Robert',
+                    '<b>July</b><br />Consistent with last month',
+                    '<b>August</b><br />A nice high point',
+                    '<b>September</b><br />A low point',
+                    '<b>October</b><br />A nice rise',
+                    '<b>November</b><br />Falling for fall...',
+                    '<b>December</b><br />Rising again for Christmas'
+                ]
+            })
+            .trace2();
         };
     </script>
 
@@ -140,7 +130,6 @@
 
     This is the code that generates the chart:
     <pre class="code">
-&lt;script&gt;
     window.onload = function ()
     {
         var data1 = [4,6,12,16,8,4,2,8,18,16,14,16];
@@ -169,7 +158,8 @@
                 title: 'An example Line chart',
                 axisColor: '#666',
                 textColor: '#666',
-                spline: true
+                spline: true,
+                textAccessible: true
             }
         }).on('draw', function (obj)
         {
@@ -190,48 +180,37 @@
         /**
         * Use the Trace animation to show the chart
         */
-        if (RGraph.ISOLD) {
-            // IE7/8 don't support shadow blur, so set custom shadow properties
-            myLine.set({
-                shadow: {
-                    offsetx: 3,
-                    offsety: 3,
-                    color: '#aaa'
-                }
-            })
-        } else {
-            myLine.set({
-                tooltips: [
-                    '&lt;b&gt;January&lt;/b&gt;&lt;br /&gt;Started off the year quite averagely',
-                    '&lt;b&gt;February&lt;/b&gt;&lt;br /&gt;Better than January, rising quite nicely',
-                    '&lt;b&gt;March&lt;/b&gt;&lt;br /&gt;March was quite a spike',
-                    '&lt;b&gt;April&lt;/b&gt;&lt;br /&gt;Rising very impressively',
-                    '&lt;b&gt;May&lt;/b&gt;&lt;br /&gt;Dropping after the last two month spike',
-                    '&lt;b&gt;June&lt;/b&gt;&lt;br /&gt;Still dropping',
-                    '&lt;b&gt;July&lt;/b&gt;&lt;br /&gt;The fall is beginning to subside, but still dropping',
-                    '&lt;b&gt;August&lt;/b&gt;&lt;br /&gt;A good rise after the fall',
-                    '&lt;b&gt;September&lt;/b&gt;&lt;br /&gt;A very good peak',
-                    '&lt;b&gt;October&lt;/b&gt;&lt;br /&gt;The peak is now subsiding',
-                    '&lt;b&gt;November&lt;/b&gt;&lt;br /&gt;Still subsiding',
-                    '&lt;b&gt;December&lt;/b&gt;&lt;br /&gt;Rising again after the last fall',
-                    
-                    
-                    '&lt;b&gt;January&lt;/b&gt;&lt;br /&gt;Started off the year quite averagely as with Robert',
-                    '&lt;b&gt;February&lt;/b&gt;&lt;br /&gt;Rising as with Robert',
-                    '&lt;b&gt;March&lt;/b&gt;&lt;br /&gt;Not as good as Robert, but OK',
-                    '&lt;b&gt;April&lt;/b&gt;&lt;br /&gt;Dropping after the peak',
-                    '&lt;b&gt;May&lt;/b&gt;&lt;br /&gt;The low point as with last year',
-                    '&lt;b&gt;June&lt;/b&gt;&lt;br /&gt;Rising higher than Robert',
-                    '&lt;b&gt;July&lt;/b&gt;&lt;br /&gt;Consistent with last month',
-                    '&lt;b&gt;August&lt;/b&gt;&lt;br /&gt;A nice high point',
-                    '&lt;b&gt;September&lt;/b&gt;&lt;br /&gt;A low point',
-                    '&lt;b&gt;October&lt;/b&gt;&lt;br /&gt;A nice rise',
-                    '&lt;b&gt;November&lt;/b&gt;&lt;br /&gt;Falling for fall...',
-                    '&lt;b&gt;December&lt;/b&gt;&lt;br /&gt;Rising again for Christmas'
-                ]
-            })
-            .trace2();
-        }
+        myLine.set({
+            tooltips: [
+                '<b>January</b><br />Started off the year quite averagely',
+                '<b>February</b><br />Better than January, rising quite nicely',
+                '<b>March</b><br />March was quite a spike',
+                '<b>April</b><br />Rising very impressively',
+                '<b>May</b><br />Dropping after the last two month spike',
+                '<b>June</b><br />Still dropping',
+                '<b>July</b><br />The fall is beginning to subside, but still dropping',
+                '<b>August</b><br />A good rise after the fall',
+                '<b>September</b><br />A very good peak',
+                '<b>October</b><br />The peak is now subsiding',
+                '<b>November</b><br />Still subsiding',
+                '<b>December</b><br />Rising again after the last fall',
+                
+                
+                '<b>January</b><br />Started off the year quite averagely as with Robert',
+                '<b>February</b><br />Rising as with Robert',
+                '<b>March</b><br />Not as good as Robert, but OK',
+                '<b>April</b><br />Dropping after the peak',
+                '<b>May</b><br />The low point as with last year',
+                '<b>June</b><br />Rising higher than Robert',
+                '<b>July</b><br />Consistent with last month',
+                '<b>August</b><br />A nice high point',
+                '<b>September</b><br />A low point',
+                '<b>October</b><br />A nice rise',
+                '<b>November</b><br />Falling for fall...',
+                '<b>December</b><br />Rising again for Christmas'
+            ]
+        })
+        .trace2();
     };
 &lt;/script&gt;
 </pre>

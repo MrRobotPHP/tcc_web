@@ -24,7 +24,7 @@
         The interactive key has been re-implemented as of June 2013 and added to more chart types.
     </p>
 
-    <canvas id="cvs" width="400" height="550">[No canvas support]</canvas>
+    <canvas id="cvs" width="450" height="550">[No canvas support]</canvas>
     <script>
         window.onload = function ()
         {
@@ -34,7 +34,8 @@
                 options: {
                     key: ['Phone call','Interview','Selection','2nd Interview','Offer'],
                     keyInteractive: true,
-                    keyPositionX: 265,
+                    keyPositionY: 80,
+                    keyPositionX: 320,
                     gutterRight: 125
                 }
             }).draw();

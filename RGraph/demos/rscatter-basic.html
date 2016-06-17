@@ -27,12 +27,15 @@
             var data = [];
 
             for (var i=0; i<360; i+=2) {
-                data.push([i * 2, i, 'red']);
+                data.push([String(i * 2), String(i), 'red']);
             }
 
-            var rscatter = new RGraph.Rscatter({
+            new RGraph.Rscatter({
                 id: 'cvs',
-                data: [data]
+                data: [data],
+                options: {
+                    textAccessible: true
+                }
             }).draw();
         };
     </script>
@@ -72,7 +75,10 @@
 
         var rscatter = new RGraph.Rscatter({
             id: 'cvs',
-            data: [data]
+            data: [data],
+            options: {
+                textAccessible: true
+            }
         }).draw();
     };
 &lt;/script&gt;

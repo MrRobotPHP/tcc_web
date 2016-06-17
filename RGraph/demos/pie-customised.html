@@ -18,7 +18,9 @@
 
     <h1>A customised Pie chart</h1>
 
-    <canvas id="cvs" width="550" height="250">[No canvas support]</canvas>
+    <div style="margin-left: 50px">
+        <canvas id="cvs" width="550" height="250">[No canvas support]</canvas>
+    </div>
     
     <script>
         window.onload = function ()
@@ -35,6 +37,7 @@
                 data: data,
                 options: {
                     labels: labels,
+                    labelsSticksList: true,
                     tooltips: labels,
                     colors: ['#EC0033','#A0D300','#FFCD00','#00B869','#999999','#FF7300','#004CB0'],
                     strokestyle: 'white',
@@ -42,7 +45,8 @@
                     shadowOffsetx: 2,
                     shadowOffsety: 2,
                     shadowBlur: 3,
-                    exploded: 7
+                    exploded: 7,
+                    textAccessible: true
                 }
             }).draw();
         };
@@ -64,9 +68,9 @@
     
     Put this where you want the chart to show up:
     <pre class="code">
-&lt;canvas id="cvs" width="550" height="250"&gt;
-    [No canvas support]
-&lt;/canvas&gt;
+&lt;div style="margin-left: 50px"&gt;
+    &lt;canvas id="cvs" width="550" height="250"&gt;[No canvas support]&lt;/canvas&gt;
+&lt;div&gt;
 </pre>
 
     This is the code that generates the chart:
@@ -86,6 +90,7 @@
             data: data,
             options: {
                 labels: labels,
+                labelsSticksList: true,
                 tooltips: labels,
                 colors: ['#EC0033','#A0D300','#FFCD00','#00B869','#999999','#FF7300','#004CB0'],
                 strokestyle: 'white',
@@ -93,7 +98,8 @@
                 shadowOffsetx: 2,
                 shadowOffsety: 2,
                 shadowBlur: 3,
-                exploded: 7
+                exploded: 7,
+                textAccessible: true
             }
         }).draw();
     };

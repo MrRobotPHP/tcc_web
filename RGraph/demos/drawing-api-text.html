@@ -23,28 +23,36 @@
     <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
 
     <script>
-        var line = new RGraph.Line({
+        new RGraph.Line({
             id: 'cvs',
             data: [4,8,6,3,5,2,6],
             options: {
                 labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                tooltips: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
                 gutterLeft: 35,
-                gutterRight: 35
+                gutterRight: 35,
+                textAccessible: true,
+                textSize: 14,
+                textFont: 'Segoe UI',
+                textAccessible:true
             }
         }).draw()
         
-        var text = new RGraph.Drawing.Text({
+        new RGraph.Drawing.Text({
             id: 'cvs',
             x: 300,
             y: 22,
             text: 'A custom title using the drawing API text object',
             options: {
-                font: 'Arial',
+                tooltips: ['A custom title using the drawing API text object'],
+                tooltipsEvent: 'mousemove',
+                font: 'Segoe UI',
                 bold: true,
                 halign: 'center',
                 valign: 'bottom',
                 colors: ['gray'],
-                size: 16
+                size: 16,
+                textAccessible: true
             }
         }).draw();
     </script>
@@ -77,17 +85,18 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    var line = new RGraph.Line({
+    new RGraph.Line({
         id: 'cvs',
         data: [4,8,6,3,5,2,6],
         options: {
             labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
             gutterLeft: 35,
-            gutterRight: 35
+            gutterRight: 35,
+            textAccessible:true
         }
     }).draw()
     
-    var text = new RGraph.Drawing.Text({
+    new RGraph.Drawing.Text({
         id: 'cvs',
         x: 300,
         y: 22,
@@ -98,7 +107,8 @@
             halign: 'center',
             valign: 'bottom',
             colors: ['gray'],
-            size: 16
+            size: 16,
+            textAccessible:true
         }
     }).draw();
 &lt;/script&gt;

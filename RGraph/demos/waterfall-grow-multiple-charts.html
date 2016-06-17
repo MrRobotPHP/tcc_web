@@ -5,7 +5,6 @@
     
     <script src="../libraries/RGraph.common.core.js" ></script>
     <script src="../libraries/RGraph.common.dynamic.js" ></script>
-    <script src="../libraries/RGraph.common.tooltips.js" ></script>
     <script src="../libraries/RGraph.common.effects.js" ></script>
     <script src="../libraries/RGraph.bar.js" ></script>
     <script src="../libraries/RGraph.line.js" ></script>
@@ -24,43 +23,48 @@
 
     <canvas id="cvs1" width="600" height="250">[No canvas support]</canvas>
     <canvas id="cvs2" width="600" height="250">[No canvas support]</canvas>
-     <script>
-         window.onload = function ()
-         {
-             var waterfall = new RGraph.Waterfall({
-                id: 'cvs1',
-                data: [4,5,-8,-6,-5,2,3,1,-5.03],
-                options: {
-                    labels: ['sample', 'sample', 'sample'],
-                    tooltips: ['sample', 'sample', 'sample'],
-                    xaxispos: 'center'
-                }
-            }).grow();
+    
+    <script>
+        new RGraph.Waterfall({
+            id: 'cvs1',
+            data: [4,5,-8,-6,-5,2,3,1,-5.03],
+            options: {
+                labels: [
+                    '','Monday', '',
+                    '','Tuesday', '',
+                    '','Wednesday','',
+                    'Total'
+                ],
+                xaxispos: 'center',
+                textAccessible: true
+            }
+        }).grow();
              
-             // Combo - ensure the Bar chart is created first
-             var bar = new RGraph.Bar({
-                id: 'cvs2',
-                data: [14,3,5,2,2],
-                options: {
-                    tooltips: ['A','B','C','D','E'],
-                    shadowOffsetx: 3,
-                    shadowOffsety: 3,
-                    shadowBlur: 10
-                }
-            })
+         // Combo - ensure the Bar chart is created first
+         var bar = new RGraph.Bar({
+            id: 'cvs2',
+            data: [14,3,5,2,2],
+            options: {
+                tooltips: ['A','B','C','D','E'],
+                shadowOffsetx: 3,
+                shadowOffsety: 3,
+                shadowBlur: 10,
+                textAccessible: true
+            }
+        });
              
-             var line = new RGraph.Line({
-                id: 'cvs2',
-                data: [4,8,6,3,5],
-                options: {
-                    tickmarks: 'endcircle',
-                    linewidth: 3
-                }
-            })
+         var line = new RGraph.Line({
+            id: 'cvs2',
+            data: [4,8,6,3,5],
+            options: {
+                tickmarks: 'endcircle',
+                linewidth: 3,
+                textAccessible: true
+            }
+        });
              
-             var combo = new RGraph.CombinedChart(bar, line);
-             combo.draw();
-    	 };
+         var combo = new RGraph.CombinedChart(bar, line);
+         combo.draw();
      </script>
 
 
@@ -89,42 +93,46 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-     window.onload = function ()
-     {
-         var waterfall = new RGraph.Waterfall({
-            id: 'cvs1',
-            data: [4,5,-8,-6,-5,2,3,1,-5.03],
-            options: {
-                labels: ['sample', 'sample', 'sample'],
-                tooltips: ['sample', 'sample', 'sample'],
-                xaxispos: 'center'
-            }
-        }).grow();
+    new RGraph.Waterfall({
+        id: 'cvs1',
+        data: [4,5,-8,-6,-5,2,3,1,-5.03],
+        options: {
+            labels: [
+                '','Monday', '',
+                '','Tuesday', '',
+                '','Wednesday','',
+                'Total'
+            ],
+            xaxispos: 'center',
+            textAccessible: true
+        }
+    }).grow();
          
-         <span>// Combo - ensure the Bar chart is created first</span>
-         var bar = new RGraph.Bar({
-            id: 'cvs2',
-            data: [14,3,5,2,2],
-            options: {
-                tooltips: ['A','B','C','D','E'],
-                shadowOffsetx: 3,
-                shadowOffsety: 3,
-                shadowBlur: 10
-            }
-        })
+     // Combo - ensure the Bar chart is created first
+     var bar = new RGraph.Bar({
+        id: 'cvs2',
+        data: [14,3,5,2,2],
+        options: {
+            tooltips: ['A','B','C','D','E'],
+            shadowOffsetx: 3,
+            shadowOffsety: 3,
+            shadowBlur: 10,
+            textAccessible: true
+        }
+    });
          
-         var line = new RGraph.Line({
-            id: 'cvs2',
-            data: [4,8,6,3,5],
-            options: {
-                tickmarks: 'endcircle',
-                linewidth: 3
-            }
-        })
+     var line = new RGraph.Line({
+        id: 'cvs2',
+        data: [4,8,6,3,5],
+        options: {
+            tickmarks: 'endcircle',
+            linewidth: 3,
+            textAccessible: true
+        }
+    });
          
-         var combo = new RGraph.CombinedChart(bar, line);
-         combo.draw();
-     };
+     var combo = new RGraph.CombinedChart(bar, line);
+     combo.draw();
 &lt;/script&gt;
 </pre>
 

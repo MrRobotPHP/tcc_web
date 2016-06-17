@@ -1,4 +1,4 @@
-<!DOCTYPE html >
+    <!DOCTYPE html >
 <html>
 <head>
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
@@ -29,13 +29,17 @@
                 id: 'cvs',
                 min: 0,
                 max: 100,
-                value: 89
+                value: 89,
+                options: {
+                    textAccessible: true
+                }
             }).on('draw', function (obj)
             {
                 obj.context.fillStyle = 'black';
                 
                 RGraph.Text2(obj, {
-                    font: 'Arial italic',
+                    font: 'Arial',
+                    italic: true,
                     size: 16,
                     x: obj.canvas.width / 2,
                     y: obj.Get('gutter.top') - 5,
@@ -75,13 +79,17 @@
             id: 'cvs',
             min: 0,
             max: 100,
-            value: 89
+            value: 89,
+            options: {
+                textAccessible: true
+            }
         }).on('draw', function (obj)
         {
             obj.context.fillStyle = 'black';
             
             RGraph.Text2(obj, {
-                font: 'Arial italic',
+                font: 'Arial',
+                italic: true,
                 size: 16,
                 x: obj.canvas.width / 2,
                 y: obj.Get('gutter.top') - 5,

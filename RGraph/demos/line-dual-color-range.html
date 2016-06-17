@@ -2,6 +2,7 @@
 <html>
 <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../libraries/RGraph.common.effects.js" ></script>
     <script src="../libraries/RGraph.common.core.js" ></script>
     <script src="../libraries/RGraph.line.js" ></script>
     
@@ -83,14 +84,15 @@
                     numxticks: numvlines,
                     linewidth: 0.0001,
                     tickmarks: null,
-                    labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun','Spare']
+                    labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun','Spare'],
+                    textAccessible: true
                 }
-            }).trace({frames: 30});
+            }).fadeIn({frames: 30})
             
             //
             // Set the value of the input
             //
-            document.getElementById('val').value = line.get('filledRangeThreshold');
+            document.getElementById('val').value = 40;
         };
     </script>
 
@@ -106,6 +108,7 @@
 
     This goes in the documents header:
     <pre class="code">
+&lt;script src="RGraph.common.effects.js"&gt;&lt;/script&gt;
 &lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
 &lt;script src="RGraph.line.js"&gt;&lt;/script&gt;
 </pre>
@@ -165,9 +168,15 @@ Threshold: &lt;input type="text" onkeyup="update(event)" value="40" id="val" /&g
                 numxticks: numvlines,
                 linewidth: 0.0001,
                 tickmarks: null,
-                labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun','Spare']
+                labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun','Spare'],
+                textAccessible: true
             }
-        }).trace({frames: 30});
+        }).fadeIn({frames: 30})
+        
+        //
+        // Set the value of the input
+        //
+        document.getElementById('val').value = 40;
     };
 &lt;/script&gt;
 </pre>

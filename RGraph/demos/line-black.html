@@ -35,14 +35,25 @@
                     colors: ['#0f0','#76D0FF'],
                     tickmarks: function (obj, data, value, index, x, y, color, prevX, prevY)
                     {
-                        RGraph.path(obj.context, ['b','lw', 2,'a',x, y, 4, 0, RGraph.TWOPI, false, 'f', null, , 's', 'black']);
+                        RGraph.path2(
+                            obj.context, [
+                                'b',
+                                'lw', 2,
+                                'a',x, y, 4, 0, RGraph.TWOPI, false,
+                                'f', null,
+                                's', 'black'
+                            ]
+                        );
                     },
                     linewidth: 3,
-                    textColor: '#eee'
+                    textColor: '#eee',
+                    clearto: 'black',
+                    textAccessible: true
                 }
             }).on('beforedraw', function (obj)
             {
                 RGraph.clear(obj.canvas, 'black');
+
             }).trace2({frames: 15})
         };
     </script>
@@ -88,10 +99,11 @@
                 colors: ['#0f0','#76D0FF'],
                 tickmarks: function (obj, data, value, index, x, y, color, prevX, prevY)
                 {
-                    RGraph.path(obj.context, ['b','lw', 2,'a',x, y, 4, 0, RGraph.TWOPI, false, 'f', null, , 's', 'black']);
+                    RGraph.path2(obj.context, ['b','lw', 2,'a',x, y, 4, 0, RGraph.TWOPI, false, 'f', null, , 's', 'black']);
                 },
                 linewidth: 3,
-                textColor: '#eee'
+                textColor: '#eee',
+                textAccessible: true
             }
         }).on('beforedraw', function (obj)
         {

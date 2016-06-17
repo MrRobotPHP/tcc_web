@@ -22,7 +22,7 @@
 
     <canvas id="cvs" width="1000" height="250">[No canvas support]</canvas>
     
-    <script>
+    <script>textAccessible: true
         window.onload = function ()
         {
             var obj       = null;
@@ -48,27 +48,25 @@
                         data: [data1, data2],
                         options: {
                             xticks: 100,
-                            backgroundGrid: false,
-                            backgroundColor: '#eee',
+                            backgroundGridAutofitNumvlines: 15,
                             title: 'Bandwidth used (Mb/s)',
-                            titleXaxis: 'Last 100(ish) seconds',
+                            titleXaxis: 'Bandwidth used',
                             titleXaxisPos: 0.5,
-                            titleYaxis: 'Bandwidth (MB/s)',
-                            titleYaxisPos: 0.5,
-                            titleVpos: 0.5,
                             colors: ['black'],
                             linewidth: 0.5,
                             yaxispos: 'right',
                             ymax: 50,
-                            numxticks: 0,
+                            noxaxis: true,
                             numyticks: 0,
                             filled: true,
                             filledRange: true,
                             filledRangeThreshold: 25,
                             filledRangeThresholdColors: ['red','#0c0'],
                             fillstyle: 'red',
-                            colors: ['black'],
-                            tickmarks: null
+                            colors: ['rgba(0,0,0,0)'],
+                            tickmarks: null,
+                            textAccessible: true,
+                            scaleZerostart: true
                         }
                     }).draw();
                 }
@@ -127,13 +125,13 @@
         var numvalues = 600;
         var value     = 25;
 
-        <span>// RGraph.arrayPad(array, length[, value])</span>
+        // RGraph.array_pad(array, length[, value])
         var data1 = RGraph.arrayPad([], numvalues, null);
         var data2 = RGraph.arrayPad([], numvalues, null);
     
         function drawGraph ()
         {
-            <span>// "cache" this in a local variable</span>
+            // "cache" this in a local variable
             var RG = RGraph;
             var ma = Math;
             var canvas = document.getElementById("cvs");
@@ -145,28 +143,26 @@
                     id: 'cvs',
                     data: [data1, data2],
                     options: {
-                        backgroundGrid: false,
-                        backgroundColor: '#eee',
                         xticks: 100,
+                        backgroundGridAutofitNumvlines: 15,
                         title: 'Bandwidth used (Mb/s)',
-                        titleXaxis: 'Last 30(ish) seconds',
+                        titleXaxis: 'Bandwidth used',
                         titleXaxisPos: 0.5,
-                        titleYaxis: 'Bandwidth (MB/s)',
-                        titleYaxisPos: 0.5,
-                        titleVpos: 0.5,
                         colors: ['black'],
                         linewidth: 0.5,
                         yaxispos: 'right',
                         ymax: 50,
-                        numxticks: 0,
+                        noxaxis: true,
                         numyticks: 0,
                         filled: true,
                         filledRange: true,
                         filledRangeThreshold: 25,
                         filledRangeThresholdColors: ['red','#0c0'],
                         fillstyle: 'red',
-                        colors: ['black'],
-                        tickmarks: null
+                        colors: ['rgba(0,0,0,0)'],
+                        tickmarks: null,
+                        textAccessible: true,
+                        scaleZerostart: true
                     }
                 }).draw();
             }
@@ -186,7 +182,7 @@
 
             
 
-            setTimeout(drawGraph, 16.666);
+            RGraph.Effects.updateCanvas(drawGraph);
         }
 
 

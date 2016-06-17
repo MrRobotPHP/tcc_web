@@ -22,10 +22,11 @@
     <canvas id="cvs" width="600" height="550">[No canvas support]</canvas>
     
     <script>
-        var hbar = new RGraph.HBar({
+        new RGraph.HBar({
             id: 'cvs',
             data: [[1,null],[1,2],[5,4],[7,null],[-4,-3],[-8,-8],[4,6]],
             options: {
+                textAccessible: true,
                 colors: [
                     'Gradient(#fcc:red:red)',
                     'Gradient(#cfc:#0f0:#0f0)'
@@ -51,7 +52,8 @@
                     'Friday','Friday',
                     'Saturday','Saturday',
                     'Sunday','Sunday'
-                ]
+                ],
+                tooltipsCoordsPage: true
             }
         }).grow();
     </script>
@@ -80,10 +82,11 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    var hbar = new RGraph.HBar({
+    new RGraph.HBar({
         id: 'cvs',
         data: [[1,null],[1,2],[5,4],[7,8],[4,3],[8,8],[4,6]],
         options: {
+            textAccessible: true,
             colors: [
                 'Gradient(#fcc:red:red)',
                 'Gradient(#cfc:#0f0:#0f0)'
@@ -109,7 +112,8 @@
                 'Friday','Friday',
                 'Saturday','Saturday',
                 'Sunday','Sunday'
-            ]
+            ],
+            tooltipsCoordsPage: true
         }
     }).draw();
 &lt;/script&gt;

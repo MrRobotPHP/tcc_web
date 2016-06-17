@@ -25,7 +25,7 @@
     <script>
         window.onload = function ()
         {
-            var bar = new RGraph.Bar({
+            new RGraph.Bar({
                 id: 'cvs',
                 data: [4,6,8,4,5,3,7,5,4,9],
                 options: {
@@ -33,16 +33,20 @@
                     ylabels: false,
                     colors: ['blue','blue','blue','blue','blue','red','red','red','red','red'],
                     colorsSequential: true,
-                    gutterLeft: 50
+                    gutterLeft: 50,
+                    title: 'A custom Y axis',
+                    textAccessible: true
                 }
             }).draw();
             
-            var yaxes = new RGraph.Drawing.YAxis({
+            new RGraph.Drawing.YAxis({
                 id: 'cvs',
                 x: 50,
                 options: {
                     max: 100,
-                    title: 'A custom Y axis'
+                    
+                    textAccessible: true,
+                    textAccessiblePointerevents: false
                 }
             }).on('click', function (e, obj)
             {
@@ -83,7 +87,7 @@
 &lt;script&gt;
     window.onload = function ()
     {
-        var bar = new RGraph.Bar({
+        new RGraph.Bar({
             id: 'cvs',
             data: [4,6,8,4,5,3,7,5,4,9],
             options: {
@@ -91,16 +95,19 @@
                 ylabels: false,
                 colors: ['blue','blue','blue','blue','blue','red','red','red','red','red'],
                 colorsSequential: true,
-                gutterLeft: 50
+                gutterLeft: 50,
+                title: 'A custom Y axis',
+                textAccessible: true
             }
         }).draw();
         
-        var yaxes = new RGraph.Drawing.YAxis({
+        new RGraph.Drawing.YAxis({
             id: 'cvs',
             x: 50,
             options: {
                 max: 100,
-                title: 'A custom Y axis'
+                textAccessible: true,
+                textAccessiblePointerevents: false
             }
         }).on('click', function (e, obj)
         {

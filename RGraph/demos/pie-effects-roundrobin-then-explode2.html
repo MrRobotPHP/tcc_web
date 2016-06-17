@@ -18,8 +18,11 @@
 <body>
 
     <h1>Pie chart effect then explode</h1>
-
-    <canvas id="cvs" width="450" height="300">[No canvas support]</canvas>
+    
+    <div style="margin-left: 50px">
+        <canvas id="cvs" width="450" height="300">[No canvas support]</canvas>
+    </div>
+    
     
     <script>
         window.onload = function ()
@@ -31,13 +34,12 @@
                     radius: 100,
                     tooltips: ['John (2%)', 'Richard (29%)', 'Fred (45%)', 'Brian (17%)', 'Peter (7%)'],
                     labels: ['John (2%)', 'Richard (29%)', 'Fred (45%)', 'Brian (17%)', 'Peter (7%)'],
+                    labelsSticksList: true,
                     strokestyle: 'white',
                     linewidth: 2,
-                    shadowBlur: 10,
-                    shadowOffsetx: 0,
-                    shadowOffsety: 0,
-                    shadowColor: '#666',
-                    textColor: '#999'
+                    shadow: false,
+                    textColor: '#333',
+                    textAccessible: true
                 }
             })
             
@@ -84,9 +86,9 @@
     
     Put this where you want the chart to show up:
     <pre class="code">
-&lt;canvas id="cvs" width="450" height="300"&gt;
-    [No canvas support]
-&lt;/canvas&gt;
+&lt;div style="margin-left: 50px"&gt;
+    &lt;canvas id="cvs" width="450" height="300"&gt;[No canvas support]&lt;/canvas&gt;
+&lt;div&gt;
 </pre>
 
     This is the code that generates the chart:
@@ -101,13 +103,15 @@
                 radius: 100,
                 tooltips: ['John (2%)', 'Richard (29%)', 'Fred (45%)', 'Brian (17%)', 'Peter (7%)'],
                 labels: ['John (2%)', 'Richard (29%)', 'Fred (45%)', 'Brian (17%)', 'Peter (7%)'],
+                labelsSticksList: true,
                 strokestyle: 'white',
                 linewidth: 2,
                 shadowBlur: 10,
                 shadowOffsetx: 0,
                 shadowOffsety: 0,
                 shadowColor: '#666',
-                textColor: '#999'
+                textColor: '#999',
+                textAccessible: true
             }
         })
         

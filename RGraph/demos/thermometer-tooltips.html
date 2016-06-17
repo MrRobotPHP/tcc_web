@@ -22,19 +22,17 @@
     <canvas id="cvs" width="100" height="400">[No canvas support]</canvas>
 
     <script>
-        window.onload = function ()
-        {
-            var thermometer = new RGraph.Thermometer({
-                id: 'cvs',
-                min: 0,
-                max: 100,
-                value: 68,
-                options: {
-                    tooltips: ["It's getting <b style='color: red'>hot</b> in here!"],
-                    tooltipsEvent: 'mousemove'
-                }
-            }).draw();
-        };
+        new RGraph.Thermometer({
+            id: 'cvs',
+            min: 0,
+            max: 100,
+            value: 68,
+            options: {
+                tooltips: ["It's getting <b style='color: red'>hot</b> in here!"],
+                tooltipsEvent: 'mousemove',
+                textAccessible: true
+            }
+        }).draw();
     </script>
 
 
@@ -62,19 +60,17 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var thermometer = new RGraph.Thermometer({
-            id: 'cvs',
-            min: 0,
-            max: 100,
-            value: 68,
-            options: {
-                tooltips: ["It's getting &lt;b style='color: red'&gt;hot&lt;/b&gt; in here!"],
-                tooltipsEvent: 'mousemove'
-            }
-        }).draw();
-    };
+    new RGraph.Thermometer({
+        id: 'cvs',
+        min: 0,
+        max: 100,
+        value: 68,
+        options: {
+            tooltips: ["It's getting <b style='color: red'>hot</b> in here!"],
+            tooltipsEvent: 'mousemove',
+            textAccessible: true
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

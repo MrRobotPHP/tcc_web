@@ -39,7 +39,8 @@
                     {
                         var label = bar.Get('labels')[index];
                         return '<div style="text-align: center; font-weight: bold; font-size: 16pt">' + label + '</div><br  /><canvas id="tooltip_canvas" width="250" height="110"></canvas>';
-                    }
+                    },
+                    textAccessible: true
                 }
             }).grow();
 
@@ -61,6 +62,8 @@
                 ]
                 var tooltip = RGraph.Registry.Get('chart.tooltip');
                 var index   = tooltip.__index__;
+                
+                RGraph.reset(document.getElementById("tooltip_canvas"));
 
                 var pie = new RGraph.Pie({
                     id: 'tooltip_canvas',
@@ -120,7 +123,8 @@
                 {
                     var label = bar8.Get('labels')[index];
                     return '&lt;div style="text-align: center; font-weight: bold; font-size: 16pt"&gt;' + label + '&lt;/div&gt;&lt;br  /&gt;&lt;canvas id="tooltip_canvas" width="250" height="110"&gt;&lt;/canvas&gt;';
-                }
+                },
+                textAccessible: true
             }
         }).grow();
 

@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -88,8 +88,11 @@
             'chart.gutter.bottom':          15,
             'chart.ticksize':               3,
             'chart.text.color':             'black',
-            'chart.text.font':              'Arial',
+            'chart.text.font':              'Segoe UI, Arial, Verdana, sans-serif',
             'chart.text.size':              12,
+            'chart.text.accessible':               true,
+            'chart.text.accessible.overflow':      'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.units.pre':              '',
             'chart.units.post':             '',
             'chart.zoom.factor':            1.5,
@@ -130,7 +133,8 @@
             'chart.tooltips.effect':        'fade',
             'chart.tooltips.event':         'onclick',
             'chart.highlight.stroke':       'rgba(0,0,0,0)',
-            'chart.highlight.fill':         'rgba(255,255,255,0.7)'
+            'chart.highlight.fill':         'rgba(255,255,255,0.7)',
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
 
@@ -167,7 +171,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -219,10 +222,9 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
 
 
 
@@ -776,17 +778,25 @@
         this.Highlight = function (shape)
         {
             if (prop['chart.tooltips.highlight']) {
-    
-                // Add the new highlight
-                //RGraph.Highlight.Rect(this, shape);
-    
-                co.beginPath();
-                    co.strokeStyle = prop['chart.highlight.stroke'];
-                    co.fillStyle   = prop['chart.highlight.fill'];
-                    co.rect(shape['x'],shape['y'],shape['width'],shape['height'] + this.bulbBottomRadius);
-                    co.arc(this.bulbBottomCenterX, this.bulbBottomCenterY, this.bulbBottomRadius - 1, 0, RG.TWOPI, false);
-                co.stroke;
-                co.fill();
+            
+                if (typeof prop['chart.highlight.style'] === 'function') {
+                    (prop['chart.highlight.style'])(shape);
+                    return;
+                }
+            
+                pa2(co, 'b r % % % % a % % % % % false s % f %',
+                    shape['x'],
+                    shape['y'],
+                    shape['width'],
+                    shape['height'] + this.bulbBottomRadius,
+                    this.bulbBottomCenterX,
+                    this.bulbBottomCenterY,
+                    this.bulbBottomRadius - 1,
+                    0,
+                    RG.TWOPI,
+                    prop['chart.highlight.stroke'],
+                    prop['chart.highlight.fill']
+                );
             }
         };
 
@@ -864,6 +874,7 @@
             var coordW     = obj.coords[tooltip.__index__][2];
             var coordH     = obj.coords[tooltip.__index__][3];
             var canvasXY   = RGraph.getCanvasXY(ca);
+            var mouseXY    = RG.getMouseXY(window.event);
             var gutterLeft = obj.gutterLeft;
             var gutterTop  = obj.gutterTop;
             var width      = tooltip.offsetWidth;
@@ -871,35 +882,24 @@
     
             // Set the top position
             tooltip.style.left = 0;
-            tooltip.style.top  = canvasXY[1] + coordY - height - 7 + 'px';
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
             
             // By default any overflow is hidden
             tooltip.style.overflow = '';
-
-            // The arrow
-            var img = new Image();
-                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                img.style.position = 'absolute';
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.top = (tooltip.offsetHeight - 2) + 'px';
-            tooltip.appendChild(img);
             
             // Reposition the tooltip if at the edges:
     
             // LEFT edge
-            if ((canvasXY[0] + coordX - (width / 2)) < 10) {
-                tooltip.style.left = (canvasXY[0] + coordX - (width * 0.1)) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.1) - 8.5) + 'px';
+            if (canvasXY[0] + mouseXY[0] - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + (width / 2)) > doc.body.offsetWidth) {
-                tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-                tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 

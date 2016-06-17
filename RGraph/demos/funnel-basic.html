@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
     
     <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.tooltips.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
     <script src="../libraries/RGraph.funnel.js" ></script>
     
     <title>A basic Funnel chart</title>
@@ -17,29 +19,29 @@
 
     <h1>A basic Funnel chart</h1>
 
-    <canvas id="cvs" width="450" height="500">[No canvas support]</canvas>
+    <canvas id="cvs" width="500" height="500">[No canvas support]</canvas>
+
     
     <script>
-        window.onload = function ()
-        {
-            var funnel = new RGraph.Funnel({
-                id: 'cvs',
-                data: [100,42,34,23],
-                options: {
-                    labels: ['All potential Customers','Pre-sale enquiry','Sale finalised','Follow up telephone call'],
-                    labelsSticks: true,
-                    labelsX: 10,
-                    gutterLeft: 180,
-                    strokestyle: 'rgba(0,0,0,0)',
-                    textBoxed: false,
-                    shadow: true,
-                    shadowOffsetx: 0,
-                    shadowOffsety: 0,
-                    shadowBlur: 15,
-                    shadowColor: 'gray'
-                }
-            }).draw();
-        };
+        new RGraph.Funnel({
+            id: 'cvs',
+            data: [100,42,34,23],
+            options: {
+                labels: ['All potential Customers','Pre-sale enquiry','Sale finalised','Follow up telephone call'],
+                tooltips: ['All potential Customers','Pre-sale enquiry','Sale finalised','Follow up telephone call'],
+                labelsSticks: true,
+                labelsX: 10,
+                gutterLeft: 230,
+                strokestyle: 'rgba(0,0,0,0)',
+                textBoxed: false,
+                shadow: true,
+                shadowOffsetx: 0,
+                shadowOffsety: 0,
+                shadowBlur: 15,
+                shadowColor: 'gray',
+                textAccessible: true
+            }
+        }).draw();
     </script>
 
 
@@ -56,7 +58,7 @@
     
     Put this where you want the chart to show up:
     <pre class="code">
-&lt;canvas id="cvs" width="450" height="500"&gt;
+&lt;canvas id="cvs" width="500" height="500"&gt;
     [No canvas support]
 &lt;/canvas&gt;
 </pre>
@@ -64,26 +66,24 @@
     This is the code that generates the chart:
     <pre class="code">
 &lt;script&gt;
-    window.onload = function ()
-    {
-        var funnel = new RGraph.Funnel({
-            id: 'cvs',
-            data: [100,42,34,23],
-            options: {
-                labels: ['All potential Customers','Pre-sale enquiry','Sale finalised','Follow up telephone call'],
-                labelsSticks: true,
-                labelsX: 10,
-                gutterLeft: 180,
-                strokestyle: 'rgba(0,0,0,0)',
-                textBoxed: false,
-                shadow: true,
-                shadowOffsetx: 0,
-                shadowOffsety: 0,
-                shadowBlur: 15,
-                shadowColor: 'gray'
-            }
-        }).draw();
-    };
+    new RGraph.Funnel({
+        id: 'cvs',
+        data: [100,42,34,23],
+        options: {
+            labels: ['All potential Customers','Pre-sale enquiry','Sale finalised','Follow up telephone call'],
+            labelsSticks: true,
+            labelsX: 10,
+            gutterLeft: 230,
+            strokestyle: 'rgba(0,0,0,0)',
+            textBoxed: false,
+            shadow: true,
+            shadowOffsetx: 0,
+            shadowOffsety: 0,
+            shadowBlur: 15,
+            shadowColor: 'gray',
+            textAccessible: true
+        }
+    }).draw();
 &lt;/script&gt;
 </pre>
 

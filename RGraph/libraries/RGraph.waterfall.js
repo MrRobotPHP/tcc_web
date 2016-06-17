@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -38,9 +38,9 @@
         } else {
         
             var conf = {
-                        id: conf,
-                        data: arguments[1]
-                       };
+                id: conf,
+                data: arguments[1]
+            };
         }
 
 
@@ -96,11 +96,18 @@
             'chart.gutter.bottom':          25,
             'chart.labels':                 [],
             'chart.labels.bold':            false,
+            'chart.labels.offsetx':         0,
+            'chart.labels.offsety':         0,
+            'chart.ylabels.offsetx':        0,
+            'chart.ylabels.offsety':        0,
             'chart.ylabels':                true,
             'chart.text.color':             'black',
             'chart.text.size':              12,
             'chart.text.angle':             0,
-            'chart.text.font':              'Arial',
+            'chart.text.font':              'Segoe UI, Arial, Verdana, sans-serif',
+            'chart.text.accessible':               true,
+            'chart.text.accessible.overflow':      'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.ymax':                   null,
             'chart.title':                  '',
             'chart.title.color':            'black',
@@ -176,7 +183,8 @@
             'chart.multiplier.w':           1,
             'chart.events.click':           null,
             'chart.events.mousemove':       null,
-            'chart.ylabels.count':          5
+            'chart.ylabels.count':          5,
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
         // Check for support
@@ -187,9 +195,19 @@
         
         /**
         * Create the $ objects
+        * 
+        * 2/5/016: Now also use this loop to go through the dat conerting
+        * strings to floats
         */
-        for (var i=0; i<=this.data.length; ++i) {
+        for (var i=0,len=this.data.length; i<=len; ++i) {
+            
+            // Create the object for adding event listeners
             this['$' + i] = {}
+            
+            // Ensure that the data point is numeric
+            if (typeof this.data[i] === 'string') {
+                this.data[i] = parseFloat(this.data[i]);
+            }
         }
 
 
@@ -211,7 +229,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -262,11 +279,9 @@
             
             
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase()
-            });
-
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
 
 
 
@@ -566,14 +581,16 @@
         this.drawLabels =
         this.DrawLabels = function ()
         {
-            var context    = co;
-            var numYLabels = 5; // Make this configurable
-            var interval   = this.grapharea / numYLabels;
-            var font       = prop['chart.text.font'];
-            var size       = prop['chart.text.size'];
-            var color      = prop['chart.text.color'];
-            var units_pre  = prop['chart.units.pre'];
-            var units_post = prop['chart.units.post'];
+            var context    = co,
+                numYLabels = 5, // TODO Make this configurable
+                interval   = this.grapharea / numYLabels,
+                font       = prop['chart.text.font'],
+                size       = prop['chart.text.size'],
+                color      = prop['chart.text.color'],
+                units_pre  = prop['chart.units.pre'],
+                units_post = prop['chart.units.post'],
+                offsetx    = prop['chart.ylabels.offsetx'],
+                offsety    = prop['chart.ylabels.offsety'];
             
             co.beginPath();
             co.fillStyle = color;
@@ -591,8 +608,8 @@
                         RG.text2(this, {
                             'font':font,
                             'size':size,
-                            'x':this.gutterLeft - 5,
-                            'y': this.gutterTop + (((this.grapharea/2) / len) * i),
+                            'x':this.gutterLeft - 5 + offsetx,
+                            'y': this.gutterTop + (((this.grapharea/2) / len) * i) + offsety,
                             'text':this.scale2.labels[len - i - 1],
                             'valign':'center',
                             'halign':'right',
@@ -602,8 +619,8 @@
                         RG.Text2(this, {
                             'font':font,
                             'size':size,
-                            'x':this.gutterLeft - 5,
-                            'y': halfWay + (((this.grapharea/2) / len) * (i + 1)),
+                            'x':this.gutterLeft - 5 + offsetx,
+                            'y': halfWay + (((this.grapharea/2) / len) * (i + 1)) + offsety,
                             'text':this.scale2.labels[i],
                             'valign':'center',
                             'halign':'right',
@@ -617,8 +634,8 @@
                         RG.text2(this, {
                             'font':font,
                             'size':size,
-                            'x':this.gutterLeft - 5,
-                            'y': ca.height - this.gutterBottom - ((this.grapharea / len) * (i + 1)),
+                            'x':this.gutterLeft - 5 + offsetx,
+                            'y': ca.height - this.gutterBottom - ((this.grapharea / len) * (i + 1)) + offsety,
                             'text':this.scale2.labels[i],
                             'valign':'center',
                             'halign':'right',
@@ -648,7 +665,9 @@
     
                 var labels      = prop['chart.labels'],
                     labelsColor = prop['chart.labels.color'],
-                    bold        = prop['chart.labels.bold']
+                    bold        = prop['chart.labels.bold'],
+                    offsetx     = prop['chart.labels.offsetx'],
+                    offsety     = prop['chart.labels.offsety']
     
                 for (var i=0,len=labels.length; i<len; i+=1) {
                     RG.text2(this, {
@@ -656,8 +675,8 @@
                         'font':font,
                         'size':size,
                         'bold': bold,
-                        'x':this.gutterLeft + (i * interval) + (interval / 2),
-                        'y':ca.height - this.gutterBottom + 5 + this.halfTextHeight,
+                        'x':this.gutterLeft + (i * interval) + (interval / 2) + offsetx,
+                        'y':ca.height - this.gutterBottom + 5 + this.halfTextHeight + offsety,
                         'text':labels[i],
                         'valign':'center',
                         'halign':halign,
@@ -888,8 +907,11 @@
         this.highlight =
         this.Highlight = function (shape)
         {
-            // Add the new highlight
-            RG.Highlight.Rect(this, shape);
+            if (typeof prop['chart.highlight.style'] === 'function') {
+                (prop['chart.highlight.style'])(shape);
+            } else {
+                RG.Highlight.Rect(this, shape);
+            }
         };
 
 
@@ -935,6 +957,7 @@
             var coordW     = obj.coords[tooltip.__index__][2];
             var coordH     = obj.coords[tooltip.__index__][3];
             var canvasXY   = RG.getCanvasXY(obj.canvas);
+            var mouseXY    = RG.getMouseXY(window.event);
             var gutterLeft = obj.gutterLeft;
             var gutterTop  = obj.gutterTop;
             var width      = tooltip.offsetWidth;
@@ -950,49 +973,26 @@
     
             // Set the top position
             tooltip.style.left = 0;
-            tooltip.style.top  = canvasXY[1] + coordY - height - 7 + 'px';
-    
-    
-            /**
-            * If the tooltip is for a negative value - position it underneath the bar
-            */
-            if (value < 0) {
-                tooltip.style.top =  canvasXY[1] + coordY + coordH + 7 + 'px';
-            }
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
     
     
             // By default any overflow is hidden
             tooltip.style.overflow = '';
     
-            // The arrow
-            var img = new Image();
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.position = 'absolute';
-                if (value >= 0) {
-                    img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                    img.style.top = (tooltip.offsetHeight - 2) + 'px';
-                } else {
-                    img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAFCAMAAACkeOZkAAAAK3RFWHRDcmVhdGlvbiBUaW1lAFNhdCA2IE9jdCAyMDEyIDEyOjQ5OjMyIC0wMDAw2S1RlgAAAAd0SU1FB9wKBgszM4Ed2k4AAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAEZ0FNQQAAsY8L/GEFAAAACVBMVEX/AAC9vb3//+92Pom0AAAAAXRSTlMAQObYZgAAAB1JREFUeNpjYAABRgY4YGRiRDCZYBwQE8qBMEEcAANCACqByy1sAAAAAElFTkSuQmCC';
-                    img.style.top = '-5px';
-                }
-            tooltip.appendChild(img);
             
             // Reposition the tooltip if at the edges:
             
             // LEFT edge
-            if ((canvasXY[0] + coordX - (width / 2)) < 10) {
-                tooltip.style.left = (canvasXY[0] + coordX - (width * 0.1)) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.1) - 8.5) + 'px';
+            if (canvasXY[0] + mouseXY[0] - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + (width / 2)) > doc.body.offsetWidth) {
-                tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-                tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 

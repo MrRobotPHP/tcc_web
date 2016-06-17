@@ -1,4 +1,4 @@
-// version: 2016-02-06
+// version: 2016-06-04
     /**
     * o--------------------------------------------------------------------------------o
     * | This file is part of the RGraph package - you can learn more at:               |
@@ -7,7 +7,7 @@
     * |                                                                                |
     * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
     * | v2.0 license and a commercial license which means that you're not bound by     |
-    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | the terms of the GPL. The commercial license is just 99 GBP and you can     |
     * | read about it here:                                                            |
     * |                      http://www.rgraph.net/license                             |
     * o--------------------------------------------------------------------------------o
@@ -29,16 +29,16 @@
             && typeof conf.data === 'object'
             && typeof conf.id === 'string') {
 
-            var id                        = conf.id;
-            var canvas                    = document.getElementById(id);
-            var data                      = conf.data;
-            var parseConfObjectForOptions = true; // Set this so the config is parsed (at the end of the constructor)
+            var id                        = conf.id,
+                canvas                    = document.getElementById(id),
+                data                      = conf.data,
+                parseConfObjectForOptions = true; // Set this so the config is parsed (at the end of the constructor
         
         } else {
         
-            var id     = conf;
-            var canvas = document.getElementById(id);
-            var data   = arguments[1];
+            var id     = conf,
+                canvas = document.getElementById(id),
+                data   = arguments[1];
         }
 
 
@@ -67,25 +67,30 @@
         this.firstDraw         = true; // After the first draw this will be false
 
 
-        /**
-        * Compatibility with older browsers
-        */
-        //RGraph.OldBrowserCompat(this.context);
+        //
+        // Go through the data and convert strings to numbers
+        //
+        for (var i=0; i<this.data.length; ++i) {
+            if (typeof this.data[i] === 'string') {
+                this.data[i] = parseFloat(this.data[i]);
+            }
+        }
 
         this.properties =
         {
             'chart.centerx.adjust':         0,
             'chart.centery.adjust':         0,
-            'chart.colors':                 ['Gradient(red:#fcc)', 'Gradient(#ddd:#eee)', 'Gradient(#0f0:#cfc)', 'Gradient(blue:#ccf)', 'Gradient(#FB7BA3:#FCC7EE)', 'Gradient(yellow:#ffc)', 'Gradient(#000:#ccc)', 'Gradient(#EE9D80:#FEE5C8)', 'Gradient(cyan:#ccf)','Gradient(#9E7BF6:#C7B6D2)','Gradient(#78CAEA:#C5FBFD)','Gradient(#E284E9:#FDC4FF)','Gradient(white:#ccf)','Gradient(blue:#ccf)','Gradient(#9E7BF6:#C7B6D2)'],
+            'chart.colors':                 ['red', '#ccc', '#cfc', 'blue', 'pink', 'yellow', 'black', 'orange', 'cyan', 'purple', '#78CAEA', '#E284E9', 'white', 'blue', '#9E7BF6'],
             'chart.strokestyle':            'white',
             'chart.linewidth':              3,
             'chart.labels':                 [],
             'chart.labels.sticks':          false,
             'chart.labels.sticks.length':   7,
-            'chart.labels.sticks.color':    '#aaa',
-            'chart.labels.sticks.usecolors': false,
+            'chart.labels.sticks.colors':   null,
+            'chart.labels.sticks.usecolors': true,
             'chart.labels.sticks.linewidth': 1,
             'chart.labels.sticks.hlength':  5,
+            'chart.labels.sticks.list':     false,
             'chart.labels.ingraph':         null,
             'chart.labels.ingraph.color':   null,
             'chart.labels.ingraph.font':    null,
@@ -98,7 +103,7 @@
             'chart.labels.ingraph.radius':  null,
             'chart.labels.center':            null,
             'chart.labels.center.size':       26,
-            'chart.labels.center.font':       'Arial',
+            'chart.labels.center.font':       'Segoe UI, Arial, Verdana, sans-serif',
             'chart.labels.center.color':      'black',
             'chart.labels.center.italic':     false,
             'chart.labels.center.bold':       false,
@@ -125,7 +130,10 @@
             'chart.shadow.blur':            15,
             'chart.text.size':              12,
             'chart.text.color':             'black',
-            'chart.text.font':              'Arial',
+            'chart.text.font':              'Segoe UI, Arial, Verdana, sans-serif',
+            'chart.text.accessible':               true,
+            'chart.text.accessible.overflow':      'visible',
+            'chart.text.accessible.pointerevents': false,
             'chart.contextmenu':            null,
             'chart.tooltips':               null,
             'chart.tooltips.event':         'onclick',
@@ -133,8 +141,9 @@
             'chart.tooltips.css.class':     'RGraph_tooltip',
             'chart.tooltips.highlight':     true,
             'chart.highlight.style':        '2d',
-            'chart.highlight.style.2d.fill': 'rgba(255,255,255,0.7)',
-            'chart.highlight.style.2d.stroke': 'rgba(255,255,255,0.7)',
+            'chart.highlight.style.twod.fill':   'rgba(255,255,255,0.7)',
+            'chart.highlight.style.twod.stroke': 'rgba(255,255,255,0.7)',
+            'chart.highlight.style.outline.width': null,
             'chart.centerx':                null,
             'chart.centery':                null,
             'chart.radius':                 null,
@@ -188,7 +197,8 @@
             'chart.centerpin.stroke':         'white',
             'chart.origin':                   0 - (Math.PI / 2),
             'chart.events':                   true,
-            'chart.labels.colors':            []
+            'chart.labels.colors':            [],
+            'chart.clearto':   'rgba(0,0,0,0)'
         }
 
 
@@ -223,7 +233,6 @@
             ca   = this.canvas,
             co   = ca.getContext('2d'),
             prop = this.properties,
-            pa   = RG.Path,
             pa2  = RG.path2,
             win  = window,
             doc  = document,
@@ -273,13 +282,19 @@
 
 
             // Convert uppercase letters to dot+lower case letter
-            name = name.replace(/([A-Z])/g, function (str)
-            {
-                return '.' + String(RegExp.$1).toLowerCase();
-            });
+            while(name.match(/([A-Z])/)) {
+                name = name.replace(/([A-Z])/, '.' + RegExp.$1.toLowerCase());
+            }
+
+
+
+            if (name == 'chart.highlight.style.twod.color') {
+                name = 'chart.highlight.style.twod.fill';
+            }
     
-            if (name == 'chart.highlight.style.2d.color') {
-                name = 'chart.highlight.style.2d.fill';
+    
+            if (name == 'chart.labels.spaced') {
+                name = 'chart.labels.sticks.list';
             }
 
 
@@ -314,8 +329,8 @@
                 return '.' + String(RegExp.$1).toLowerCase()
             });
     
-            if (name == 'chart.highlight.style.2d.color') {
-                name = 'chart.highlight.style.2d.fill';
+            if (name == 'chart.highlight.style.twod.color') {
+                name = 'chart.highlight.style.twod.fill';
             }
     
             return prop[name];
@@ -376,7 +391,8 @@
                 // Don't want to do this again
                 this.colorsParsed = true;
             }
-    
+
+
     
     
             /**
@@ -668,9 +684,7 @@
             } else if (RGraph.ISOLD && radians == 0) {
                 radians = 0.001;
             }
-    
-            var context  = co;
-            var canvas   = ca;
+
             var subTotal = this.subTotal;
                 radians  = radians * prop['chart.effect.roundrobin.multiplier'];
     
@@ -681,11 +695,13 @@
                 co.lineWidth   = 0;
     
                 if (prop['chart.shadow']) {
-                    RG.SetShadow(this,
-                                 prop['chart.shadow.color'],
-                                 prop['chart.shadow.offsetx'],
-                                 prop['chart.shadow.offsety'],
-                                 prop['chart.shadow.blur']);
+                    RG.setShadow(
+                        this,
+                        prop['chart.shadow.color'],
+                        prop['chart.shadow.offsetx'],
+                        prop['chart.shadow.offsety'],
+                        prop['chart.shadow.blur']
+                    );
                 }
     
                 /**
@@ -760,6 +776,11 @@
         this.drawLabels =
         this.DrawLabels = function ()
         {
+            // New way of spacing labels out
+            if (prop['chart.labels'].length && prop['chart.labels.sticks.list']) {
+                return this.drawLabelsList();
+            }
+
             var hAlignment = 'left';
             var vAlignment = 'center';
             var labels     = prop['chart.labels'];
@@ -851,16 +872,18 @@
                         co.fillStyle = prop['chart.labels.colors'][i];
                     }
     
-    
-                    RG.Text2(this, {'font':font,
-                                        'size':text_size,
-                                        'x':x,
-                                        'y':y,
-                                        'text':labels[i],
-                                        'valign':vAlignment,
-                                        'halign':hAlignment,
-                                        'tag': 'labels'
-                                       });
+
+                    RG.text2(this, {
+                        'font':font,
+                        'size':text_size,
+                        'x':x,
+                        'y':y,
+                        'text':labels[i],
+                        'valign':vAlignment,
+                        'halign':hAlignment,
+                        'tag': 'labels',
+                        color: prop['chart.labels.sticks.usecolors'] ? prop['chart.colors'][i] : 'black'
+                    });
                 }
                 
                 co.fill();
@@ -870,24 +893,243 @@
 
 
 
+        //
+        // A new way of spacing out labels
+        //
+        this.drawLabelsList = function ()
+        {
+            var segment      = this.angles[i],
+                labels       = prop['chart.labels'],
+                labels_right = [],
+                labels_left  = [],
+                text_font    = prop['chart.text.font'],
+                text_size    = prop['chart.text.size'],
+                text_color   = prop['chart.text.color'],
+                left         = [],
+                right        = [],
+                centerx      = this.centerx,
+                centery      = this.centery,
+                radius       = this.radius,
+                offset       = 50
+
+
+
+
+
+
+
+
+            //
+            // Draw the right hand side labels first
+            //
+            for (var i=0; i<this.angles.length; ++i) {
+
+                var angle          = this.angles[i][0] + ((this.angles[i][1] - this.angles[i][0]) / 2), // Midpoint
+                    endpoint_inner = RG.getRadiusEndPoint(centerx, centery, angle, radius + 5),
+                    endpoint_outer = RG.getRadiusEndPoint(centerx, centery, angle, radius + 10),
+                    explosion      = [
+                        (typeof prop['chart.exploded'] === 'number' ? prop['chart.exploded'] : prop['chart.exploded'][i]),
+                        (ma.cos(angle) * (typeof prop['chart.exploded'] === 'number' ? prop['chart.exploded'] : prop['chart.exploded'][i])),
+                        (ma.sin(angle) * (typeof prop['chart.exploded'] === 'number' ? prop['chart.exploded'] : prop['chart.exploded'][i]))
+                    ]
+
+                
+                //
+                // Work out the color
+                //
+                if ( typeof prop['chart.labels.sticks.colors'] === 'object' && prop['chart.labels.sticks.colors'] && prop['chart.labels.sticks.colors'][i] ) {
+                    var color = prop['chart.labels.sticks.colors'][i];
+                } else if ( prop['chart.labels.sticks.usecolors'] && prop['chart.colors'][i] ) {
+                    var color = prop['chart.colors'][i];
+                } else {
+                    var color = prop['chart.text.color'];
+                }
+
+                
+                
+
+                if (angle > (-1 * RG.HALFPI) && angle < RG.HALFPI) {
+                    labels_right.push([
+                        i,
+                        angle,
+                        labels[i] ? labels[i] : '',
+                        endpoint_inner,
+                        endpoint_outer,
+                        color,
+                        RG.arrayClone(explosion)
+                    ]);
+                } else {
+                    labels_left.push([
+                        i,
+                        angle,
+                        labels[i] ? labels[i] : '',
+                        endpoint_inner,
+                        endpoint_outer,
+                        color,
+                        RG.arrayClone(explosion)
+                    ]);
+                }
+            }
+
+
+            
+            
+            //
+            // Draw the right hand side labels first
+            //
+
+
+            // Calculate how much space there is for each label
+            var vspace_right = (ca.height - prop['chart.gutter.top'] - prop['chart.gutter.bottom']) / labels_right.length
+
+            for (var i=0,y=(prop['chart.gutter.top'] + (vspace_right / 2)); i<labels_right.length; y+=vspace_right,i++) {
+                
+                if (labels_right[i][2]) {
+
+                    var x          = this.centerx + this.radius + offset,
+                        idx        = labels_right[i][0],
+                        explosionX = labels_right[i][6][0] ? labels_right[i][6][1] : 0,
+                        explosionY = labels_right[i][6][0] ? labels_right[i][6][2] : 0
+
+                    var ret = RG.text2(this, {
+                        font:   text_font,
+                        size:   text_size,
+                        x:      x + explosionX,
+                        y:      y + explosionY,
+                        text:   labels_right[i][2],
+                        valign: 'center',
+                        halign: 'left',
+                        tag:    'labels',
+                        color:  labels_right[i][5]
+                    });
+                    
+                    if (ret && ret.node) {
+                        ret.node.__index__ = labels_right[i][0];
+                    }
+
     
+                    pa2(co, 'lc round lw % b m % % l % % l % % l % % s %',
+                        
+                        prop['chart.labels.sticks.linewidth'],
+                        
+                        labels_right[i][3][0] + explosionX,
+                        labels_right[i][3][1] + explosionY,
+    
+                        labels_right[i][4][0] + explosionX,
+                        labels_right[i][4][1] + explosionY,
+                        
+                        this.centerx + this.radius + 25 + explosionX,
+                        ma.round(labels_right[i][4][1] + explosionY),
+                        
+                        ret.x - 5 ,
+                        ret.y + (ret.height / 2),
+    
+                        labels_right[i][5]
+                    );
+                }
+            }
+
+
+
+
+
+
+
+
+
+            //
+            // Draw the left hand side labels
+            //
+            
+            
+            
+            
+            
+            // Calculate how much space there is for each label
+            var vspace_left = (ca.height - prop['chart.gutter.top'] - prop['chart.gutter.bottom']) / labels_left.length
+
+            for (var i=(labels_left.length - 1),y=(prop['chart.gutter.top'] + (vspace_left / 2)); i>=0; y+=vspace_left,i--) {
+
+                if (labels_left[i][2]) {
+
+                    var x = this.centerx - this.radius - offset,
+                        idx        = labels_left[i][0],
+                        explosionX = labels_left[i][6][0] ? labels_left[i][6][1] : 0,
+                        explosionY = labels_left[i][6][0] ? labels_left[i][6][2] : 0
+                    
+                    var ret = RG.text2(this, {
+                        font:   text_font,
+                        size:   text_size,
+                        x:      x + explosionX,
+                        y:      y + explosionY,
+                        text:   labels_left[i][2],
+                        valign: 'center',
+                        halign: 'right',
+                        tag:    'labels',
+                        color:  labels_left[i][5]
+                    });
+                    
+                    if (ret && ret.node) {
+                        ret.node.__index__ = labels_left[i][0];
+                    }
+    
+                    pa2(co,
+                        'lw % b m % % l % % l % % l % % s %',
+                        
+                        prop['chart.labels.sticks.linewidth'],
+                        
+                        labels_left[i][3][0] + explosionX,
+                        labels_left[i][3][1] + explosionY,
+    
+                        labels_left[i][4][0] + explosionX,
+                        labels_left[i][4][1] + explosionY,
+                        
+                        this.centerx - this.radius - 25 + explosionX,
+                        ma.round(labels_left[i][4][1] + explosionY),
+                        
+                        ret.x + 5 + ret.width,
+                        ret.y + (ret.height / 2),
+    
+                        labels_left[i][5]
+                    );
+                }
+            }
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /**
         * This function draws the pie chart sticks (for the labels)
         */
         this.drawSticks =
         this.DrawSticks = function ()
         {
-            var context   = co,
-                offset    = prop['chart.linewidth'] / 2,
+            var offset    = prop['chart.linewidth'] / 2,
                 exploded  = prop['chart.exploded'],
                 sticks    = prop['chart.labels.sticks'],
                 colors    = prop['chart.colors'],
                 cx        = this.centerx,
                 cy        = this.centery,
                 radius     = this.radius,
-                points    = [],
-                linewidth = prop['chart.labels.sticks.linewidth']
-    
+                points     = [],
+                linewidth  = prop['chart.labels.sticks.linewidth']
+
             for (var i=0,len=this.angles.length; i<len; ++i) {
             
                 var segment = this.angles[i];
@@ -900,9 +1142,13 @@
                 var radians = segment[1] - segment[0];
     
                 co.beginPath();
-                co.strokeStyle = prop['chart.labels.sticks.color'];
-                co.lineWidth   = prop['chart.labels.sticks.linewidth'];
+                co.strokeStyle = typeof prop['chart.labels.sticks.colors'] === 'string' ? prop['chart.labels.sticks.colors'] : (!RG.isNull(prop['chart.labels.sticks.colors']) ? prop['chart.labels.sticks.colors'][0] : 'gray');
+                co.lineWidth   = linewidth;
                 
+                if (typeof prop['chart.labels.sticks.color'] === 'string') {
+                    co.strokeStyle = prop['chart.labels.sticks.color'];
+                }
+
                 //
                 // Allow for labelsSticksUseColors
                 //
@@ -1145,8 +1391,8 @@
         this.highlight_segment = function (segment)
         {
             co.beginPath();
-                co.strokeStyle = prop['chart.highlight.style.2d.stroke'];
-                co.fillStyle   = prop['chart.highlight.style.2d.fill'];
+                co.strokeStyle = prop['chart.highlight.style.twod.stroke'];
+                co.fillStyle   = prop['chart.highlight.style.twod.fill'];
                 co.moveTo(segment[0], segment[1]);
                 co.arc(segment[0], segment[1], segment[2], this.angles[segment[5]][0], this.angles[segment[5]][1], 0);
                 co.lineTo(segment[0], segment[1]);
@@ -1160,7 +1406,8 @@
 
 
         /**
-        * Each object type has its own Highlight() function which highlights the appropriate shape
+        * Each object type has its own Highlight() function which highlights
+        * the appropriate shape
         * 
         * @param object shape The shape to highlight
         */
@@ -1168,10 +1415,14 @@
         this.Highlight = function (shape)
         {
             if (prop['chart.tooltips.highlight']) {
+                
+                if (typeof prop['chart.highlight.style'] === 'function') {
+                    (prop['chart.highlight.style'])(shape);
+
                 /**
                 * 3D style of highlighting
                 */
-                if (prop['chart.highlight.style'] == '3d') {
+                } else if (prop['chart.highlight.style'] == '3d') {
 
                     co.lineWidth = 1;
                     
@@ -1225,6 +1476,44 @@
                         co.arc(shape['x'] - extent, shape['y'] - extent, shape['radius'] - 2, shape['angle.start'], shape['angle.end'], false);
                         co.stroke();
                     }
+                
+
+
+
+                // Outline style of highlighting
+                } else if (prop['chart.highlight.style'] === 'outline') {
+            
+                    var tooltip = RG.Registry.get('chart.tooltip'),
+                        index   = tooltip.__index__,
+                        coords  = this.angles[index],
+                        color   = this.get('colors')[index]
+                        width   = this.radius / 12.5;
+                    
+                    // Allow custom setting of outline
+                    if (typeof prop['chart.highlight.style.outline.width'] === 'number') {
+                        width = prop['chart.highlight.style.outline.width'];
+                    }
+
+
+
+                    RGraph.path2(
+                        co,
+                        'ga 0.25 b a % % % % % false a % % % % % true c f % ga 1',
+                        coords[2],
+                        coords[3],
+                        this.radius + 2 + width,
+                        coords[0],
+                        coords[1],
+                        
+                        coords[2],
+                        coords[3],
+                        this.radius + 2,
+                        coords[1],
+                        coords[0],
+                        color
+                    );
+        
+        
         
         
         
@@ -1234,8 +1523,8 @@
 
                     co.beginPath();
     
-                        co.strokeStyle = prop['chart.highlight.style.2d.stroke'];
-                        co.fillStyle   = prop['chart.highlight.style.2d.fill'];
+                        co.strokeStyle = prop['chart.highlight.style.twod.stroke'];
+                        co.fillStyle   = prop['chart.highlight.style.twod.fill'];
 
                         if (prop['chart.variant'].indexOf('donut') > -1) {
                             co.arc(shape['x'], shape['y'], shape['radius'], shape['angle.start'], shape['angle.end'], false);
@@ -1246,7 +1535,7 @@
                         }
                     co.closePath();
         
-                    //co.stroke();
+                    co.stroke();
                     co.fill();
                 }
             }
@@ -1305,6 +1594,7 @@
         {
             var coordX      = obj.angles[idx][2];
             var coordY      = obj.angles[idx][3];
+            var mouseXY     = RG.getMouseXY(window.event);
             var angleStart  = obj.angles[idx][0];
             var angleEnd    = obj.angles[idx][1];
             var angleCenter = ((angleEnd - angleStart) / 2) + angleStart;
@@ -1313,40 +1603,31 @@
             var gutterTop   = prop['chart.gutter.top'];
             var width       = tooltip.offsetWidth;
             var height      = tooltip.offsetHeight;
-            var x           = canvasXY[0] + this.angles[idx][2] + (Math.cos(angleCenter) * (prop['chart.variant'] == 'donut' && typeof(prop['chart.variant.donut.width']) == 'number' ? ((this.radius - prop['chart.variant.donut.width']) + (prop['chart.variant.donut.width'] / 2)) : (this.radius * 0.75)));
-            var y           = canvasXY[1] + this.angles[idx][3] + (Math.sin(angleCenter) * (prop['chart.variant'] == 'donut' && typeof(prop['chart.variant.donut.width']) == 'number' ? ((this.radius - prop['chart.variant.donut.width']) + (prop['chart.variant.donut.width'] / 2)) : (this.radius * 0.75)));
+            var x           = canvasXY[0] + this.angles[idx][2] + (Math.cos(angleCenter) * (prop['chart.variant'] == 'donut' && typeof(prop['chart.variant.donut.width']) == 'number' ? ((this.radius - prop['chart.variant.donut.width']) + (prop['chart.variant.donut.width'] / 2)) : (this.radius * 0.5)));
+            var y           = canvasXY[1] + this.angles[idx][3] + (Math.sin(angleCenter) * (prop['chart.variant'] == 'donut' && typeof(prop['chart.variant.donut.width']) == 'number' ? ((this.radius - prop['chart.variant.donut.width']) + (prop['chart.variant.donut.width'] / 2)) : (this.radius * 0.5)));
     
             
             // By default any overflow is hidden
             tooltip.style.overflow = '';
-    
-            // The arrow
-            var img = new Image();
-                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAFCAYAAACjKgd3AAAARUlEQVQYV2NkQAN79+797+RkhC4M5+/bd47B2dmZEVkBCgcmgcsgbAaA9GA1BCSBbhAuA/AagmwQPgMIGgIzCD0M0AMMAEFVIAa6UQgcAAAAAElFTkSuQmCC';
-                img.style.position = 'absolute';
-                img.id = '__rgraph_tooltip_pointer__';
-                img.style.top = (tooltip.offsetHeight - 2) + 'px';
-            tooltip.appendChild(img);
+
+            // Set the top position
+            tooltip.style.left = 0;
+            tooltip.style.top  = window.event.pageY - height - 5 + 'px';
+
             
             // Reposition the tooltip if at the edges:
     
             // LEFT edge
-            if ((x - (width / 2)) < 10) {
-                tooltip.style.left = (x - (width * 0.1)) + 'px';
-                tooltip.style.top  = (y - height - 4) + 'px';
-                img.style.left = ((width * 0.1) - 8.5) + 'px';
+            if (canvasXY[0] + mouseXY[0] - (width / 2) < 0) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.1) + 'px';
     
             // RIGHT edge
-            } else if ((x + (width / 2)) > (doc.body.offsetWidth - 10) ) {
-                tooltip.style.left = (x - (width * 0.9)) + 'px';
-                tooltip.style.top  = (y - height - 4) + 'px';
-                img.style.left = ((width * 0.9) - 8.5) + 'px';
+            } else if (canvasXY[0] + mouseXY[0]  + (width / 2) > doc.body.offsetWidth) {
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width * 0.9) + 'px';
     
             // Default positioning - CENTERED
             } else {
-                tooltip.style.left = (x - (width / 2)) + 'px';
-                tooltip.style.top  = (y - height - 4) + 'px';
-                img.style.left = ((width * 0.5) - 8.5) + 'px';
+                tooltip.style.left = canvasXY[0] + mouseXY[0]  - (width / 2) + 'px';
             }
         };
 
@@ -1508,8 +1789,8 @@
                 this.original_colors['chart.key.colors']              = RG.arrayClone(prop['chart.key.colors']);
                 this.original_colors['chart.strokestyle']             = RG.arrayClone(prop['chart.strokestyle']);
                 this.original_colors['chart.highlight.stroke']        = RG.arrayClone(prop['chart.highlight.stroke']);
-                this.original_colors['chart.highlight.style.2d.fill'] = RG.arrayClone(prop['chart.highlight.style.2d.fill']);
-                this.original_colors['chart.highlight.style.stroke']  = RG.arrayClone(prop['chart.highlight.style.2d.stroke']);
+                this.original_colors['chart.highlight.style.twod.fill']   = RG.arrayClone(prop['chart.highlight.style.twod.fill']);
+                this.original_colors['chart.highlight.style.twod.stroke'] = RG.arrayClone(prop['chart.highlight.style.twod.stroke']);
                 this.original_colors['chart.ingraph.bounding.fill']   = RG.arrayClone(prop['chart.ingraph.bounding.fill']);
                 this.original_colors['chart.ingraph.color']           = RG.arrayClone(prop['chart.ingraph.color']);
             }
@@ -1527,8 +1808,8 @@
     
             prop['chart.strokestyle']                  = this.parseSingleColorForGradient(prop['chart.strokestyle']);
             prop['chart.highlight.stroke']             = this.parseSingleColorForGradient(prop['chart.highlight.stroke']);
-            prop['chart.highlight.style.2d.fill']      = this.parseSingleColorForGradient(prop['chart.highlight.style.2d.fill']);
-            prop['chart.highlight.style.2d.stroke']    = this.parseSingleColorForGradient(prop['chart.highlight.style.2d.stroke']);
+            prop['chart.highlight.style.twod.fill']      = this.parseSingleColorForGradient(prop['chart.highlight.style.twod.fill']);
+            prop['chart.highlight.style.twod.stroke']    = this.parseSingleColorForGradient(prop['chart.highlight.style.twod.stroke']);
             prop['chart.labels.ingraph.bounding.fill'] = this.parseSingleColorForGradient(prop['chart.labels.ingraph.bounding.fill']);
             prop['chart.labels.ingraph.color']         = this.parseSingleColorForGradient(prop['chart.labels.ingraph.color']);
         };
@@ -1721,7 +2002,7 @@
                     if (prop['chart.variant'].indexOf('donut') !== -1) {
 
                         for (var j=0; j<this.angles.length; ++j) {
-                            pa(this.context,[
+                            pa2(co,[
                                 'b',
                                 'a', this.angles[j][2], this.angles[j][3], this.radius + 1, this.angles[j][0], this.angles[j][1] * prop['chart.effect.roundrobin.multiplier'], false,
                                 'a', this.angles[j][2], this.angles[j][3], this.radius / 2, this.angles[j][1] * prop['chart.effect.roundrobin.multiplier'], this.angles[j][0], true,
@@ -1734,7 +2015,7 @@
 
                         for (var j=0; j<this.angles.length; ++j) {
 
-                            pa(this.context,[
+                            pa2(co,[
                                 'b',
                                 'm', this.angles[j][2], this.angles[j][3],
                                 'a', this.angles[j][2],
@@ -1871,14 +2152,16 @@
         this.roundrobin =
         this.roundRobin = function ()
         {
-            var obj      = this;
-            var opt      = arguments[0] || {};
-            var callback = arguments[1] || function () {};
-            var frame    = 0;
-            var frames   = opt.frames || 30;
-            var radius   =  obj.getRadius();
+            var obj      = this,
+                opt      = arguments[0] || {},
+                callback = arguments[1] || function () {},
+                frame    = 0,
+                frames   = opt.frames || 30,
+                radius   =  obj.getRadius(),
+                labels   =  obj.get('labels')
             
             obj.Set('chart.events', false);
+            obj.Set('chart.labels', []);
 
             var iterator = function ()
             {                
@@ -1893,11 +2176,13 @@
                     RGraph.Effects.updateCanvas(iterator);
                 
                 } else {
-                    
-                    // Re-enable the events and redraw the chart.
-                    obj.set('events', true);
-                    RGraph.redrawCanvas(obj.canvas);
 
+                    obj.set({
+                        events: true,
+                        labels: labels
+                    });
+                    
+                    RG.redrawCanvas(obj.canvas);
                     callback(obj);
                 }
             };

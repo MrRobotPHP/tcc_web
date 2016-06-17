@@ -44,14 +44,14 @@
                     needleType: 'line',
                     centerpinRadius: 0.1,
                     titleTop: 'Speed',
-                    labelsOffset: 7
+                    textAccessible: true
                 }
             }).on('draw', function (obj)
             {
                 var co = obj.context;
     
                 // This circle becomes the border of the centerpin
-                RGraph.path(co, ['b', 'a', obj.centerx, obj.centery, 10, 0, RGraph.TWOPI, false, 'f', 'black']);
+                RGraph.path2(co, ['b', 'a', obj.centerx, obj.centery, 10, 0, RGraph.TWOPI, false, 'f', 'black']);
             })
             .draw();
 
@@ -124,14 +124,15 @@
                 needleType: 'line',
                 centerpinRadius: 0.1,
                 titleTop: 'Speed',
-                labelsOffset: 7
+                labelsOffset: 7,
+                textAccessible: true
             }
         }).on('draw', function (obj)
         {
             var co = obj.context;
 
             <span>// This circle becomes the border of the centerpin</span>
-            RGraph.path(co, ['b', 'a', obj.centerx, obj.centery, 10, 0, RGraph.TWOPI, false, 'f', 'black']);
+            RGraph.path2(co, ['b', 'a', obj.centerx, obj.centery, 10, 0, RGraph.TWOPI, false, 'f', 'black']);
         })
         .draw();
 
