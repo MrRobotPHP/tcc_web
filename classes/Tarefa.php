@@ -9,6 +9,7 @@ class Tarefa extends Conexao_sql {
 	private $evento;
 	private $prazo;
 	private $status;
+	private $query;
 
 	public function getDescricao() {
 		return $this -> descricao;
@@ -50,28 +51,31 @@ class Tarefa extends Conexao_sql {
 		$this -> status = $status;
 	}
 
+	public function getQuery() {
+		return $this -> query;
+	}
+
+	public function setQuery($query) {
+		$this -> query = $query;
+	}
+
 	/* Pega todas as tarefas ligadas ao funcionário logado */
-	public function carregaTarefas($id) {
+	public function carregaTarefas() {
 		$pdo = parent::getDB();
 
-		$query = $pdo -> prepare("SELECT T.DESCRICAO, F.NOME, T.PRAZO, E.DESCRICAO AS EVENTO, T.STATUS
+		$query = $pdo -> prepare("SELECT T.DESCRICAO AS DESCRICAO, DATE_FORMAT(T.PRAZO, '%d/%m/%Y') AS PRAZO, E.DESCRICAO AS EVENTO, T.STATUS AS STATUS
 								  FROM TAREFA T
 								  INNER JOIN EVENTO AS E ON T.EVENTO = E.ID
 								  INNER JOIN FUNCIONARIO AS F ON T.FUNCIONARIO = F.ID
 								  WHERE T.STATUS = 0 AND F.ID = " . $this -> getFuncionario());
+
+		$this -> setQuery($query);
+
 		$query -> execute();
 
-		/*$this -> setDescricao($dadosTabela -> DESCRICAO);
-		$this -> setPrazo($dadosTabela -> PRAZO);
-		$this -> setEvento($dadosTabela -> EVENTO);*/
-
-		while ($dadosTabela = $query -> fetch(PDO::FETCH_OBJ)) {
-
-			foreach ($dadosTabela as $linha => $valor) {
-				echo "<td><spam class='texto-painel'>" . $valor . "</spam></td>";
-				echo "<td><spam class='texto-painel'>" . $valor . "</spam></td>";
-			}
-		}
+		//$this -> setDescricao($dadosTabela -> DESCRICAO);
+		//$this -> setPrazo($dadosTabela -> PRAZO);
+		//$this -> setEvento($dadosTabela -> EVENTO);
 	}
 
 }

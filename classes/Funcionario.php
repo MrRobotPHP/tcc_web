@@ -82,7 +82,7 @@ class Funcionario extends Conexao_sql {
 	}
 
 	/* Pega dados do funcionário logado */
-	public function carregaDados($id) {
+	public function carregaDados() {
 		$pdo = parent::getDB();
 		
 		$query1 = $pdo -> prepare("SELECT F.NOME AS NOME, C.DESCRICAO AS CARGO, F.EMAIL AS EMAIL, F.TELEFONE1 AS TELEFONE
@@ -98,9 +98,7 @@ class Funcionario extends Conexao_sql {
 		$this -> setEmail($dados1 -> EMAIL);
 		$this -> setTelefone($dados1 -> TELEFONE);
 
-		$query2 = $pdo -> prepare("SELECT COUNT(T.STATUS) AS TPEND
-								   FROM TAREFA T
-								   INNER JOIN FUNCIONARIO AS F ON T.FUNCIONARIO = F.ID");
+		$query2 = $pdo -> prepare("SELECT COUNT(STATUS) AS TPEND FROM TAREFA WHERE FUNCIONARIO = " . $this-> getId());
 		$query2 -> execute();
 
 		$dados2 = $query2 -> fetch(PDO::FETCH_OBJ);

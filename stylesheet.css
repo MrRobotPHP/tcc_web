@@ -9,33 +9,13 @@
 }
 
 @font-face {
-  font-family: JosefinSans-Light;
-  src: url('fonts/JosefinSans-Light.ttf');
+  font-family: Gravity-Bold;
+  src: url('fonts/Gravity-Bold.otf');
 }
 
 @font-face {
-  font-family: Amaranth-Regular;
-  src: url('fonts/Amaranth-Regular.otf');
-}
-
-@font-face {
-  font-family: Amaranth-Bold;
-  src: url('fonts/Amaranth-Bold.otf');
-}
-
-@font-face {
-  font-family: Sansation-Regular;
-  src: url('fonts/Sansation_Regular.ttf');
-}
-
-@font-face {
-  font-family: Sansation-Bold;
-  src: url('fonts/Sansation_Bold.ttf');
-}
-
-@font-face {
-  font-family: Sansation-Light;
-  src: url('fonts/Sansation_Light.ttf');
+  font-family: Gravity-Regular;
+  src: url('fonts/Gravity-Regular.otf');
 }
 
 body {
@@ -105,7 +85,7 @@ input[type="password"] {
   position: relative;
   display: block;
   margin: auto;
-
+  max-width: 100%;
 }
 
 .d-login {
@@ -134,13 +114,23 @@ input[type="password"] {
 
 .header-painel {
   background: #070438;
-  height: 90px;
+  height: 80px;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 15;
   width: 100%;
   padding-left: 10px;
+  padding-top: -10px;
+}
+
+.t-header {
+  font-family: Squared-Display, sans-serif;
+  font-size: 70px;
+  margin-top: 10px;
+  display: inline-block;
+  margin-left: 50px;
+  color: #fff;
 }
 
 .painel {
@@ -148,24 +138,70 @@ input[type="password"] {
 }
 
 .p-grafico {
-  position: absolute;
-  top: 100px;
-  left: 25%;
+  position: relative;
+  top: 110px;
+  text-align: center;
 }
 
 .t-painel {
-  font-family: Sansation-Regular;
+  font-family: Gravity-Bold;
   font-size: 36px;
+  color: #fff;
+  border-radius: 5px;
+  background-color: #272727;
 }
 
 .t-texto-painel {
-  font-family: Sansation-Regular;
+  font-family: Gravity-Bold;
   font-size: 14px;
-  font-weight: bold;
 }
 
 .texto-painel {
-  font-family: Sansation-Light;
+  font-family: Gravity-Regular;
   font-size: 14px;
-  font-weight: bold;
+}
+
+.tarefas tr{
+  border-bottom: 1px solid #fff;
+}
+
+.icon-header {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  position: relative;
+  border: 3px solid #070438;
+  top: 0px;
+}
+
+.icon-header:hover {
+  border-bottom: 3px solid #FF5733;
+  transition: 0.5s;
+}
+
+#icon-tarefa-completa {
+  width: 30px;
+  height: 30px;
+  position: relative;
+  border: 3px solid #272727;
+  float: right;
+  top: 5px;
+  right: 5px;
+}
+
+#icon-tarefa-completa:hover {
+  border-bottom: 3px solid #FF5733;
+  transition: 0.5s;
+}
+
+.footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  height: 70px;
+  background-color: #070438;
+  color: #fff;
+  text-align: center;
+  padding-top: 1.5em;
 }

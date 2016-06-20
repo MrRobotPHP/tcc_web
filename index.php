@@ -18,7 +18,6 @@ session_start();
 
 			if ($login -> logar()) {
 				header("Location: principal.php");
-				$funcionario = new Funcionario($dados -> ID);
 			}
 			else {
 				echo "<script>";
