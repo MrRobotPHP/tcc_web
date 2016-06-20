@@ -50,13 +50,21 @@ input[type="password"] {
   font-family: JosefinSans-Regular;
   font-size: 24px;
   color: #ffffff;
+<<<<<<< HEAD
   background-color: #070438;
+=======
+  background-color: #043807;
+>>>>>>> refs/remotes/origin/master
   border: none;
 }
 
 .submit:hover{
   background-color:#ffffff;
+<<<<<<< HEAD
   color: #070438;
+=======
+  color: #043807;
+>>>>>>> refs/remotes/origin/master
   transition:0.5s;
 }
 
@@ -77,7 +85,11 @@ input[type="email"],
 input[type="password"] {
   background-color: rgba(0, 0, 0, 0.5);
   border: none;
+<<<<<<< HEAD
   border-bottom: 3px solid #070438;
+=======
+  border-bottom: 3px solid #043807;
+>>>>>>> refs/remotes/origin/master
   width: 300px;
 }
 
@@ -85,7 +97,11 @@ input[type="password"] {
   position: relative;
   display: block;
   margin: auto;
+<<<<<<< HEAD
   max-width: 100%;
+=======
+
+>>>>>>> refs/remotes/origin/master
 }
 
 .d-login {
