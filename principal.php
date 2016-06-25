@@ -48,8 +48,8 @@
 		<span style="display: inline-block; margin-right: -180px; font-family: Gravity-Bold; color: #fff"><?php echo "Bem-vindo(a) " . $_SESSION['usuario']; ?></span>
 
 		<a href="principal.php"><img src="img/home.png" class="icon-header" style="left: 380px"></a>
-		<a href="grafico.php?session=<?php $session_id ?>"><img src="img/grafico.png" class="icon-header" style="left: 430px"></a>
-		<a href="config.php"><img src="img/config.png" class="icon-header" style="left: 480px"></a>
+		<a href="<?php echo "grafico.php?session=" . $session_id ?>"><img src="img/grafico.png" class="icon-header" style="left: 430px"></a>
+		<a href="<?php echo "config.php?idfunc=" . $id . "&session=" . $session_id ?>"><img src="img/config.png" class="icon-header" style="left: 480px"></a>
 		
 		<a href="principal.php?logout=ok"><img src="img/logout_branco.png" class="icon-header" style="float: right; margin-top: 23px; margin-right: 17px;" title="Logout"></a>
 	</div>
@@ -60,7 +60,7 @@
 			<h4 class="t-painel" style="margin-top: 10px; margin-bottom: 10px; padding-left: 10px">Meus dados</h4>
 			<table cellspacing="10px">
 				<tr>
-					<td><img src="img/teste_usuario.png" alt="Foto" style="width: 85px; height: 100px" /></td>
+					<td><img src="foto_funcionario/foto_padrao.png" alt="Foto" style="width: 85px; height: 100px" /></td>
 				</tr>
 				<tr>
 					<td><span class="t-texto-painel">Nome</span></td>
@@ -116,13 +116,14 @@
 		</div>
 
 		<div class="painel" style="width: 50%; float: right; top: -272px; right: 10px; padding: 0px 0px 0px 0px; box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.6); border-radius: 5px">
-			<h4 class="t-painel" style="padding-left: 10px; margin: 0px 0px 0px 0px">Tarefas<a href="tarefas_completas.php"><img src="img/tarefa_completa1.png" id="icon-tarefa-completa"></a></h4>
+			<h4 class="t-painel" style="padding-left: 10px; margin: 0px 0px 0px 0px">Tarefas<a href="<?php echo "tarefas_concluidas.php?idfunc=" . $id . "&session=" . $session_id ?>"><img src="img/tarefa_completa1.png" id="icon-tarefa-completa"></a></h4>
 
 			<table class="tarefas" style="border-spacing: 10px; margin-right: 0px;">
 				<tr>
 					<td><span class="t-texto-painel">Descrição</span></td>
 					<td><span class="t-texto-painel">Evento</span></td>
 					<td><span class="t-texto-painel">Prazo</span></td>
+					<td><span class="t-texto-painel">Concluir</span></td>
 				</tr>
 				<?php
 					$tarefa -> carregaTarefas();
@@ -135,6 +136,11 @@
 					<td><span class="texto-painel"><?php print($dado["DESCRICAO"]) ?></span></td>
 					<td><span class="texto-painel"><?php print($dado["EVENTO"]) ?></span></td>
 					<td><span class="texto-painel"><?php print($dado["PRAZO"]) ?></span></td>
+					<td>
+						<a href="<?php echo "c_usuario_comum.php?idtarefa=" . $dado["ID"] . "&idfunc=" . $id; ?>">
+							<img src="img/concluido.png" style="width: 30px; height: 30px" />
+						</a>
+					</td>
 				</tr>
 				<?php
 					}

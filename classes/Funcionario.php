@@ -105,6 +105,64 @@ class Funcionario extends Conexao_sql {
 
 		$this -> setTarefasPendentes($dados2 -> TPEND);
 	}
+
+	public function verificaNivel($idfunc) {
+		$pdo = parent::getDB();
+
+		$query = $pdo -> prepare("SELECT NIVEL FROM FUNCIONARIO WHERE ID = " . $idfunc);
+		$query -> execute();
+
+		return $dados = $query -> fetch(PDO::FETCH_ASSOC);
+	}
+
+	public function editarFuncionario($id, $email, $telefone) {
+		$pdo = parent::getDB();
+
+		if (isset($_FILES['foto'])) {
+			
+			$ext = strtolower(substr($_FILES['foto']['name'], -4));
+			$novoNome = date("Y.m.d-H.i.s") . "." . $ext;
+			$dir = "foto_funcionario/";
+			$res = move_uploaded_file($_FILES['foto']['tmp_name'], $dir . $novoNome);
+		}
+
+		$query = $pdo -> prepare("UPDATE FUNCIONARIO SET EMAIL = '" . $email . "', TELEFONE1 = '" . $telefone . "' WHERE ID = " . $id);
+		$query -> execute();
+
+		echo "<script>alert('Dados alterados com sucesso!')</script>";
+	}
+
+	/*
+	public function enviaFoto($id) {
+		if(isset($_FILES['foto'])) {
+
+			$ext = strtolower(substr($_FILES['foto']['name'], -4));
+			$novoNome = date("Y.m.d-H.i.s") . $ext;
+			$dir = "foto_funcionario/";
+
+			$res = move_uploaded_file($_FILES['foto']['tmp_name'], $dir . $novoNome);
+
+			$pdo = parent::getDB();
+
+			$query = $pdo -> prepare("UPDATE FUNCIONARIO SET FOTO = " . $res . " WHERE ID = " . $id);
+			$query -> execute();
+		}
+	}
+	*/
+
+	public function resgataFoto($id) {
+		$pdo = parent::getDB();
+
+		$query = $pdo -> prepare("SELECT FOTO FROM FUNCIONARIO WHERE ID = " . $id);
+		$caminho = $query -> execute();
+
+		if ($caminho -> rowCount() == 0) {
+
+			$caminho = print("foto_funcionario/foto_padrao.png");
+		}
+
+		return $caminho;
+	}
 }
 
 ?>

@@ -4,12 +4,21 @@ require_once "classes/Conexao_sql.php";
 
 class Tarefa extends Conexao_sql {
 
+	private $id;
 	private $descricao;
 	private $funcionario;
 	private $evento;
 	private $prazo;
 	private $status;
 	private $query;
+
+	public function getId() {
+		return $this -> id;
+	}
+
+	public function setId($id) {
+		$this -> id = $id;
+	}
 
 	public function getDescricao() {
 		return $this -> descricao;
@@ -63,7 +72,7 @@ class Tarefa extends Conexao_sql {
 	public function carregaTarefas() {
 		$pdo = parent::getDB();
 
-		$query = $pdo -> prepare("SELECT T.DESCRICAO AS DESCRICAO, DATE_FORMAT(T.PRAZO, '%d/%m/%Y') AS PRAZO, E.DESCRICAO AS EVENTO, T.STATUS AS STATUS
+		$query = $pdo -> prepare("SELECT T.ID AS ID, T.DESCRICAO AS DESCRICAO, DATE_FORMAT(T.PRAZO, '%d/%m/%Y') AS PRAZO, E.DESCRICAO AS EVENTO, T.STATUS AS STATUS
 								  FROM TAREFA T
 								  INNER JOIN EVENTO AS E ON T.EVENTO = E.ID
 								  INNER JOIN FUNCIONARIO AS F ON T.FUNCIONARIO = F.ID
@@ -76,6 +85,13 @@ class Tarefa extends Conexao_sql {
 		//$this -> setDescricao($dadosTabela -> DESCRICAO);
 		//$this -> setPrazo($dadosTabela -> PRAZO);
 		//$this -> setEvento($dadosTabela -> EVENTO);
+	}
+
+	public function concluirTarefa($idtarefa) {
+		$pdo = parent::getDB();
+
+		$query = "UPDATE TAREFA SET STATUS = 1";
+		$query -> execute();
 	}
 
 }

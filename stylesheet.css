@@ -141,6 +141,7 @@ input[type="password"] {
   position: relative;
   top: 110px;
   text-align: center;
+  margin-bottom: 30px;
 }
 
 .t-painel {
@@ -203,5 +204,40 @@ input[type="password"] {
   background-color: #070438;
   color: #fff;
   text-align: center;
-  padding-top: 1.5em;
+  margin-top: 30px;
+}
+
+#btnEdit {
+  font-family: Gravity-Bold;
+  margin-left: 25%;
+}
+
+#btnEdit:hover {
+  background-color: #57D371;
+  color: #fff;
+}
+
+.lblEdit {
+  font-family: Gravity-Bold;
+  font-size: 16px;
+  color: #000;
+  text-shadow: none;
+}
+
+.frmEdit {
+  height: 50px;
+  width: 100%;
+  border: none;
+  border-bottom: 3px solid #070438;
+  color: #fff;
+  font-family: Gravity-Regular;
+  font-size: 18px;
+  margin-bottom: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  margin-right: 100px;
+}
+
+.frmEdit:hover {
+  border-bottom: 3px solid #fff;
+  transition: 0.5s;
 }

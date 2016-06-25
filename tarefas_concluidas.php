@@ -1,4 +1,5 @@
 <?php
+
 	require_once "classes/Conexao_sql.php";
 	require_once "classes/Login.php";
 	require_once "classes/Funcionario.php";
@@ -26,7 +27,6 @@
 		$tarefa = new Tarefa;
 		$tarefa -> setFuncionario($id);	
 	}
-
 ?>
 
 <!DOCTYPE html>
@@ -49,22 +49,45 @@
 
 		<a href="principal.php"><img src="img/home.png" class="icon-header" style="left: 380px"></a>
 		<a href="grafico.php?session=<?php $session_id ?>"><img src="img/grafico.png" class="icon-header" style="left: 430px"></a>
-		<a href="<?php echo "config.php?idfunc=" . $id . "&session=" . $session_id ?>"><img src="img/config.png" class="icon-header" style="left: 480px"></a>
+		<a href="config.php"><img src="img/config.png" class="icon-header" style="left: 480px"></a>
 		
 		<a href="principal.php?logout=ok"><img src="img/logout_branco.png" class="icon-header" style="float: right; margin-top: 23px; margin-right: 17px;" title="Logout"></a>
 	</div>
 
 	<div class="container">		
 
-		<div class="p-grafico">
-			<h4 class="t-painel" style="padding-left: 10px; padding-right: 10px; margin: 0px 0px 0px 0px">Meu desempenho</h4>
+		<div class="painel" style="top: 110px; text-align: center">
+			<h4 class="t-painel" style="padding-left: 10px; padding-right: 10px; margin: 0px 0px 10px 0px">Tarefas concluídas</h4>
 
-			<img src="gera_grafico.php" />
+			<table class="tarefas" style="border-spacing: 10px; margin: 0px auto;">
+				<tr>
+					<td><span class="t-texto-painel">Descrição</span></td>
+					<td><span class="t-texto-painel">Evento</span></td>
+					<td><span class="t-texto-painel">Prazo</span></td>
+				</tr>
+				<tr>
+					<td><span class="texto-painel">Tarefa 4</span></td>
+					<td><span class="texto-painel">Evento 4</span></td>
+					<td><span class="texto-painel">2016-05-18</span></td>
+				</tr>
+				<tr>
+					<td><span class="texto-painel">Tarefa 7</span></td>
+					<td><span class="texto-painel">Evento 7</span></td>
+					<td><span class="texto-painel">2016-09-23</span></td>
+				</tr>
+				<tr>
+					<td><span class="texto-painel">Tarefa 8</span></td>
+					<td><span class="texto-painel">Evento 8</span></td>
+					<td><span class="texto-painel">2016-11-03</span></td>
+				</tr>
+			</table>
+
 		</div>
 	</div>
 
 	<div class="footer">
 		<p class="texto-painel" style="display: block; top: 20px">&copy; Copyright PHOTUS - Todos os direitos reservados.</p>
 	</div>
+	
 </body>
 </html>
