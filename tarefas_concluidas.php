@@ -65,21 +65,24 @@
 					<td><span class="t-texto-painel">Evento</span></td>
 					<td><span class="t-texto-painel">Prazo</span></td>
 				</tr>
+				<?php
+
+					$tarefa -> visualizarTarefasConcluidas($id);
+					$query = $tarefa -> getQuery();
+					$valor = $query -> fetchAll(PDO::FETCH_ASSOC);
+
+					foreach ($valor as $dado) {
+				?>
 				<tr>
-					<td><span class="texto-painel">Tarefa 4</span></td>
-					<td><span class="texto-painel">Evento 4</span></td>
-					<td><span class="texto-painel">2016-05-18</span></td>
+					<td><span class="texto-painel"><?php print($dado['DESCRICAO']) ?></span></td>
+					<td><span class="texto-painel"><?php print($dado['EVENTO']) ?></span></td>
+					<td><span class="texto-painel"><?php print($dado['PRAZO']) ?></span></td>
 				</tr>
-				<tr>
-					<td><span class="texto-painel">Tarefa 7</span></td>
-					<td><span class="texto-painel">Evento 7</span></td>
-					<td><span class="texto-painel">2016-09-23</span></td>
-				</tr>
-				<tr>
-					<td><span class="texto-painel">Tarefa 8</span></td>
-					<td><span class="texto-painel">Evento 8</span></td>
-					<td><span class="texto-painel">2016-11-03</span></td>
-				</tr>
+				<?php
+
+					}
+
+				?>
 			</table>
 
 		</div>

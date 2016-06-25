@@ -84,7 +84,7 @@ class Funcionario extends Conexao_sql {
 	/* Pega dados do funcionário logado */
 	public function carregaDados() {
 		$pdo = parent::getDB();
-		
+
 		$query1 = $pdo -> prepare("SELECT F.NOME AS NOME, C.DESCRICAO AS CARGO, F.EMAIL AS EMAIL, F.TELEFONE1 AS TELEFONE
 								  FROM FUNCIONARIO F
 								  INNER JOIN CARGO AS C ON F.CARGO = C.ID
@@ -98,7 +98,7 @@ class Funcionario extends Conexao_sql {
 		$this -> setEmail($dados1 -> EMAIL);
 		$this -> setTelefone($dados1 -> TELEFONE);
 
-		$query2 = $pdo -> prepare("SELECT COUNT(STATUS) AS TPEND FROM TAREFA WHERE FUNCIONARIO = " . $this-> getId());
+		$query2 = $pdo -> prepare("SELECT COUNT(STATUS) AS TPEND FROM TAREFA WHERE FUNCIONARIO = " . $this-> getId() . " AND STATUS = 0");
 		$query2 -> execute();
 
 		$dados2 = $query2 -> fetch(PDO::FETCH_OBJ);
@@ -111,20 +111,31 @@ class Funcionario extends Conexao_sql {
 
 		$query = $pdo -> prepare("SELECT NIVEL FROM FUNCIONARIO WHERE ID = " . $idfunc);
 		$query -> execute();
+		$dados = $query -> fetch(PDO::FETCH_OBJ);
 
-		return $dados = $query -> fetch(PDO::FETCH_ASSOC);
+		return $dados -> NIVEL;
+	}
+
+	public function carregaPaginaDados($idfunc) {
+
+		$pdo = parent::getDB();
+
+		$query = $pdo -> prepare("SELECT F.NOME AS NOME, F.EMAIL AS EMAIL, F.TELEFONE1 AS TELEFONE, C.DESCRICAO AS FUNCAO
+								  FROM FUNCIONARIO F
+								  INNER JOIN CARGO AS C ON F.CARGO = C.ID
+								  WHERE F.ID = " . $idfunc);
+		$query -> execute();
+
+		$dados = $query -> fetch(PDO::FETCH_OBJ);
+
+		$this -> setNome($dados -> NOME);
+		$this -> setEmail($dados -> EMAIL);
+		$this -> setTelefone($dados -> TELEFONE);
+		$this -> setFuncao($dados -> FUNCAO);
 	}
 
 	public function editarFuncionario($id, $email, $telefone) {
 		$pdo = parent::getDB();
-
-		if (isset($_FILES['foto'])) {
-			
-			$ext = strtolower(substr($_FILES['foto']['name'], -4));
-			$novoNome = date("Y.m.d-H.i.s") . "." . $ext;
-			$dir = "foto_funcionario/";
-			$res = move_uploaded_file($_FILES['foto']['tmp_name'], $dir . $novoNome);
-		}
 
 		$query = $pdo -> prepare("UPDATE FUNCIONARIO SET EMAIL = '" . $email . "', TELEFONE1 = '" . $telefone . "' WHERE ID = " . $id);
 		$query -> execute();
@@ -132,7 +143,6 @@ class Funcionario extends Conexao_sql {
 		echo "<script>alert('Dados alterados com sucesso!')</script>";
 	}
 
-	/*
 	public function enviaFoto($id) {
 		if(isset($_FILES['foto'])) {
 
@@ -148,7 +158,6 @@ class Funcionario extends Conexao_sql {
 			$query -> execute();
 		}
 	}
-	*/
 
 	public function resgataFoto($id) {
 		$pdo = parent::getDB();

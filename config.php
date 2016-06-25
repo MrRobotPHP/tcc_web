@@ -20,7 +20,7 @@
 
 	if (isset($_GET['idfunc'])) {
 		$funcionario = new Funcionario;
-		$id = $_SESSION['id'];
+		$id = $_GET['idfunc'];
 		$funcionario -> setId($id);
 
 		if(isset($_POST['salvaEdit'])) {
@@ -30,6 +30,8 @@
 			$funcionario -> editarFuncionario($id, $email, $telefone);
 		}
 	}
+
+	$funcionario -> carregaPaginaDados($id);
 
 ?>
 
@@ -81,20 +83,20 @@
 							<td><label class="lblEdit" for="funcao">Funcao</label></td>
 						</tr>
 						<tr>
-							<td><input class="frmEdit" type="text" name="nome" id="nome" placeholder="<?php print('Teste Fotógrafo') ?>" disabled /></td>
-							<td><input class="frmEdit" type="text" name="funcao" id="funcao" placeholder="<?php print('Fotógrafo') ?>" disabled /></td>
+							<td><input class="frmEdit" type="text" name="nome" id="nome" placeholder="<?php print($funcionario -> getNome()) ?>" disabled /></td>
+							<td><input class="frmEdit" type="text" name="funcao" id="funcao" placeholder="<?php print($funcionario -> getFuncao()) ?>" disabled /></td>
 						</tr>
 						<tr>
 							<td><label class="lblEdit" for="email">Email</label></td>
 						</tr>
 						<tr>
-							<td><input class="frmEdit" type="text" name="email" id="email" placeholder="<?php print('teste_fotografo@gmail.com') ?>" required /></td>
+							<td><input class="frmEdit" type="text" name="email" id="email" placeholder="<?php print($funcionario -> getEmail()) ?>" required /></td>
 						</tr>
 						<tr>
 							<td><label class="lblEdit" for="telefone">Telefone fixo</label></td>
 						</tr>
 						<tr>
-							<td><input class="frmEdit" type="text" name="telefone" id="telefone" placeholder="<?php print('(19)3384-0380') ?>" required /></td>
+							<td><input class="frmEdit" type="text" name="telefone" id="telefone" placeholder="<?php print($funcionario -> getTelefone()) ?>" required /></td>
 						</tr>
 						<tr>
 							<td colspan="2">

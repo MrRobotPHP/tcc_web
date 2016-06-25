@@ -72,7 +72,7 @@ class Tarefa extends Conexao_sql {
 	public function carregaTarefas() {
 		$pdo = parent::getDB();
 
-		$query = $pdo -> prepare("SELECT T.ID AS ID, T.DESCRICAO AS DESCRICAO, DATE_FORMAT(T.PRAZO, '%d/%m/%Y') AS PRAZO, E.DESCRICAO AS EVENTO, T.STATUS AS STATUS
+		$query = $pdo -> prepare("SELECT T.ID AS ID, T.DESCRICAO AS DESCRICAO, DATE_FORMAT(T.PRAZO, '%d/%m/%Y') AS PRAZO, E.DESCRICAO AS EVENTO, T.STATUS 					   AS STATUS
 								  FROM TAREFA T
 								  INNER JOIN EVENTO AS E ON T.EVENTO = E.ID
 								  INNER JOIN FUNCIONARIO AS F ON T.FUNCIONARIO = F.ID
@@ -87,10 +87,42 @@ class Tarefa extends Conexao_sql {
 		//$this -> setEvento($dadosTabela -> EVENTO);
 	}
 
-	public function concluirTarefa($idtarefa) {
+	public function concluirTarefa($idtarefa, $dtInicio, $dtTermino, $hrInicio, $hrTermino) {
 		$pdo = parent::getDB();
 
-		$query = "UPDATE TAREFA SET STATUS = 1";
+		$inicio = $dtInicio . " " . $hrInicio;
+		$termino = $dtTermino . " " . $hrTermino;
+
+		$query1 = $pdo -> prepare("SELECT E.ID AS EVENTO FROM TAREFA T INNER JOIN EVENTO AS E ON T.EVENTO = E.ID WHERE T.ID = " . $idtarefa);
+		$query1 -> execute();
+		$array = $query1 -> fetch(PDO::FETCH_ASSOC);
+		$idEvento = $array["EVENTO"];
+
+		$queryEvento = $pdo -> prepare("UPDATE EVENTO SET INICIO ='" . $inicio . "', TERMINO = '" . $termino . "' WHERE ID = " . $idEvento);
+		$queryEvento -> execute();
+
+		$queryTarefa = $pdo -> prepare("UPDATE TAREFA SET STATUS = 1 WHERE ID = " . $idtarefa);
+		$queryTarefa -> execute();
+	}
+
+	public function concluirTarefaUsuarioComum($idtarefa) {
+		$pdo = parent::getDB();
+
+		$queryTarefa = $pdo -> prepare("UPDATE TAREFA SET STATUS = 1 WHERE ID = " . $idtarefa);
+		$queryTarefa -> execute();
+	}
+
+	public function visualizarTarefasConcluidas($idfunc) {
+		$pdo = parent::getDB();
+
+		$query = $pdo -> prepare("SELECT T.DESCRICAO AS DESCRICAO, E.DESCRICAO AS EVENTO, T.PRAZO AS PRAZO, F.ID
+				  FROM TAREFA T
+				  INNER JOIN EVENTO AS E ON T.EVENTO = E.ID
+				  INNER JOIN FUNCIONARIO AS F ON T.FUNCIONARIO = F.ID
+				  WHERE F.ID = " . $idfunc . " AND T.STATUS = 1");
+
+		$this -> setQuery($query);
+
 		$query -> execute();
 	}
 

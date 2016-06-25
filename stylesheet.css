@@ -210,11 +210,12 @@ input[type="password"] {
 #btnEdit {
   font-family: Gravity-Bold;
   margin-left: 25%;
+  width: 310px;
 }
 
 #btnEdit:hover {
   background-color: #57D371;
-  color: #fff;
+  color: #000;
 }
 
 .lblEdit {
