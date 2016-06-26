@@ -56,6 +56,17 @@
 	<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
 
 	<title>Photus Dashboard</title>
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="js/jquery.mask.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#dinicio').mask('0000-00-00');
+			$('#dtermino').mask('0000-00-00');
+			$('#hinicio').mask('00:00:00');
+			$('#htermino').mask('00:00:00');
+		)};
+	</script>
 </head>
 <body style="background-image: none;">
 
@@ -117,17 +128,6 @@
 		</div>
 
 	</div>
-
-	<script type="text/javascript" src="js/jquery.mask.js" />
-
-	<script>
-		$(document).ready(function() {
-			$('#dinicio').mask('0000-00-00');
-			$('#dtermino').mask('0000-00-00');
-			$('#hinicio').mask('00:00:00');
-			$('#htermino').mask('00:00:00');
-		)};
-	</script>
 
 </body>
 </html>

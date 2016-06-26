@@ -60,7 +60,7 @@
 			<h4 class="t-painel" style="margin-top: 10px; margin-bottom: 10px; padding-left: 10px">Meus dados</h4>
 			<table cellspacing="10px">
 				<tr>
-					<td><img src="foto_funcionario/foto_padrao.png" alt="Foto" style="width: 85px; height: 100px" /></td>
+					<td><img src="<?php print($funcionario -> resgataFoto($id)) ?>" alt="Foto" style="width: 85px; height: 100px" /></td>
 				</tr>
 				<tr>
 					<td><span class="t-texto-painel">Nome</span></td>

@@ -28,6 +28,7 @@
 			$email = $_POST['email'];
 			$telefone = $_POST['telefone'];
 			$funcionario -> editarFuncionario($id, $email, $telefone);
+			$funcionario -> enviaFoto($id);
 		}
 	}
 
@@ -41,7 +42,7 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="stylesheet.css">
 	<link rel="icon" href="img/favicon.ico" type="image/x-icon" />
-	<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />	
+	<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
 
 	<title>Photus Dashboard</title>
 </head>
@@ -56,11 +57,11 @@
 		<a href="principal.php"><img src="img/home.png" class="icon-header" style="left: 380px"></a>
 		<a href="grafico.php?session=<?php $session_id ?>"><img src="img/grafico.png" class="icon-header" style="left: 430px"></a>
 		<a href="config.php"><img src="img/config.png" class="icon-header" style="left: 480px"></a>
-		
+
 		<a href="principal.php?logout=ok"><img src="img/logout_branco.png" class="icon-header" style="float: right; margin-top: 23px; margin-right: 17px;" title="Logout"></a>
 	</div>
 
-	<div class="container">		
+	<div class="container">
 
 		<div class="painel" style="top: 110px; text-align: center">
 			<h4 class="t-painel" style="padding-left: 10px; padding-right: 10px; margin: 0px 0px 10px 0px">Editar Perfil</h4>
@@ -74,7 +75,7 @@
 						</tr>
 						<tr>
 							<td>
-								<input type="hidden" name="MAX_FILE_SIZE" value="30000">
+								<input type="hidden" name="MAX_FILE_SIZE" value="3145728">
 								<input type="file" name="foto" style="margin-bottom: 20px" />
 							</td>
 						</tr>
@@ -107,7 +108,7 @@
 				</form>
 			</div>
 		</div>
-		
+
 		<!--
 		<div class="footer">
 			<p class="texto-painel" style="display: block; top: 20px">&copy; Copyright PHOTUS - Todos os direitos reservados.</p>
@@ -115,6 +116,6 @@
 		-->
 
 	</div>
-	
+
 </body>
 </html>

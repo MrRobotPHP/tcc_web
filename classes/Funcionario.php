@@ -149,12 +149,18 @@ class Funcionario extends Conexao_sql {
 			$ext = strtolower(substr($_FILES['foto']['name'], -4));
 			$novoNome = date("Y.m.d-H.i.s") . $ext;
 			$dir = "foto_funcionario/";
+			$caminho = $dir . $novoNome;
 
-			$res = move_uploaded_file($_FILES['foto']['tmp_name'], $dir . $novoNome);
+			if (move_uploaded_file($_FILES['foto']['tmp_name'], $dir . $novoNome)) {
+				echo "<script> alert('Foto enviada com sucesso') </script>";
+			}
+			else {
+				echo "<script> alert('" . $_FILES['foto']['error'] . "') </script>";
+			}
 
 			$pdo = parent::getDB();
 
-			$query = $pdo -> prepare("UPDATE FUNCIONARIO SET FOTO = " . $res . " WHERE ID = " . $id);
+			$query = $pdo -> prepare("UPDATE FUNCIONARIO SET FOTO = '" . $caminho . "' WHERE ID = " . $id);
 			$query -> execute();
 		}
 	}
@@ -163,11 +169,13 @@ class Funcionario extends Conexao_sql {
 		$pdo = parent::getDB();
 
 		$query = $pdo -> prepare("SELECT FOTO FROM FUNCIONARIO WHERE ID = " . $id);
-		$caminho = $query -> execute();
+		$query -> execute();
 
-		if ($caminho -> rowCount() == 0) {
+		$array = $query -> fetch(PDO::FETCH_ASSOC);
+		$caminho = $array["FOTO"];
 
-			$caminho = print("foto_funcionario/foto_padrao.png");
+		if ($query -> rowCount() == 0) {
+			$caminho = "foto_funcionario/foto_padrao.png";
 		}
 
 		return $caminho;

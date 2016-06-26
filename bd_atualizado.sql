@@ -151,7 +151,7 @@ CREATE TABLE `funcionario` (
 
 LOCK TABLES `funcionario` WRITE;
 /*!40000 ALTER TABLE `funcionario` DISABLE KEYS */;
-INSERT INTO `funcionario` VALUES (1,'','feliepe','felipe@gmail.com','3406050','94039039',2,'RUA',1,'Vênus','','Jardim alvorada','americana','SP',1,'PHOTUS',NULL),(4,'','Vagner','','','',9,'',0,'','','','','',1,NULL,NULL),(5,'','admin','admin@admin.com','','',13,'',0,'','','','','',2,'PHOTUS',NULL),(6,'','Funcionário Comum','estagiario@gmail.com','(19)3426-7056','',12,'',0,'','','','','',1,'PHOTUS',NULL),(7,'','Teste Fotografo','teste_fotografo@gmail.com','(88)8888-8888','',2,'RUA',90,'Dos Atrazos','','Jd. Ipiranga','Americana','SP',2,'PHOTUS','foto_funcionario/mr-robot-wallpaper.jpg');
+INSERT INTO `funcionario` VALUES (1,'','feliepe','felipe@gmail.com','3406050','94039039',2,'RUA',1,'Vênus','','Jardim alvorada','americana','SP',1,'PHOTUS',NULL),(4,'','Vagner','','','',9,'',0,'','','','','',1,NULL,NULL),(5,'','admin','admin@admin.com','','',13,'',0,'','','','','',2,'PHOTUS',NULL),(6,'','Funcionário Comum','estagiario@gmail.com','(19)3426-7056','',12,'',0,'','','','','',1,'PHOTUS',NULL),(7,'','Teste Fotografo','fotografo@photus.com','(19) 3645-7206','',2,'RUA',90,'Dos Atrazos','','Jd. Ipiranga','Americana','SP',2,'PHOTUS','foto_funcionario/2016.06.26-21.02.24.jpg');
 /*!40000 ALTER TABLE `funcionario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,4 +195,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-25 18:24:30
+-- Dump completed on 2016-06-26 19:28:35
