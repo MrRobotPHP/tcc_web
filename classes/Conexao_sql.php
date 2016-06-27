@@ -3,7 +3,7 @@
 abstract class Conexao_sql {
 
 	const user = "root";
-	const pass = "root";
+	const pass = "";
 	private static $instance = null;
 
 	private static function conectar() {

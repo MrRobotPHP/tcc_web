@@ -65,7 +65,24 @@
 			$('#dtermino').mask('0000-00-00');
 			$('#hinicio').mask('00:00:00');
 			$('#htermino').mask('00:00:00');
-		)};
+		});
+		
+		function checarCampos(){
+				var dataInicio = $('#dinicio').val().replace( /-/g, '' );
+				var dataTermino = $("#dtermino").val().replace( /-/g, '' );
+				var horaInicio = $("#hinicio").val().replace(/:/g,"");
+				var horaTermino = $("#htermino").val().replace( /:/g, '' );
+
+				if (dataInicio > dataTermino) {
+					alert("A data inicial deve ser menor que a data final.");
+					return false;
+				}else if(dataInicio == dataTermino && horaInicio > horaTermino){
+					alert("O horário de inicio deve ser menor que o horário do termino.")
+				}else{
+					return true;
+				}
+				return false;
+		}					
 	</script>
 </head>
 <body style="background-image: none;">
@@ -90,7 +107,7 @@
 
 			<div class="form-edit">
 
-				<form action="" name="edit_funcionario" method="post">
+				<form action="" name="edit_funcionario" onSubmit="return checarCampos()" method="post">
 					<table style="text-align: justify; margin: 0px auto" cellspacing="0px" cellpadding="5px">
 						<tr>
 							<td><label class="lblEdit" for="dinicio">Data de início</label></td>
