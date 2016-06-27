@@ -7,7 +7,7 @@ class Grafico extends Conexao_sql {
 
 	
 	private $mes;
-
+	private $grafico = new Phplot(750,600);
 	public function getMes() {
 		return $this -> mes;
 	}
@@ -20,6 +20,7 @@ class Grafico extends Conexao_sql {
 
 		$pdo = parent::getDB();
 
+			// USAR SET lc_time_names = 'pt_BR'; PARA SETAR A FORMATAÇÃO DE DATA PARA PADRÃO BR
 		$query = $pdo -> prepare("SELECT COUNT(T.ID) AS TAREFAS, F.NOME AS FUNCIONARIO, DATE_FORMAT(PRAZO, '%m') AS MES
 							      FROM TAREFA T
 							      INNER JOIN FUNCIONARIO AS F ON T.FUNCIONARIO = F.ID
@@ -28,9 +29,11 @@ class Grafico extends Conexao_sql {
 		//$query = $pdo -> prepare("$linha = $query -> fetchAll(PDO::FETCH_ASSOC);");
 		$query -> execute();
 
-		while ($valor = $query -> fetchAll(PDO::FETCH_ASSOC)) {
+		$dados = array();
 
-			switch ($valor["MES"]) {
+		while ($valor = $query -> fetchAll(PDO::FETCH_ASSOC)) {
+			int array_push($dados,)
+			/*switch ($valor["MES"]) {
 				case '01':
 					$this -> setMes("Janeiro");
 					break;
@@ -78,7 +81,7 @@ class Grafico extends Conexao_sql {
 				case '12':
 					$this -> setMes("Dezembro");
 					break;
-			}
+			}*/
 		}
 	}
 }
